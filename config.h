@@ -11,10 +11,10 @@
 #define HERO_PATH ":/res/Entity_887.0.0.png"
 #define ROTATE_SENSITIVITY 2
 #define I_SHOW_SPEED 10.0
+#define MAX_HEALTH 20.0
 /**********  子弹配置数据 **********/
 #define BULLET_PATH ":/res/bullet_11.png"   //子弹图片路径
 #define BULLET_SPEED 2  //子弹移动速度
-
 #define BULLET_NUM 50   //弹匣中子弹总数
 #define BULLET_INTERVAL 50 //发射子弹时间间隔
 /**********  敌机配置数据 **********/

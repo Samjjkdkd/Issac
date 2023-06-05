@@ -3,8 +3,10 @@
 #include "enemy_1.h"
 #include "enemy_2.h"
 #include <QIcon>
-#include<QPainter>
-#include<QMouseEvent>
+#include <QPainter>
+#include <QPainterPath>
+#include <QMouseEvent>
+#include <QPen>
 #include <ctime>
 #include <QSoundEffect>
 #include <QSound>
@@ -147,12 +149,25 @@ void MainScene::updatePosition()
 void MainScene::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
-
+    QPainterPath path;
+    path.addRect(m_hero.m_Rect.x()+1,m_hero.m_Rect.y()-29,(m_hero.m_Rect.width()-2)*((double)(m_hero.m_hp>=0?m_hero.m_hp:0)/MAX_HEALTH),18);
+    painter.setRenderHint(QPainter::Antialiasing);
     //绘制地图
     painter.drawPixmap(0,0 , m_map.m_map_1);
 
+    //画Hero
     painter.drawPixmap(m_hero.m_X,m_hero.m_Y,m_hero.m_Plane);
-    painter.drawRect(m_hero.m_Rect);
+    //painter.drawRect(m_hero.m_Rect);
+    //画血条
+    painter.setPen(QPen(Qt::red, 1));
+    painter.fillPath(path, Qt::red);
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(m_hero.m_Rect.x(),m_hero.m_Rect.y()-30,m_hero.m_Rect.width(),20);
+    QString h_show = QString::number(m_hero.m_hp) + "/"+ QString::number(MAX_HEALTH);
+    painter.setFont(QFont("Consolas",10,QFont::Normal));
+    painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show.length()/2)*12,m_hero.m_Rect.y()-14,h_show);
+
+    painter.setPen(QPen(Qt::black, 1));
     //painter.drawPixmap(temp_bullet.m_X,temp_bullet.m_Y,temp_bullet.m_Bullet);
     //绘制子弹
     for(int i = 0 ;i < BULLET_NUM;i++)

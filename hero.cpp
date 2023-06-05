@@ -20,7 +20,7 @@ HeroPlane::HeroPlane()
     m_Rect.setHeight(m_Plane.height()+ 20);
     m_Rect.moveTo(m_X - 10,m_Y - 10);
 
-    m_hp = 114514;
+    m_hp = MAX_HEALTH;
 
     //初始化发射间隔记录
     m_recorder = 0;
