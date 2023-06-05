@@ -27,6 +27,9 @@ public:
     int m_X;
     int m_Y;
 
+    //飞机生命
+    int m_hp;
+
     //飞机的矩形边框
     QRect m_Rect;
 

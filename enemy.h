@@ -25,11 +25,13 @@ public:
     bool m_Free;
 
     //速度
-    int m_Speed;
+    double m_Speed;
     //从哪里进入地图
     int startplace;
     //生命值
     int hp;
+    //初始生命
+    int preset_hp;
 };
 
 #endif // ENEMYPLANE_H

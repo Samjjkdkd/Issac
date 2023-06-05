@@ -3,25 +3,16 @@
 #include<math.h>
 EnemyPlane::EnemyPlane()
 {
-    //敌机资源加载
-    m_enemy.load(ENEMY_PATH);
-    m_enemy = m_enemy.scaled(RESIZE_WIDTH, RESIZE_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
     //敌机位置
     m_X = 0;
     m_Y = 0;
 
     //敌机状态
     m_Free = true;
-
-    //敌机速度
-    m_Speed = ENEMY_SPEED;
-
     //敌机矩形
-    m_Rect.setWidth(m_enemy.width());
-    m_Rect.setHeight(m_enemy.height());
+
     m_Rect.moveTo(m_X,m_Y);
-
-
 }
 
 void EnemyPlane::updatePosition(int hero_X,int hero_Y)

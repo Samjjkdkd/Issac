@@ -13,6 +13,7 @@ SOURCES += \
     bullet.cpp \
     enemy.cpp \
     enemy_1.cpp \
+    enemy_2.cpp \
     hero.cpp \
     main.cpp \
     mainscene.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     config.h \
     enemy.h \
     enemy_1.h \
+    enemy_2.h \
     hero.h \
     mainscene.h \
     map.h \

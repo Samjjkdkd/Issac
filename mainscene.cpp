@@ -1,5 +1,7 @@
 #include "mainscene.h"
 #include "config.h"
+#include "enemy_1.h"
+#include "enemy_2.h"
 #include <QIcon>
 #include<QPainter>
 #include<QMouseEvent>
@@ -38,6 +40,21 @@ void MainScene::initScene()
 
     //随机数种子
     srand((unsigned int)time(NULL));  //头文件  #include <ctime>
+
+    //开数组
+    if(m_enemys.size()<ENEMY_NUM){
+        for(int i=m_enemys.size();i<ENEMY_NUM;i++){
+            int type = rand()%4;
+            EnemyPlane* pointer;
+            if(type == 0){
+                pointer = new enemy_1();
+            }
+            else if(type == 1 || type == 2 || type == 3){
+                pointer = new enemy_2();
+            }
+            m_enemys.push_back(pointer);
+        }
+    }
 }
 
 void MainScene::enemyToScene()
@@ -52,24 +69,27 @@ void MainScene::enemyToScene()
 
     for(int i = 0 ; i< ENEMY_NUM;i++)
     {
-        if(m_enemys[i].m_Free)
+        if(m_enemys[i]->m_Free)
         {
-            m_enemys[i].m_Free = false;
+            m_enemys[i]->m_Free = false;
             int choice = rand()%2;
             if(choice==0){            //敌机空闲状态改为false
 
             //设置坐标
-            m_enemys[i].startplace=0;
-            m_enemys[i].m_X = rand() % (GAME_WIDTH - m_enemys[i].m_Rect.width());
-            m_enemys[i].m_Y = -m_enemys[i].m_Rect.height();
-            m_enemys[i].m_Rect.moveTo(m_enemys[i].m_X,m_enemys[i].m_Y);
+            m_enemys[i]->startplace=0;
+            m_enemys[i]->m_X = rand() % (GAME_WIDTH - m_enemys[i]->m_Rect.width());
+            m_enemys[i]->m_Y = -m_enemys[i]->m_Rect.height();
+            m_enemys[i]->m_Rect.moveTo(m_enemys[i]->m_X, m_enemys[i]->m_Y);
+            m_enemys[i]->hp = m_enemys[i]->preset_hp;
+
 
             }
             if(choice==1){
-            m_enemys[i].startplace=1;
-            m_enemys[i].m_X = rand() % (GAME_WIDTH - m_enemys[i].m_Rect.width());
-            m_enemys[i].m_Y = MAP_RESIZE_HEIGHT+m_enemys[i].m_Rect.height();
-            m_enemys[i].m_Rect.moveTo(m_enemys[i].m_X,m_enemys[i].m_Y);
+            m_enemys[i]->startplace=1;
+            m_enemys[i]->m_X = rand() % (GAME_WIDTH - m_enemys[i]->m_Rect.width());
+            m_enemys[i]->m_Y = MAP_RESIZE_HEIGHT+m_enemys[i]->m_Rect.height();
+            m_enemys[i]->m_Rect.moveTo(m_enemys[i]->m_X, m_enemys[i]->m_Y);
+            m_enemys[i]->hp = m_enemys[i]->preset_hp;
 
             }
             break;
@@ -95,9 +115,9 @@ void MainScene::updatePosition()
     for(int i = 0 ; i< ENEMY_NUM;i++)
     {
         //非空闲敌机 更新坐标
-        if(m_enemys[i].m_Free == false)
+        if(m_enemys[i]->m_Free == false)
         {
-            m_enemys[i].updatePosition(m_hero.m_X,m_hero.m_Y);
+            m_enemys[i]->updatePosition(m_hero.m_X,m_hero.m_Y);
         }
     }
     //计算爆炸播放的图片
@@ -132,6 +152,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.drawPixmap(0,0 , m_map.m_map_1);
 
     painter.drawPixmap(m_hero.m_X,m_hero.m_Y,m_hero.m_Plane);
+    painter.drawRect(m_hero.m_Rect);
     //painter.drawPixmap(temp_bullet.m_X,temp_bullet.m_Y,temp_bullet.m_Bullet);
     //绘制子弹
     for(int i = 0 ;i < BULLET_NUM;i++)
@@ -140,13 +161,15 @@ void MainScene::paintEvent(QPaintEvent *event)
         if(!m_hero.m_bullets[i].m_Free)
         {
             painter.drawPixmap(m_hero.m_bullets[i].m_X,m_hero.m_bullets[i].m_Y,m_hero.m_bullets[i].m_Bullet);
+            painter.drawRect(m_hero.m_bullets[i].m_Rect);
         }
     }
     for(int i = 0 ; i< ENEMY_NUM;i++)
     {
-        if(m_enemys[i].m_Free == false)
+        if(m_enemys[i]->m_Free == false)
         {
-            painter.drawPixmap(m_enemys[i].m_X,m_enemys[i].m_Y,m_enemys[i].m_enemy);
+            painter.drawPixmap(m_enemys[i]->m_X,m_enemys[i]->m_Y,m_enemys[i]->m_enemy);
+            painter.drawRect(m_enemys[i]->m_Rect);
         }
     }
     //绘制爆炸图片
@@ -161,6 +184,11 @@ void MainScene::paintEvent(QPaintEvent *event)
     QString a = "Killed:" + QString::number(score);
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(750,100,a);
+
+    //绘制生命
+    QString b = "HP:" + QString::number(m_hero.m_hp);
+    painter.setFont(QFont("黑体",20,QFont::Bold));
+    painter.drawText(1050,100,b);
 }
 
 void MainScene::playGame()
@@ -180,9 +208,10 @@ void MainScene::playGame()
     //监听定时器
     connect(&m_Timer,&QTimer::timeout,[=](){
         //更新游戏中元素的坐标
-        updatePosition();
+
         //敌机出场
         enemyToScene();
+        updatePosition();
         collisionDetection();
 
         //temp_bullet.m_Free = false;
@@ -300,7 +329,7 @@ void MainScene::collisionDetection()
     //遍历所有非空闲的敌机
     for(int i = 0 ;i < ENEMY_NUM;i++)
     {
-        if(m_enemys[i].m_Free)
+        if(m_enemys[i]->m_Free)
         {
             //空闲飞机 跳转下一次循环
             continue;
@@ -309,20 +338,42 @@ void MainScene::collisionDetection()
         //遍历所有 非空闲的子弹
         for(int j = 0 ; j < BULLET_NUM;j++)
         {
-            if(m_hero.m_bullets[j].m_Free||m_enemys[i].m_Free)
+            if(m_hero.m_bullets[j].m_Free||m_enemys[i]->m_Free)
             {
                 //空闲子弹 跳转下一次循环
                 continue;
             }
 
             //如果子弹矩形框和敌机矩形框相交，发生碰撞，同时变为空闲状态即可
-            if(isIntersect(m_enemys[i].m_Rect,m_hero.m_bullets[j].m_Rect))
+            if(m_enemys[i]->m_Rect.intersects(m_hero.m_bullets[j].m_Rect))
             {
-                score++;//得分增加
-
-                m_enemys[i].m_Free = true;
+                m_enemys[i]->hp--;
                 m_hero.m_bullets[j].m_Free = true;
-                //播放爆炸效果
+                if(m_enemys[i]->hp==0){
+                    score++;//得分增加
+
+                    m_enemys[i]->m_Free = true;
+
+                    //播放爆炸效果
+                    for(int k = 0 ; k < BOMB_NUM;k++)
+                    {
+                        if(m_bombs[k].m_Free)
+                        {
+                            //爆炸状态设置为非空闲
+                            m_bombs[k].m_Free = false;
+                            //更新坐标
+                            bombSound->play();
+                            m_bombs[k].m_X = m_enemys[i]->m_X;
+                            m_bombs[k].m_Y = m_enemys[i]->m_Y;
+                            k = BOMB_NUM;
+                            break;
+                        }
+                    }
+                }
+            }
+            if(m_enemys[i]->m_Rect.intersects(m_hero.m_Rect)){
+                m_hero.m_hp-= m_enemys[i]->hp;
+                m_enemys[i]->m_Free = true;
                 for(int k = 0 ; k < BOMB_NUM;k++)
                 {
                     if(m_bombs[k].m_Free)
@@ -331,13 +382,14 @@ void MainScene::collisionDetection()
                         m_bombs[k].m_Free = false;
                         //更新坐标
                         bombSound->play();
-                        m_bombs[k].m_X = m_enemys[i].m_X;
-                        m_bombs[k].m_Y = m_enemys[i].m_Y;
+                        m_bombs[k].m_X = m_enemys[i]->m_X;
+                        m_bombs[k].m_Y = m_enemys[i]->m_Y;
                         k = BOMB_NUM;
                         break;
                     }
                 }
             }
+
         }
 
     }

@@ -1,5 +1,4 @@
 #include "hero.h"
-#include "config.h"
 
 HeroPlane::HeroPlane()
 {
@@ -8,7 +7,7 @@ HeroPlane::HeroPlane()
     QTransform transform;
     transform.rotate(90);
     m_Plane_original = m_Plane_original.transformed(transform, Qt::SmoothTransformation);
-    m_Plane_original = m_Plane_original.scaled(RESIZE_WIDTH, RESIZE_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_Plane_original = m_Plane_original.scaled(RESIZE_WIDTH_1, RESIZE_HEIGHT_1, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     //
     m_Plane = m_Plane_original;
 
@@ -17,9 +16,11 @@ HeroPlane::HeroPlane()
     m_Y = GAME_HEIGHT - m_Plane.height();
 
     //初始化矩形框
-    m_Rect.setWidth(m_Plane.width());
-    m_Rect.setHeight(m_Plane.height());
-    m_Rect.moveTo(m_X,m_Y);
+    m_Rect.setWidth(m_Plane.width() + 20);
+    m_Rect.setHeight(m_Plane.height()+ 20);
+    m_Rect.moveTo(m_X - 10,m_Y - 10);
+
+    m_hp = 114514;
 
     //初始化发射间隔记录
     m_recorder = 0;
@@ -30,7 +31,7 @@ void HeroPlane::setPosition(int x, int y)
 {
     m_X = x;
     m_Y = y;
-    m_Rect.moveTo(m_X,m_Y);
+    m_Rect.moveTo(m_X - 10,m_Y - 10);
 }
 
 void HeroPlane::shoot()

@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "bomb.h"
 #include "movevector.h"
+#include <vector>
 class MainScene : public QWidget
 {
     Q_OBJECT
@@ -37,7 +38,7 @@ public:
     void enemyToScene();
 
     //敌机数组
-    EnemyPlane m_enemys[ENEMY_NUM];
+    std::vector <EnemyPlane*> m_enemys;
 
     //敌机出场间隔记录
     int m_recorder;
