@@ -1,11 +1,7 @@
 /**********  游戏配置数据 **********/
 #define GAME_WIDTH  2048  //宽度
 #define GAME_HEIGHT 1200  //高度
-<<<<<<< HEAD
 #define GAME_TITLE "以撒 v2.4" //标题
-=======
-#define GAME_TITLE "以撒 v2.3" //标题
->>>>>>> origin/main
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -36,11 +32,7 @@
 #define RESIZE_HEIGHT_3 80 //敌方统一大小
 
 //动图播放
-<<<<<<< HEAD
 #define ENEMY_3_INTERVAL 7
-=======
-#define ENEMY_3_INTERVAL 7aaaaa
->>>>>>> origin/main
 #define ENEMY_3_MAX 2
 
 #define ENEMY_SPEED_1 1.5  //敌机移动速度

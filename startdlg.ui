@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>StartDlg</class>
+ <widget class="QDialog" name="StartDlg">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1024</width>
+    <height>479</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Start Issac</string>
+  </property>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>220</y>
+     <width>361</width>
+     <height>151</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <family>Microsoft YaHei</family>
+     <pointsize>35</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>开始游戏</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1024</width>
+     <height>479</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="pixmap">
+    <pixmap resource="res.qrc">:/res/startbg.jpg</pixmap>
+   </property>
+  </widget>
+  <zorder>label</zorder>
+  <zorder>pushButton</zorder>
+ </widget>
+ <resources>
+  <include location="res.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>StartDlg</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>137</x>
+     <y>99</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>207</x>
+     <y>150</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
