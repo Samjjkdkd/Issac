@@ -50,5 +50,21 @@
         <file>res/img-plane_6.png</file>
         <file>res/img-plane_7.png</file>
         <file>res/The_Chest.png</file>
+        <file>res/startbg.jpg</file>
+        <file>res/Entity_14.0.1.png</file>
+        <file>res/Entity_14.0.2.png</file>
+        <file>res/7.png</file>
+        <file>res/8.png</file>
+        <file>res/9.png</file>
+        <file>res/10.png</file>
+        <file>res/11.png</file>
+        <file>res/12.png</file>
+        <file>res/13.png</file>
+        <file>res/6.png</file>
+        <file>res/blood-1.png</file>
+        <file>res/blood-2.png</file>
+        <file>res/blood-3.png</file>
+        <file>res/blood-4.png</file>
+        <file>res/blood-5.png</file>
     </qresource>
 </RCC>

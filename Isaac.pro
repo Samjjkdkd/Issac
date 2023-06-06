@@ -14,11 +14,13 @@ SOURCES += \
     enemy.cpp \
     enemy_1.cpp \
     enemy_2.cpp \
+    enemy_3.cpp \
     hero.cpp \
     main.cpp \
     mainscene.cpp \
     map.cpp \
-    movevector.cpp
+    movevector.cpp \
+    startdlg.cpp
 
 HEADERS += \
     bomb.h \
@@ -27,10 +29,12 @@ HEADERS += \
     enemy.h \
     enemy_1.h \
     enemy_2.h \
+    enemy_3.h \
     hero.h \
     mainscene.h \
     map.h \
-    movevector.h
+    movevector.h \
+    startdlg.h
     QSoundEffect
 
 # Default rules for deployment.
@@ -43,3 +47,6 @@ RESOURCES += \
 RC_ICONS = res\app.ico
 
 QT  += core gui multimedia
+
+FORMS += \
+    startdlg.ui

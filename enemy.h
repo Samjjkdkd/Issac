@@ -1,7 +1,8 @@
 #ifndef ENEMYPLANE_H
 #define ENEMYPLANE_H
 #include <QPixmap>
-
+#include "config.h"
+#include "qpainter.h"
 class EnemyPlane
 {
 public:
@@ -9,9 +10,6 @@ public:
 
     //更新坐标
     void updatePosition(int hero_X,int hero_Y);
-public:
-    //敌机资源对象
-    QPixmap m_enemy;
 
     //位置
     int m_X;
@@ -32,6 +30,15 @@ public:
     int hp;
     //初始生命
     int preset_hp;
+
+    //敌人种类
+    int type;
+    //画敌人
+    QPixmap m_enemy;
+    virtual void drawEnemy(QPainter &t){
+        t.drawPixmap(this->m_X, this->m_Y, this->m_enemy);
+    }
+    virtual void updateInfo(){}
 };
 
 #endif // ENEMYPLANE_H

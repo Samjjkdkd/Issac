@@ -15,4 +15,5 @@ enemy_1::enemy_1():EnemyPlane()
     //hp
     hp = ENEMY_HP_1;
     preset_hp = ENEMY_HP_1;
+    type = 1;
 }
