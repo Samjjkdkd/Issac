@@ -7,8 +7,9 @@
 #include "enemy.h"
 #include "bomb.h"
 #include "movevector.h"
-#include "floorblood.h"
+#include "bloodtrail.h"
 #include <vector>
+
 class MainScene : public QWidget
 {
     Q_OBJECT
@@ -53,7 +54,7 @@ public:
     Bomb m_bombs[BOMB_NUM];
 
     //残留血液
-    FloorBlood floor_bloods[FB_NUM];
+    bloodtrail m_bloodtrail[BLOOD_NUM];
 
     // Bullet temp_bullet;
     ~MainScene();

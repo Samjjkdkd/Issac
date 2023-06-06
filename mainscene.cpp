@@ -62,6 +62,15 @@ void MainScene::initScene()
             m_enemys.push_back(pointer);
         }
     }
+    for(int i=0;i<BLOOD_NUM;i++){
+        int type_ = rand()%2;
+        if(type_ == 0){
+            m_bloodtrail[i].type = 0;
+        }
+        else if(type_ == 1){
+            m_bloodtrail[i].type = 1;
+        }
+    }
 }
 
 void MainScene::enemyToScene()
@@ -138,6 +147,12 @@ void MainScene::updatePosition()
         {
             m_bombs[i].updateInfo();
         }
+
+    }
+    for(int i=0;i<BLOOD_NUM;i++){
+        if(m_bloodtrail[i].m_Free==false){
+            m_bloodtrail[i].updateInfo();
+        }
     }
 
     QTransform transform;
@@ -165,6 +180,7 @@ void MainScene::updatePosition()
 void MainScene::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
+
     painter.setRenderHint(QPainter::Antialiasing);
     //绘制地图
     painter.drawPixmap(0,0 , m_map.m_map_1);
@@ -211,6 +227,21 @@ void MainScene::paintEvent(QPaintEvent *event)
             painter.drawPixmap(m_bombs[i].m_X,m_bombs[i].m_Y,m_bombs[i].m_pixArr[m_bombs[i].m_index]);
         }
     }
+    //绘制血迹
+    for(int i = 0 ; i < BLOOD_NUM;i++)
+    {
+        if(m_bloodtrail[i].m_Free == false)
+        {
+            painter.setOpacity(m_bloodtrail[i].m_transparentrate/2);
+            if(m_bloodtrail[i].type == 0){
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_bloodtrail[i].m_blood[0]);
+            }
+            if(m_bloodtrail[i].type == 1){
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_bloodtrail[i].m_blood[1]);
+            }
+        }
+    }
+    painter.setOpacity(1);
     //绘制分数
     QString a = "Killed:" + QString::number(score);
     painter.setFont(QFont("黑体",20,QFont::Bold));
@@ -366,16 +397,28 @@ void MainScene::collisionDetection()
             m_enemys[i]->m_Free = true;
             for(int k = 0 ; k < BOMB_NUM;k++)
             {
-            if(m_bombs[k].m_Free)
-            {
-                //爆炸状态设置为非空闲
-                m_bombs[k].m_Free = false;
-                //更新坐标
-                bombSound->play();
-                m_bombs[k].m_X = m_enemys[i]->m_X;
-                m_bombs[k].m_Y = m_enemys[i]->m_Y;
-                break;
+                if(m_bombs[k].m_Free)
+                {
+                    //爆炸状态设置为非空闲
+                    m_bombs[k].m_Free = false;
+                    //更新坐标
+                    bombSound->play();
+                    m_bombs[k].m_X = m_enemys[i]->m_X;
+                    m_bombs[k].m_Y = m_enemys[i]->m_Y;
+                    break;
+                }
             }
+            for(int k=0;k<BLOOD_NUM;k++){
+                if(m_bloodtrail[k].m_Free)
+                {
+
+                    m_bloodtrail[k].m_Free = false;
+                    //更新坐标
+
+                    m_bloodtrail[k].m_X = m_enemys[i]->m_X;
+                    m_bloodtrail[k].m_Y = m_enemys[i]->m_Y;
+                    break;
+                }
             }
         }
         if(m_enemys[i]->m_Free)
@@ -417,7 +460,18 @@ void MainScene::collisionDetection()
                             break;
                         }
                     }
-
+                    for(int k = 0 ; k < BLOOD_NUM;k++)
+                    {
+                        if(m_bloodtrail[k].m_Free)
+                        {
+                            //爆炸状态设置为非空闲
+                            m_bloodtrail[k].m_Free = false;
+                            //更新坐标
+                            m_bloodtrail[k].m_X = m_enemys[i]->m_X;
+                            m_bloodtrail[k].m_Y = m_enemys[i]->m_Y;
+                            break;
+                        }
+                    }
                 }
             }
 

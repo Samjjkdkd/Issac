@@ -9,13 +9,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    bloodtrail.cpp \
     bomb.cpp \
     bullet.cpp \
     enemy.cpp \
     enemy_1.cpp \
     enemy_2.cpp \
     enemy_3.cpp \
-    floorblood.cpp \
     hero.cpp \
     main.cpp \
     mainscene.cpp \
@@ -24,6 +24,7 @@ SOURCES += \
     startdlg.cpp
 
 HEADERS += \
+    bloodtrail.h \
     bomb.h \
     bullet.h \
     config.h \
@@ -31,7 +32,6 @@ HEADERS += \
     enemy_1.h \
     enemy_2.h \
     enemy_3.h \
-    floorblood.h \
     hero.h \
     mainscene.h \
     map.h \

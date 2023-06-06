@@ -1,7 +1,7 @@
 /**********  游戏配置数据 **********/
 #define GAME_WIDTH  2048  //宽度
 #define GAME_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v2.5" //标题
+#define GAME_TITLE "以撒 v2.6" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -50,11 +50,19 @@
 #define BOMB_MAX  5      //爆炸图片最大索引
 #define BOMB_INTERVAL 10   //爆炸切图时间间隔
 
+#define BLOOD_PATH_1 ":/res/bloodtrail-1.png" //血迹图片
+#define BLOOD_PATH_2 ":/res/bloodtrail-4.png" //血迹图片
+
+#define BLOOD_NUM 50
+#define BLOOD_MAX 4
+#define BLOOD_INTERVAL 100
+#define RESIZE_BLOOD_WIDTH 300
+#define RESIZE_BLOOD_HEIGHT 300
+
 #define SOUND_BACKGROUND ":/res/bg.wav"
 #define SOUND_BOMB ":/res/bomb.wav"
 
-#define FLOORBLOOD_PATH ":/res/floorblood1.png"
-#define FB_NUM 50
+
 
 #define Pi 3.141592653589793238462643383279503884197169399375105820974944
 

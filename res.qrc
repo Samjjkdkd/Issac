@@ -69,5 +69,9 @@
         <file>res/Entity_887.0.0.1.png</file>
         <file>res/floorblood1.png</file>
         <file>res/floorblood2.png</file>
+        <file>res/bloodtrail-1.png</file>
+        <file>res/bloodtrail-2.png</file>
+        <file>res/bloodtrail-3.png</file>
+        <file>res/bloodtrail-4.png</file>
     </qresource>
 </RCC>
