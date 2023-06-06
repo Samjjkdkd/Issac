@@ -14,7 +14,8 @@ public:
     //设置飞机位置
     void setPosition(int x, int y);
 
-public:
+    QPixmap PixmapToRound(const QPixmap &src, int radius);
+
     //飞机资源 对象
     QPixmap m_Plane;
     QPixmap m_Plane_original;
@@ -41,6 +42,8 @@ public:
 
     //发射间隔记录
     int m_recorder;
+
+    int shiftx, shifty;
 };
 
 #endif // HERO_H

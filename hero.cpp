@@ -1,13 +1,21 @@
 #include "hero.h"
-
+#include <QPainter>
+#include <QPainterPath>
+#include <QRect>
 HeroPlane::HeroPlane()
 {
     //初始化加载飞机图片资源
     m_Plane_original.load(HERO_PATH);
+    //m_Plane_original = PixmapToRound(m_Plane_original, RESIZE_RADIUS);
+
+    m_Plane_original = m_Plane_original.scaled(RESIZE_RADIUS, RESIZE_RADIUS, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
     QTransform transform;
-    transform.rotate(90);
+    transform.translate(RESIZE_RADIUS/2,RESIZE_RADIUS/2);  //先将矩阵移到图片中心
+    transform.rotate(90);        //旋转矩阵
+    transform.translate(-RESIZE_RADIUS/2, -RESIZE_RADIUS/2); //将矩阵移回
     m_Plane_original = m_Plane_original.transformed(transform, Qt::SmoothTransformation);
-    m_Plane_original = m_Plane_original.scaled(RESIZE_WIDTH_1, RESIZE_HEIGHT_1, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
     //
     m_Plane = m_Plane_original;
 
@@ -70,4 +78,36 @@ void HeroPlane::shoot()
             break;
         }
     }
+}
+
+QPixmap HeroPlane::PixmapToRound(const QPixmap &src, int radius)
+{
+    if (src.isNull())
+    {
+        return QPixmap();
+    }
+
+    //按比例缩放
+    QPixmap pixmapa;
+    if(src.width() != radius || src.height() != radius)
+    {
+        pixmapa = src.scaled(radius, radius, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+    }
+    else
+    {
+        pixmapa = src;
+    }
+
+    QPixmap pixmap(radius,radius);
+    pixmap.fill(Qt::transparent);
+
+    QPainter painter(&pixmap);
+    painter.setRenderHints(QPainter::Antialiasing | QPainter::SmoothPixmapTransform |  QPainter::Antialiasing);
+
+    QPainterPath path;
+    path.addEllipse(0, 0, radius, radius);
+    painter.setClipPath(path);
+    painter.drawPixmap(0, 0, radius, radius, pixmapa);
+
+    return pixmap;
 }

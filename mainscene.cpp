@@ -13,15 +13,15 @@
 #include <QSound>
 #include <QLabel>
 #include <math.h>
+#include <complex>
 
 MainScene::MainScene(QWidget *parent)
     : QWidget(parent)
 {
+    //初始化场景
+    initScene();
 
-        //初始化场景
-        initScene();
-
-        playGame();
+    playGame();
 
 }
 
@@ -149,10 +149,17 @@ void MainScene::updatePosition()
     this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
     this->m_hero.b_direction+=this->my_vector.theta;
     this->m_hero.b_direction%=360;
-    transform.rotate(-this->m_hero.b_direction+180);
+    transform.translate(RESIZE_RADIUS/2,RESIZE_RADIUS/2);
+    int alpha = -this->m_hero.b_direction+180;
+    transform.rotate(alpha);
+    transform.translate(-RESIZE_RADIUS/2,-RESIZE_RADIUS/2);
     QPixmap ibashPlane = m_hero.m_Plane_original.transformed(transform, Qt::SmoothTransformation);
     m_hero.m_Plane = ibashPlane;
 
+    alpha %= 90;
+    alpha = abs(alpha);
+    m_hero.shiftx = qCos((45-alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
+    m_hero.shifty = qSin((45+alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
 }
 
 void MainScene::paintEvent(QPaintEvent *event)
@@ -163,8 +170,8 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.drawPixmap(0,0 , m_map.m_map_1);
 
     //画Hero
-    painter.drawPixmap(m_hero.m_X,m_hero.m_Y,m_hero.m_Plane);
-    //painter.drawRect(m_hero.m_Rect);
+    painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
+    painter.drawRect(m_hero.m_Rect);
 
     //画血条
     QPainterPath path;
@@ -410,6 +417,7 @@ void MainScene::collisionDetection()
                             break;
                         }
                     }
+
                 }
             }
 

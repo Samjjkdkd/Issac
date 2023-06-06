@@ -12,8 +12,6 @@ public:
     //更新信息（播放图片下标、播放间隔）
     void updateInfo();
 
-public:
-
     //放爆炸资源数组
     QVector<QPixmap> m_pixArr;
 

@@ -1,7 +1,7 @@
 /**********  游戏配置数据 **********/
 #define GAME_WIDTH  2048  //宽度
 #define GAME_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v2.4" //标题
+#define GAME_TITLE "以撒 v2.5" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -10,8 +10,9 @@
 #define MAP_RESIZE_WIDTH 2048
 #define MAP_RESIZE_HEIGHT 1200
 /**********  飞机配置数据 **********/
-#define HERO_PATH ":/res/Entity_887.0.0.png"
-#define ROTATE_SENSITIVITY 10
+#define HERO_PATH ":/res/Entity_887.0.0.1.png"
+#define RESIZE_RADIUS 128
+#define ROTATE_SENSITIVITY 5
 #define I_SHOW_SPEED 10.0
 #define MAX_HEALTH 20.0
 /**********  子弹配置数据 **********/
@@ -52,7 +53,8 @@
 #define SOUND_BACKGROUND ":/res/bg.wav"
 #define SOUND_BOMB ":/res/bomb.wav"
 
-
+#define FLOORBLOOD_PATH ":/res/floorblood1.png"
+#define FB_NUM 50
 
 #define Pi 3.141592653589793238462643383279503884197169399375105820974944
 

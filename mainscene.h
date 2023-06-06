@@ -7,6 +7,7 @@
 #include "enemy.h"
 #include "bomb.h"
 #include "movevector.h"
+#include "floorblood.h"
 #include <vector>
 class MainScene : public QWidget
 {
@@ -50,6 +51,9 @@ public:
 
     //爆炸数组
     Bomb m_bombs[BOMB_NUM];
+
+    //残留血液
+    FloorBlood floor_bloods[FB_NUM];
 
     // Bullet temp_bullet;
     ~MainScene();
