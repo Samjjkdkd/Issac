@@ -50,5 +50,8 @@
         <file>res/img-plane_6.png</file>
         <file>res/img-plane_7.png</file>
         <file>res/The_Chest.png</file>
+        <file>res/startbg.jpg</file>
+        <file>res/Entity_14.0.1.png</file>
+        <file>res/Entity_14.0.2.png</file>
     </qresource>
 </RCC>

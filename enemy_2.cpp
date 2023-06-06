@@ -13,4 +13,5 @@ enemy_2::enemy_2()
     //hp
     hp = ENEMY_HP_2;
     preset_hp = ENEMY_HP_2;
+    type = 2;
 }

@@ -6,6 +6,7 @@
 class enemy_1:public EnemyPlane
 {
 public:
+    //敌机资源对象
     enemy_1();
 };
 
