@@ -15,7 +15,7 @@
 #include <QColor>
 #include <math.h>
 #include <complex>
-
+#include <ctime>
 MainScene::MainScene(QWidget *parent)
     : QWidget(parent)
 {
@@ -166,6 +166,11 @@ void MainScene::updatePosition()
             m_bloodtrail[i].updateInfo();
         }
     }
+    for(int i=0;i<ENERGY_MAX;i++){
+        if(m_energies[i].m_Free==false){
+            m_energies[i].updateInfo();
+        }
+    }
 
     QTransform transform;
     this->my_vector.GenerateVector();
@@ -229,6 +234,16 @@ void MainScene::paintEvent(QPaintEvent *event)
         {
             painter.drawPixmap(m_hero.m_bullets[i].m_X,m_hero.m_bullets[i].m_Y,m_hero.m_bullets[i].m_Bullet);
             //painter.drawRect(m_hero.m_bullets[i].m_Rect);
+        }
+    }
+    //绘制能量球
+    for(int i = 0 ;i < ENERGY_MAX;i++)
+    {
+        //如果子弹状态为非空闲，计算发射位置
+        if(!m_energies[i].m_Free)
+        {
+            painter.drawPixmap(m_energies[i].m_X,m_energies[i].m_Y,m_energies[i].m_energy);
+            //painter.drawRect(m_energies[i].m_Rect);
         }
     }
     for(int i = 0 ; i< ENEMY_NUM;i++)
@@ -309,9 +324,13 @@ void MainScene::paintEvent(QPaintEvent *event)
 
     //绘制debug信息
     painter.setFont(QFont("黑体",8,QFont::Bold));
-    for(int i = BULLET_NUM-SKILL_BULLET_NUM;i<BULLET_NUM;++i)
+//    for(int i = BULLET_NUM-SKILL_BULLET_NUM;i<BULLET_NUM;++i)
+//    {
+//        painter.drawText(0,12*(SKILL_BULLET_NUM+i-BULLET_NUM),QString(QString::number(i)+":"+(m_hero.m_bullets[i].m_Free?"true":"false")));
+//    }
+    for(int i = 0;i<ENERGY_MAX;++i)
     {
-        painter.drawText(0,12*(SKILL_BULLET_NUM+i-BULLET_NUM),QString(QString::number(i)+":"+(m_hero.m_bullets[i].m_Free?"true":"false")));
+        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_energies[i].m_Free?"true":"false")));
     }
 }
 
@@ -402,6 +421,10 @@ void MainScene::keyPressEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[7]=QString("pressed");
     }
+    if(event->key()==Qt::Key_Q)
+    {
+        this->my_vector.StateofMoveKeys[8]=QString("pressed");
+    }
 }
 
 //松键事件
@@ -438,6 +461,10 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
     if(event->key()==Qt::Key_E)
     {
         this->my_vector.StateofMoveKeys[7]=QString("unpressed");
+    }
+    if(event->key()==Qt::Key_Q)
+    {
+        this->my_vector.StateofMoveKeys[8]=QString("unpressed");
     }
 }
 
@@ -532,12 +559,38 @@ void MainScene::collisionDetection()
                             break;
                         }
                     }
+
+                    //生产能量球
+                    srand((unsigned)time(0));
+                    if(rand()%100<(int)((float)ENERGY_POSSIBILITY*100.0f))
+                    {
+                        for(int k = 0; k<ENERGY_MAX;k++){
+                            if(m_energies[k].m_Free)
+                            {
+                                m_energies[k].m_Free = false;
+                                m_energies[k].m_X = m_enemys[i]->m_X;
+                                m_energies[k].m_Y = m_enemys[i]->m_Y;
+                                m_energies[k].m_Rect.moveTo(m_energies[k].m_X,m_energies[k].m_Y);
+                                m_energies[k].m_recorder = ENERGY_LASTING;
+                                break;
+                            }
+                        }
+                    }
                 }
             }
 
 
         }
 
+    }
+
+    //遍历所有能量
+    for(int i = 0; i< ENERGY_MAX;++i)
+    {
+        if((!m_energies[i].m_Free)&&m_energies[i].m_Rect.intersects(m_hero.m_Rect)){
+            m_hero.i_got_charge(m_energies[i].m_energy_amount);
+            m_energies[i].m_Free = true;
+        }
     }
 }
 

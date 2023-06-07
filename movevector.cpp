@@ -50,6 +50,10 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
     {
         this->skill = true;
     }
+    if(this->StateofMoveKeys[8]==QString("pressed"))//E
+    {
+        this->burst = true;
+    }
     qreal length=qSqrt(this->Vx*this->Vx+this->Vy*this->Vy);
     if(length!=qreal(0.0))//向量归一化
     {

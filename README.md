@@ -54,3 +54,11 @@
 
 ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/2.png)
 
+## **ISAACv2.8**
+
+### 新增能量球
+
+击败敌人（非创亖敌人）后有概率产生能量球。元素爆发的能量积攒方式也由释放战技改为拾取能量球。场上能量球存在上限，每个能量球产出持续一段时间后消失。
+
+![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/3.png)
+

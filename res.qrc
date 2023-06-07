@@ -73,5 +73,7 @@
         <file>res/bloodtrail-2.png</file>
         <file>res/bloodtrail-3.png</file>
         <file>res/bloodtrail-4.png</file>
+        <file>res/energy.png</file>
+        <file>res/energy_1.png</file>
     </qresource>
 </RCC>

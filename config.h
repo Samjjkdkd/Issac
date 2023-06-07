@@ -23,7 +23,7 @@
 #define SKILL_BULLET_PATH  ":/res/bullet_12.png"
 #define BULLET_SPEED 7  //子弹移动速度
 #define BULLET_NUM 120   //弹匣中子弹总数
-#define BULLET_INTERVAL 600 //发射子弹时间间隔
+#define BULLET_INTERVAL 8 //发射子弹时间间隔
 /**********  敌机配置数据 **********/
 #define ENEMY_PATH_1  ":/res/Entity_10.0.0.png"  //敌机资源图片
 #define ENEMY_PATH_2  ":/res/Entity_11.0.0.png"  //敌机资源图片
@@ -66,6 +66,14 @@
 #define SOUND_BGM_PATH ":/res/bg.wav"
 #define SOUND_BOOM_PATH ":/res/bomb.wav"
 
+
+/***********能量相关****************/
+#define ENERGY_PATH ":/res/energy.png"
+#define ENERGY_PATH_1 ":/res/energy_1.png"
+#define ENERGY_LASTING 500
+#define ENERGY_BLING 50
+#define ENERGY_MAX 20
+#define ENERGY_POSSIBILITY 0.30
 /***********界面位置相关*************/
 #define SKILL_ICON_MARGIN_X 330
 #define SKILL_ICON_MARGIN_Y 200

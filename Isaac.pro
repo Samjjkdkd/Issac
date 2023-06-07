@@ -17,6 +17,7 @@ SOURCES += \
     enemy_1.cpp \
     enemy_2.cpp \
     enemy_3.cpp \
+    energy.cpp \
     hero.cpp \
     main.cpp \
     mainscene.cpp \
@@ -34,6 +35,7 @@ HEADERS += \
     enemy_1.h \
     enemy_2.h \
     enemy_3.h \
+    energy.h \
     hero.h \
     mainscene.h \
     map.h \

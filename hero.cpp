@@ -35,6 +35,7 @@ HeroPlane::HeroPlane()
     //初始化发射间隔记录
     m_recorder = 0;
     m_skill_recorder = 0;
+    m_burst_recorder = 0;
 
     for(int i = 0 ;i<BULLET_NUM;++i){
         m_bullets[i] = Bullet(i);
@@ -103,7 +104,6 @@ void HeroPlane::skill(bool s)
     {
         return;
     }
-    this->i_got_charge(10);
     //到达发射时间处理
     //重置发射时间间隔记录
     m_skill_recorder = 0;

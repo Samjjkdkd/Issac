@@ -10,6 +10,7 @@
 #include "hero.h"
 #include "enemy.h"
 #include "bomb.h"
+#include "energy.h"
 #include "movevector.h"
 #include "bloodtrail.h"
 #include <vector>
@@ -59,6 +60,9 @@ public:
 
     //爆炸数组
     Bomb m_bombs[BOMB_NUM];
+
+    //能量数组
+    Energy m_energies[ENERGY_MAX];
 
     //残留血液
     bloodtrail m_bloodtrail[BLOOD_NUM];

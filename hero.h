@@ -51,8 +51,11 @@ public:
     //发射间隔记录
     int m_recorder;
 
-    //发射间隔记录
+    //e的cd
     int m_skill_recorder;
+
+    //q的cd
+    int m_burst_recorder;
 
     int shiftx, shifty;
 };
