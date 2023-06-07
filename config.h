@@ -17,6 +17,7 @@
 #define MAX_HEALTH 20.0
 #define SKILL_INTERVAL 200
 #define SKILL_BULLET_NUM 80
+#define CHARGE_MAX 90
 /**********  子弹配置数据 **********/
 #define BULLET_PATH ":/res/bullet_11.png"   //子弹图片路径
 #define SKILL_BULLET_PATH  ":/res/bullet_12.png"
@@ -45,7 +46,7 @@
 #define ENEMY_HP_1 3 //敌方血量
 #define ENEMY_HP_2 1
 #define ENEMY_HP_3 1
-#define ENEMY_NUM   2  //敌机总数量
+#define ENEMY_NUM   200  //敌机总数量
 #define ENEMY_INTERVAL  5  //敌机出场时间间隔
 
 #define BOMB_PATH  ":/res/blood-%1.png"   //爆炸资源图片
@@ -57,7 +58,7 @@
 #define BLOOD_PATH_2 ":/res/bloodtrail-4.png" //血迹图片
 
 #define BLOOD_NUM 500
-#define BLOOD_MAX 3
+#define BLOOD_MAX 8
 #define BLOOD_INTERVAL 100
 #define RESIZE_BLOOD_WIDTH 200
 #define RESIZE_BLOOD_HEIGHT 200

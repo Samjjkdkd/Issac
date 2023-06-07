@@ -12,6 +12,7 @@
 #include <QSoundEffect>
 #include <QSound>
 #include <QLabel>
+#include <QColor>
 #include <math.h>
 #include <complex>
 
@@ -194,20 +195,42 @@ void MainScene::paintEvent(QPaintEvent *event)
     //绘制地图
     painter.drawPixmap(0,0 , m_map.m_map_1);
 
+    //绘制血迹
+    for(int i = 0 ; i < BLOOD_NUM;i++)
+    {
+        if(m_bloodtrail[i].m_Free == false)
+        {
+            painter.setOpacity(m_bloodtrail[i].m_transparentrate/1.5);
+            if(m_bloodtrail[i].type == 0){
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[0]);
+            }
+            if(m_bloodtrail[i].type == 1){
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[1]);
+            }
+        }
+    }
+    painter.setOpacity(1);
     //画Hero
     painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
-    painter.drawRect(m_hero.m_Rect);
+    //painter.drawRect(m_hero.m_Rect);
 
     //画血条
-    QPainterPath path;
-    path.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-29,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_hp>=0?m_hero.m_hp:0)/MAX_HEALTH),18);
+    QPainterPath path1;
+    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_hp>=0?m_hero.m_hp:0)/MAX_HEALTH),18);
     painter.setPen(QPen(Qt::red, 1));
-    painter.fillPath(path, Qt::red);
+    painter.fillPath(path1, Qt::red);
     painter.setPen(QPen(Qt::white, 1));
-    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-30,m_hero.m_Rect.width()+20,20);
-    QString h_show = QString::number(m_hero.m_hp) + "/"+ QString::number(MAX_HEALTH);
+    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-33,m_hero.m_Rect.width()+20,20);
+    QString h_show1 = QString::number(m_hero.m_hp) + "/"+ QString::number(MAX_HEALTH);
     painter.setFont(QFont("Consolas",10,QFont::Normal));
-    painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show.length()/2)*12,m_hero.m_Rect.y()-14,h_show);
+    painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show1.length()/2)*12,m_hero.m_Rect.y()-17,h_show1);
+    //画蓝条
+    QPainterPath path2;
+    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX),6);
+    painter.setPen(QPen(Qt::red, 1));
+    painter.fillPath(path2, QColor(0x2e,0xdc,0xff));
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-13,m_hero.m_Rect.width()+20,8);
 
     //painter.drawPixmap(temp_bullet.m_X,temp_bullet.m_Y,temp_bullet.m_Bullet);
     //绘制子弹
@@ -236,20 +259,6 @@ void MainScene::paintEvent(QPaintEvent *event)
             painter.drawPixmap(m_bombs[i].m_X,m_bombs[i].m_Y,m_bombs[i].m_pixArr[m_bombs[i].m_index]);
         }
     }
-    //绘制血迹
-    for(int i = 0 ; i < BLOOD_NUM;i++)
-    {
-        if(m_bloodtrail[i].m_Free == false)
-        {
-            painter.setOpacity(m_bloodtrail[i].m_transparentrate/1.5);
-            if(m_bloodtrail[i].type == 0){
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[0]);
-            }
-            if(m_bloodtrail[i].type == 1){
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[1]);
-            }
-        }
-    }
     painter.setOpacity(1);
     //绘制分数
     QString a = "Killed:" + QString::number(score);
@@ -260,6 +269,18 @@ void MainScene::paintEvent(QPaintEvent *event)
     QString b = "HP:" + QString::number(m_hero.m_hp);
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(1050,100,b);
+
+    //绘制技能图标
+    QString b = "HP:" + QString::number(m_hero.m_hp);
+    painter.setFont(QFont("黑体",20,QFont::Bold));
+    painter.drawText(1050,100,b);
+
+    //绘制debug信息
+    painter.setFont(QFont("黑体",8,QFont::Bold));
+    for(int i = BULLET_NUM-SKILL_BULLET_NUM;i<BULLET_NUM;++i)
+    {
+        painter.drawText(0,12*(SKILL_BULLET_NUM+i-BULLET_NUM),QString(QString::number(i)+":"+(m_hero.m_bullets[i].m_Free?"true":"false")));
+    }
 }
 
 void MainScene::playGame()

@@ -30,6 +30,7 @@ HeroPlane::HeroPlane()
     m_Rect.moveTo(m_X,m_Y);
 
     m_hp = MAX_HEALTH;
+    m_charge = 0;
 
     //初始化发射间隔记录
     m_recorder = 0;
@@ -79,11 +80,18 @@ void HeroPlane::shoot()
             m_bullets[i].m_rX = (double)m_X + (double)m_Rect.width()*0.5 - 10.0;
             m_bullets[i].m_rY = (double)m_Y + 20.0 ;
             m_bullets[i].xyTrans();
+            m_bullets[i].m_Rect.moveTo(m_bullets[i].m_X, m_bullets[i].m_Y);
 
             break;
         }
     }
 }
+
+void HeroPlane::i_got_charge(int n){
+    if(this->m_charge<CHARGE_MAX)   this->m_charge+=n;
+    if(this->m_charge>CHARGE_MAX)   this->m_charge=CHARGE_MAX;
+}
+
 
 void HeroPlane::skill(bool s)
 {
@@ -95,6 +103,7 @@ void HeroPlane::skill(bool s)
     {
         return;
     }
+    this->i_got_charge(10);
     //到达发射时间处理
     //重置发射时间间隔记录
     m_skill_recorder = 0;
@@ -122,6 +131,7 @@ void HeroPlane::skill(bool s)
                 m_bullets[i].m_rX = (double)m_X + (double)m_Rect.width()*0.5 - 10.0;
                 m_bullets[i].m_rY = (double)m_Y + 20.0 ;
                 m_bullets[i].xyTrans();
+                m_bullets[i].m_Rect.moveTo(m_bullets[i].m_X, m_bullets[i].m_Y);
 
                 break;
             }
@@ -160,3 +170,4 @@ QPixmap HeroPlane::PixmapToRound(const QPixmap &src, int radius)
 
     return pixmap;
 }
+

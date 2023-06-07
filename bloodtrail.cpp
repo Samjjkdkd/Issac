@@ -15,7 +15,7 @@ bloodtrail::bloodtrail()
     m_index = 0;
 
     //爆炸间隔记录
-    m_Recoder = 0;
+    m_Recoder = BLOOD_INTERVAL;
 }
 void bloodtrail::updateInfo()
 {
@@ -43,6 +43,7 @@ void bloodtrail::updateInfo()
     if(m_index > BLOOD_MAX - 1)
     {
         m_index = 0;
+        m_Recoder = BLOOD_INTERVAL;
         m_Free = true;
     }
 }

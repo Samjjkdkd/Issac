@@ -16,6 +16,9 @@ public:
     //设置飞机位置
     void setPosition(int x, int y);
 
+    //充能
+    void i_got_charge(int n);
+
     QPixmap PixmapToRound(const QPixmap &src, int radius);
 
     //飞机资源 对象
@@ -32,6 +35,9 @@ public:
 
     //飞机生命
     int m_hp;
+
+    //飞机充能
+    int m_charge;
 
     //飞机的矩形边框
     QRect m_Rect;
