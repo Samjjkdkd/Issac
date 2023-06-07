@@ -8,7 +8,6 @@ Bomb::Bomb()
         QString str = QString(BOMB_PATH).arg(i);
         m_pixArr.push_back(QPixmap(str));
     }
-
     //初始化坐标
     m_X = 0;
     m_Y = 0;

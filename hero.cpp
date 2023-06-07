@@ -4,6 +4,7 @@
 #include <QRect>
 HeroPlane::HeroPlane()
 {
+
     //初始化加载飞机图片资源
     m_Plane_original.load(HERO_PATH);
     //m_Plane_original = PixmapToRound(m_Plane_original, RESIZE_RADIUS);
@@ -32,7 +33,11 @@ HeroPlane::HeroPlane()
 
     //初始化发射间隔记录
     m_recorder = 0;
+    m_skill_recorder = 0;
 
+    for(int i = 0 ;i<BULLET_NUM;++i){
+        m_bullets[i] = Bullet(i);
+    }
 }
 
 void HeroPlane::setPosition(int x, int y)
@@ -58,7 +63,7 @@ void HeroPlane::shoot()
     m_recorder = 0;
 
     //发射子弹
-    for(int i = 0 ; i < BULLET_NUM;i++)
+    for(int i = 0 ; i < BULLET_NUM-SKILL_BULLET_NUM;i++)
     {
         //如果是空闲的子弹进行发射
         if(m_bullets[i].m_Free)
@@ -76,6 +81,50 @@ void HeroPlane::shoot()
             m_bullets[i].xyTrans();
 
             break;
+        }
+    }
+}
+
+void HeroPlane::skill(bool s)
+{
+
+    //累加时间间隔记录变量
+    m_skill_recorder++;
+    //判断如果记录数字 未达到发射间隔，直接return
+    if(m_skill_recorder < SKILL_INTERVAL||!s)
+    {
+        return;
+    }
+    //到达发射时间处理
+    //重置发射时间间隔记录
+    m_skill_recorder = 0;
+
+    //发射子弹
+    float d_degree = (float)(360.0/(float)SKILL_BULLET_NUM);
+    QTransform transform;
+    transform.rotate(180.0);
+    for(float j = 0; j <= 360.0;j+=d_degree){
+
+        for(int i = BULLET_NUM-SKILL_BULLET_NUM ; i < BULLET_NUM;i++)
+        {
+            //如果是空闲的子弹进行发射
+            if(m_bullets[i].m_Free)
+            {
+                //初始化子弹角度
+                m_bullets[i].m_direction = j;
+
+                m_bullets[i].m_Bullet = m_bullets[i].m_Bullet_original.transformed(transform,Qt::SmoothTransformation);
+                transform.rotate(-d_degree);
+
+                //将该子弹空闲状态改为假
+                m_bullets[i].m_Free = false;
+                //设置发射的子弹坐标
+                m_bullets[i].m_rX = (double)m_X + (double)m_Rect.width()*0.5 - 10.0;
+                m_bullets[i].m_rY = (double)m_Y + 20.0 ;
+                m_bullets[i].xyTrans();
+
+                break;
+            }
         }
     }
 }

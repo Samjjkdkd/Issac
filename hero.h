@@ -11,6 +11,8 @@ public:
 
     //发射子弹
     void shoot();
+    //发射子弹
+    void skill(bool s);
     //设置飞机位置
     void setPosition(int x, int y);
 
@@ -42,6 +44,9 @@ public:
 
     //发射间隔记录
     int m_recorder;
+
+    //发射间隔记录
+    int m_skill_recorder;
 
     int shiftx, shifty;
 };

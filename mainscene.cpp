@@ -163,6 +163,9 @@ void MainScene::updatePosition()
 
     QTransform transform;
     this->my_vector.GenerateVector();
+
+    m_hero.skill(this->my_vector.skill);
+
     int isShiftPressed=this->my_vector.StateofMoveKeys[4]==QString("pressed")?1:0;
     int deltax=qFloor(this->my_vector.Vx*10000.0*I_SHOW_SPEED)/(10000+isShiftPressed*3*10000);
     int deltay=qFloor(this->my_vector.Vy*10000.0*I_SHOW_SPEED)/(10000+isShiftPressed*3*10000);
@@ -348,6 +351,10 @@ void MainScene::keyPressEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[4]=QString("pressed");
     }
+    if(event->key()==Qt::Key_E)
+    {
+        this->my_vector.StateofMoveKeys[7]=QString("pressed");
+    }
 }
 
 //松键事件
@@ -380,6 +387,10 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
     if(event->key()==Qt::Key_Shift)//低速移动键，参照東方project机制
     {
         this->my_vector.StateofMoveKeys[4]=QString("unpressed");
+    }
+    if(event->key()==Qt::Key_E)
+    {
+        this->my_vector.StateofMoveKeys[7]=QString("unpressed");
     }
 }
 

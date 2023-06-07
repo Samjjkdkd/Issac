@@ -2,7 +2,7 @@
 
 MoveVector::MoveVector()
 {
-    for(int i=0;i<7;i++)
+    for(int i=0;i<10;i++)
     {
         this->StateofMoveKeys[i]=QString("unpressed");
     }
@@ -14,6 +14,7 @@ void MoveVector::toZeroVector()//归零向量
     this->Vx=0;
     this->Vy=0;
     this->theta=0;
+    this->skill = false;
 }
 
 
@@ -44,6 +45,10 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
     if(this->StateofMoveKeys[6]==QString("pressed"))//D
     {
         this->changeTheta(-ROTATE_SENSITIVITY);
+    }
+    if(this->StateofMoveKeys[7]==QString("pressed"))//E
+    {
+        this->skill = true;
     }
     qreal length=qSqrt(this->Vx*this->Vx+this->Vy*this->Vy);
     if(length!=qreal(0.0))//向量归一化

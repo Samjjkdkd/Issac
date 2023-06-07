@@ -1,12 +1,17 @@
 #include "bullet.h"
 #include <math.h>
-Bullet::Bullet()
+Bullet::Bullet(){
+
+}
+Bullet::Bullet(int i)
 {
     //加载子弹资源
-    m_Bullet_original.load(BULLET_PATH);
-
+    if(i>=0&&i<BULLET_NUM-SKILL_BULLET_NUM){
+        m_Bullet_original.load(BULLET_PATH);
+    }else{
+        m_Bullet_original.load(SKILL_BULLET_PATH);
+    }
     m_Bullet = m_Bullet_original;
-
     //子弹坐标 初始坐标可随意设置，后期会重置
     m_X = GAME_WIDTH*0.5 - m_Bullet.width()*0.5;
     m_Y = GAME_HEIGHT;

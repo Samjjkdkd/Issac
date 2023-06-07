@@ -6,6 +6,7 @@
 class Bullet
 {
 public:
+    Bullet(int i);
     Bullet();
 
     void xyTrans(){
@@ -20,6 +21,8 @@ public:
     //子弹资源对象
     QPixmap m_Bullet_original;
     QPixmap m_Bullet;
+    QPixmap m_sBullet_original;
+    QPixmap m_sBullet;
     //子弹坐标
     int m_X;
     int m_Y;
