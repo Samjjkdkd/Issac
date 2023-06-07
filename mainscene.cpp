@@ -32,6 +32,11 @@ MainScene::~MainScene()
 void MainScene::initScene()
 {
     //加载资源。
+    bgsound = new QSoundEffect(this);
+    bgsound->setSource(QUrl::fromLocalFile(SOUND_BGM_PATH));
+    bgsound->setLoopCount(-1);
+    bgsound->setVolume(0.25f);
+
     m_blood[0].load(BLOOD_PATH_1);
     m_blood[0] = m_blood[0].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_blood[1].load(BLOOD_PATH_2);
@@ -270,8 +275,13 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(1050,100,b);
 
+
+
     //绘制技能图标
-    QString b = "HP:" + QString::number(m_hero.m_hp);
+    QString c = m_hero.m_skill_recorder>SKILL_INTERVAL?"":(QString::number((float)((float)SKILL_INTERVAL-(float)m_hero.m_skill_recorder)/(float)GAME_RATE)+"s");
+    QPainterPath path3;
+    path3.addRect(GAME_WIDTH-100,GAME_HEIGHT-50,20,20)
+    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX),6);
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(1050,100,b);
 
@@ -287,14 +297,8 @@ void MainScene::playGame()
 {
     //启动定时器
     m_Timer.start();
-    QSoundEffect *soundEffect = new QSoundEffect();
-    // 设置声音源文件的路径
-    soundEffect->setSource(QUrl::fromLocalFile(SOUND_BACKGROUND));
-    // 音频循环的次数
-    soundEffect->setLoopCount(114514);
-    // 音量
-    soundEffect->setVolume(1);
-    soundEffect->play();
+
+    bgsound->play();//
 
 
     //监听定时器
@@ -423,8 +427,6 @@ bool isIntersect(const QRect& a, const QRect& b){
 
 void MainScene::collisionDetection()
 {
-    QSoundEffect * bombSound = new QSoundEffect(this);
-    bombSound->setSource(QUrl::fromLocalFile(SOUND_BOMB));
 
     //遍历所有非空闲的敌机
     for(int i = 0 ;i < ENEMY_NUM;i++)
@@ -440,7 +442,6 @@ void MainScene::collisionDetection()
                     //爆炸状态设置为非空闲
                     m_bombs[k].m_Free = false;
                     //更新坐标
-                    bombSound->play();
                     m_bombs[k].m_X = m_enemys[i]->m_X;
                     m_bombs[k].m_Y = m_enemys[i]->m_Y;
                     break;
@@ -492,7 +493,6 @@ void MainScene::collisionDetection()
                             //爆炸状态设置为非空闲
                             m_bombs[k].m_Free = false;
                             //更新坐标
-                            bombSound->play();
                             m_bombs[k].m_X = m_enemys[i]->m_X;
                             m_bombs[k].m_Y = m_enemys[i]->m_Y;
                             break;

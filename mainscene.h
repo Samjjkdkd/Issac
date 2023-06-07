@@ -2,6 +2,10 @@
 #define MAINSCENE_H
 #include<QTimer>
 #include <QWidget>
+#include <QSound>
+#include <QSoundEffect>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
 #include "map.h"
 #include "hero.h"
 #include "enemy.h"
@@ -16,6 +20,9 @@ class MainScene : public QWidget
 
 public:
     MainScene(QWidget *parent = nullptr);
+
+    QSoundEffect *bgsound;
+    QSoundEffect *bombSound;
 
     //启动游戏  用于启动定时器对象
     void playGame();
