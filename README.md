@@ -42,5 +42,7 @@
 
 ### 新增战技显示
 
+包括战技按键，冷却时间显示
+
 ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/1.png)
 
