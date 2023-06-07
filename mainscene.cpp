@@ -219,23 +219,6 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
     //painter.drawRect(m_hero.m_Rect);
 
-    //画血条
-    QPainterPath path1;
-    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_hp>=0?m_hero.m_hp:0)/MAX_HEALTH),18);
-    painter.setPen(QPen(Qt::red, 1));
-    painter.fillPath(path1, Qt::red);
-    painter.setPen(QPen(Qt::white, 1));
-    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-33,m_hero.m_Rect.width()+20,20);
-    QString h_show1 = QString::number(m_hero.m_hp) + "/"+ QString::number(MAX_HEALTH);
-    painter.setFont(QFont("Consolas",10,QFont::Normal));
-    painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show1.length()/2)*12,m_hero.m_Rect.y()-17,h_show1);
-    //画蓝条
-    QPainterPath path2;
-    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX),6);
-    painter.setPen(QPen(Qt::red, 1));
-    painter.fillPath(path2, QColor(0x2e,0xdc,0xff));
-    painter.setPen(QPen(Qt::white, 1));
-    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-13,m_hero.m_Rect.width()+20,8);
 
     //painter.drawPixmap(temp_bullet.m_X,temp_bullet.m_Y,temp_bullet.m_Bullet);
     //绘制子弹
@@ -275,6 +258,23 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(1050,100,b);
 
+    //画血条
+    QPainterPath path1;
+    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_hp>=0?m_hero.m_hp:0)/MAX_HEALTH),18);
+    painter.setPen(QPen(Qt::red, 1));
+    painter.fillPath(path1, Qt::red);
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-33,m_hero.m_Rect.width()+20,20);
+    QString h_show1 = QString::number(m_hero.m_hp) + "/"+ QString::number(MAX_HEALTH);
+    painter.setFont(QFont("Consolas",10,QFont::Normal));
+    painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show1.length()/2)*12,m_hero.m_Rect.y()-17,h_show1);
+    //画蓝条
+    QPainterPath path2;
+    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX),6);
+    painter.setPen(QPen(Qt::red, 1));
+    painter.fillPath(path2, QColor(0x2e,0xdc,0xff));
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-13,m_hero.m_Rect.width()+20,8);
 
 
     //绘制技能图标
@@ -285,14 +285,27 @@ void MainScene::paintEvent(QPaintEvent *event)
                         m_hero.m_skill_recorder>SKILL_INTERVAL? 1.0f:((float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)));
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-SKILL_ICON_MARGIN_X,GAME_HEIGHT-SKILL_ICON_MARGIN_Y,SKILL_ICON_SIZE,SKILL_ICON_SIZE);
-    painter.setOpacity(m_hero.m_skill_recorder>SKILL_INTERVAL?0.7:0.6);
-
+    painter.setOpacity(m_hero.m_skill_recorder>SKILL_INTERVAL?0.6:0.5);
     painter.fillPath(path3, QColor(0xff,0xff,0xff));
     painter.setOpacity(1);
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-10,c);
     painter.setFont(QFont("黑体",30,QFont::Bold));
     painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-50,QString("E"));
+
+    //绘制大招图标
+
+    QPainterPath path4;
+    path4.addRect(GAME_WIDTH-BURST_ICON_MARGIN_X+1,GAME_HEIGHT-BURST_ICON_MARGIN_Y+1+(float)(BURST_ICON_SIZE-2)*((float)(m_hero.m_charge>=0?CHARGE_MAX-m_hero.m_charge:0)/CHARGE_MAX),SKILL_ICON_SIZE-2,(float)(SKILL_ICON_SIZE-2)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX));
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(GAME_WIDTH-BURST_ICON_MARGIN_X,GAME_HEIGHT-BURST_ICON_MARGIN_Y,BURST_ICON_SIZE,BURST_ICON_SIZE);
+    painter.setOpacity(m_hero.m_charge==CHARGE_MAX?0.6:0.5);
+    painter.fillPath(path4, QColor(0x2e,0xdc,0xff));
+    painter.setOpacity(1);
+    painter.setFont(QFont("黑体",20,QFont::Bold));
+    //painter.drawText(GAME_WIDTH-BURST_ICON_MARGIN_X+10,GAME_HEIGHT-BURST_ICON_MARGIN_Y+BURST_ICON_SIZE-10,d);
+    painter.setFont(QFont("黑体",30,QFont::Bold));
+    painter.drawText(GAME_WIDTH-BURST_ICON_MARGIN_X+10,GAME_HEIGHT-BURST_ICON_MARGIN_Y+BURST_ICON_SIZE-50,QString("Q"));
 
     //绘制debug信息
     painter.setFont(QFont("黑体",8,QFont::Bold));

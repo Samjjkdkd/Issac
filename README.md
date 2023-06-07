@@ -46,3 +46,11 @@
 
 ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/1.png)
 
+## **ISAACv2.7.3**
+
+### 新增爆发显示
+
+包括元素爆发按键，充能指示
+
+![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/2.png)
+
