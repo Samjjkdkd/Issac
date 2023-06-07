@@ -42,5 +42,5 @@
 
 ### 新增战技显示
 
-![image](https://github.com/Samjjkdkd/Issac/tree/main/img/1.png)
+![image](https://github.com/Samjjkdkd/Issac/tree/main/img/1.png?raw=true)
 
