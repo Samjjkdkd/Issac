@@ -13,7 +13,7 @@ public:
     void updateInfo();
 
     //放爆炸资源数组
-    QPixmap m_blood[2];
+
 
     //爆炸位置
     int m_X;

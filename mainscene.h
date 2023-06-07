@@ -55,6 +55,7 @@ public:
 
     //残留血液
     bloodtrail m_bloodtrail[BLOOD_NUM];
+    QPixmap m_blood[2];
 
     // Bullet temp_bullet;
     ~MainScene();

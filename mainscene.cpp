@@ -30,6 +30,12 @@ MainScene::~MainScene()
 }
 void MainScene::initScene()
 {
+    //加载资源。
+    m_blood[0].load(BLOOD_PATH_1);
+    m_blood[0] = m_blood[0].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    m_blood[1].load(BLOOD_PATH_2);
+    m_blood[1] = m_blood[1].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
     //初始化窗口大小
     setFixedSize(GAME_WIDTH,GAME_HEIGHT);
 
@@ -232,12 +238,12 @@ void MainScene::paintEvent(QPaintEvent *event)
     {
         if(m_bloodtrail[i].m_Free == false)
         {
-            painter.setOpacity(m_bloodtrail[i].m_transparentrate/2);
+            painter.setOpacity(m_bloodtrail[i].m_transparentrate/1.5);
             if(m_bloodtrail[i].type == 0){
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_bloodtrail[i].m_blood[0]);
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[0]);
             }
             if(m_bloodtrail[i].type == 1){
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_bloodtrail[i].m_blood[1]);
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[1]);
             }
         }
     }

@@ -3,10 +3,6 @@
 bloodtrail::bloodtrail()
 {
     //初始化爆炸图片数组
-    m_blood[0].load(BLOOD_PATH_1);
-    m_blood[0] = m_blood[0].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    m_blood[1].load(BLOOD_PATH_2);
-    m_blood[1] = m_blood[1].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     //初始化坐标
     m_X = 0;
