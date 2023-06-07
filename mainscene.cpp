@@ -278,12 +278,21 @@ void MainScene::paintEvent(QPaintEvent *event)
 
 
     //绘制技能图标
-    QString c = m_hero.m_skill_recorder>SKILL_INTERVAL?"":(QString::number((float)((float)SKILL_INTERVAL-(float)m_hero.m_skill_recorder)/(float)GAME_RATE)+"s");
+    QString c = m_hero.m_skill_recorder>SKILL_INTERVAL?"":(QString::number((float)((float)SKILL_INTERVAL-(float)m_hero.m_skill_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
     QPainterPath path3;
-    path3.addRect(GAME_WIDTH-100,GAME_HEIGHT-50,20,20)
-    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX),6);
+    path3.addRect(GAME_WIDTH-SKILL_ICON_MARGIN_X+1,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+1+(float)(SKILL_ICON_SIZE-2)*(
+                                                                                                    m_hero.m_skill_recorder>SKILL_INTERVAL? 0.0f:((float)(SKILL_INTERVAL)-(float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)),SKILL_ICON_SIZE-2,(float)(SKILL_ICON_SIZE-2)*(
+                        m_hero.m_skill_recorder>SKILL_INTERVAL? 1.0f:((float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)));
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(GAME_WIDTH-SKILL_ICON_MARGIN_X,GAME_HEIGHT-SKILL_ICON_MARGIN_Y,SKILL_ICON_SIZE,SKILL_ICON_SIZE);
+    painter.setOpacity(m_hero.m_skill_recorder>SKILL_INTERVAL?0.7:0.6);
+
+    painter.fillPath(path3, QColor(0xff,0xff,0xff));
+    painter.setOpacity(1);
     painter.setFont(QFont("黑体",20,QFont::Bold));
-    painter.drawText(1050,100,b);
+    painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-10,c);
+    painter.setFont(QFont("黑体",30,QFont::Bold));
+    painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-50,QString("E"));
 
     //绘制debug信息
     painter.setFont(QFont("黑体",8,QFont::Bold));

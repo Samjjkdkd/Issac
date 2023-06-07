@@ -66,6 +66,10 @@
 #define SOUND_BGM_PATH ":/res/bg.wav"
 #define SOUND_BOOM_PATH ":/res/bomb.wav"
 
+/***********界面位置相关*************/
+#define SKILL_ICON_MARGIN_X 300
+#define SKILL_ICON_MARGIN_Y 200
+#define SKILL_ICON_SIZE 100
 
 
 #define Pi 3.141592653589793238462643383279503884197169399375105820974944

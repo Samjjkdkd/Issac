@@ -34,3 +34,13 @@
 
 ### 新增战技
 
+## **ISAACv2.7.1**
+
+### 删除了爆炸音效，解决了卡顿的问题
+
+## **ISAACv2.7.2**
+
+### 新增战技显示
+
+![image](https://github.com/Samjjkdkd/Issac/tree/main/img/1.png)
+
