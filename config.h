@@ -16,6 +16,7 @@
 #define I_SHOW_SPEED 10.0
 #define MAX_HEALTH 20.0
 #define SKILL_INTERVAL 200
+#define BURST_INTERVAL 2000
 #define SKILL_BULLET_NUM 80
 #define CHARGE_MAX 90
 /**********  子弹配置数据 **********/

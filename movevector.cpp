@@ -15,6 +15,7 @@ void MoveVector::toZeroVector()//归零向量
     this->Vy=0;
     this->theta=0;
     this->skill = false;
+    this->burst = false;
 }
 
 
@@ -50,7 +51,7 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
     {
         this->skill = true;
     }
-    if(this->StateofMoveKeys[8]==QString("pressed"))//E
+    if(this->StateofMoveKeys[8]==QString("pressed"))//Q
     {
         this->burst = true;
     }

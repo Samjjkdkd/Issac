@@ -62,3 +62,11 @@
 
 ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/3.png)
 
+## **ISAACv2.8.2**
+
+### 完善爆发逻辑
+
+添加元素爆发cd显示，并使得元素爆发能够释放（并无实际功能，仅用于完善充能与释放逻辑）
+
+![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/4.png)
+

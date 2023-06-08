@@ -138,6 +138,24 @@ void HeroPlane::skill(bool s)
         }
     }
 }
+void HeroPlane::burst(bool s)
+{
+
+    //累加时间间隔记录变量
+    m_burst_recorder++;
+    //判断如果记录数字 未达到发射间隔，直接return
+    if(m_burst_recorder < SKILL_INTERVAL||!s||m_charge!=CHARGE_MAX)
+    {
+        return;
+    }
+    //到达发射时间处理
+    //重置发射时间间隔记录
+    m_burst_recorder = 0;
+    m_charge = 0;
+
+    //大招效果
+
+}
 
 QPixmap HeroPlane::PixmapToRound(const QPixmap &src, int radius)
 {

@@ -11,8 +11,10 @@ public:
 
     //发射子弹
     void shoot();
-    //发射子弹
+    //e技能
     void skill(bool s);
+    //q技能
+    void burst(bool s);
     //设置飞机位置
     void setPosition(int x, int y);
 
