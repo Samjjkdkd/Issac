@@ -339,10 +339,10 @@ void MainScene::paintEvent(QPaintEvent *event)
 //    {
 //        painter.drawText(0,12*(SKILL_BULLET_NUM+i-BULLET_NUM),QString(QString::number(i)+":"+(m_hero.m_bullets[i].m_Free?"true":"false")));
 //    }
-    for(int i = 0;i<ENERGY_MAX;++i)
-    {
-        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_energies[i].m_Free?"true":"false")));
-    }
+//    for(int i = 0;i<ENERGY_MAX;++i)
+//    {
+//        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_energies[i].m_Free?"true":"false")));
+//    }
 }
 
 void MainScene::playGame()
