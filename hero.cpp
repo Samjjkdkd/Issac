@@ -64,7 +64,8 @@ void HeroPlane::shoot()
     //累加时间间隔记录变量
     m_recorder++;
     //判断如果记录数字 未达到发射间隔，直接return
-    if(m_recorder < BULLET_INTERVAL)
+    int bullet_interval_ = m_burst_timer==0? BULLET_INTERVAL:BULLET_INTERVAL/2;
+    if(m_recorder < bullet_interval_)
     {
         return;
     }

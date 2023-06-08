@@ -100,3 +100,9 @@
     时停期间场景以及敌机会变暗 
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/6.png)
+
+## **ISAAC v2.10.1**
+
+- ### 元素爆发功能修改
+
+       Q技能会让子弹发射间隔减半，这个代码写的有点傻逼，好心人可以优化一下（我改在hero::shoot()了）

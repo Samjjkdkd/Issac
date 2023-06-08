@@ -1,7 +1,7 @@
 /**********  游戏配置数据 **********/
 #define GAME_WIDTH  2048  //宽度
 #define GAME_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v2.10.0" //标题
+#define GAME_TITLE "以撒 v2.10.1" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
