@@ -140,17 +140,19 @@ void MainScene::updatePosition()
         }
     }
     //敌机坐标计算
-    for(int i = 0 ; i< ENEMY_NUM;i++)
-    {
-        //非空闲敌机 更新坐标
-        if(m_enemys[i]->m_Free == false)
+    if(!m_hero.m_burst_timer){
+        for(int i = 0 ; i< ENEMY_NUM;i++)
         {
+            //非空闲敌机 更新坐标
+            if(m_enemys[i]->m_Free == false)
+            {
             if(m_enemys[i]->type == 3){
                 m_enemys[i]->updateInfo();
             }
             m_enemys[i]->updatePosition(m_hero.m_X,m_hero.m_Y);
-        }
+            }
 
+        }
     }
     //计算爆炸播放的图片
     for(int i = 0 ; i < BOMB_NUM;i++)
@@ -211,6 +213,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     //绘制地图
     painter.drawPixmap(0,0 , m_map.m_map_1);
 
+
     //绘制血迹
     for(int i = 0 ; i < BLOOD_NUM;i++)
     {
@@ -225,6 +228,34 @@ void MainScene::paintEvent(QPaintEvent *event)
             }
         }
     }
+    painter.setOpacity(1);
+
+    //绘制爆炸图片
+    for(int i = 0 ; i < BOMB_NUM;i++)
+    {
+        if(m_bombs[i].m_Free == false)
+        {
+            painter.drawPixmap(m_bombs[i].m_X,m_bombs[i].m_Y,m_bombs[i].m_pixArr[m_bombs[i].m_index]);
+        }
+    }
+
+    //画敌人
+    for(int i = 0 ; i< ENEMY_NUM;i++)
+    {
+        if(m_enemys[i]->m_Free == false)
+        {
+            m_enemys[i]->drawEnemy(painter);
+            //painter.drawRect(m_enemys[i]->m_Rect);
+        }
+    }
+
+    if(m_hero.m_burst_timer){
+        painter.setBrush(QBrush(QColor(0,0,0,80)));
+        painter.drawRect(-1,-1,GAME_WIDTH+2,GAME_HEIGHT+2);
+        painter.setBrush(QBrush(Qt::NoBrush));
+    }
+
+
     painter.setOpacity(1);
     //画Hero
     painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
@@ -250,22 +281,6 @@ void MainScene::paintEvent(QPaintEvent *event)
         {
             painter.drawPixmap(m_energies[i].m_X,m_energies[i].m_Y,m_energies[i].m_energy);
             //painter.drawRect(m_energies[i].m_Rect);
-        }
-    }
-    for(int i = 0 ; i< ENEMY_NUM;i++)
-    {
-        if(m_enemys[i]->m_Free == false)
-        {
-            m_enemys[i]->drawEnemy(painter);
-            //painter.drawRect(m_enemys[i]->m_Rect);
-        }
-    }
-    //绘制爆炸图片
-    for(int i = 0 ; i < BOMB_NUM;i++)
-    {
-        if(m_bombs[i].m_Free == false)
-        {
-            painter.drawPixmap(m_bombs[i].m_X,m_bombs[i].m_Y,m_bombs[i].m_pixArr[m_bombs[i].m_index]);
         }
     }
     painter.setOpacity(1.0);
@@ -541,7 +556,20 @@ void MainScene::collisionDetection()
                 m_enemys[i]->hp--;
                 m_hero.m_bullets[j].m_Free = true;
                 if(m_enemys[i]->hp==0){
-                    score++;//得分增加
+
+                    //得分增加
+                    switch(m_enemys[i]->type){
+                    case 1:
+                        score+=ENEMY_SCORE_1;
+                        break;
+                    case 2:
+                        score+=ENEMY_SCORE_2;
+                        break;
+                    case 3:
+                        score+=ENEMY_SCORE_3;
+                        break;
+                    }
+
 
                     m_enemys[i]->m_Free = true;
 
@@ -578,6 +606,19 @@ void MainScene::collisionDetection()
                             if(m_energies[k].m_Free)
                             {
                                 m_energies[k].m_Free = false;
+                                switch(m_enemys[i]->type){
+                                case 1:
+                                    m_energies[k].m_energy_amount = ENEMY_ENERGY_1;
+                                    break;
+                                case 2:
+                                    m_energies[k].m_energy_amount = ENEMY_ENERGY_2;
+                                    break;
+                                case 3:
+                                    m_energies[k].m_energy_amount = ENEMY_ENERGY_3;
+                                    break;
+                                }
+
+
                                 m_energies[k].m_X = m_enemys[i]->m_X;
                                 m_energies[k].m_Y = m_enemys[i]->m_Y;
                                 m_energies[k].m_Rect.moveTo(m_energies[k].m_X,m_energies[k].m_Y);

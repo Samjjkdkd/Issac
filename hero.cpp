@@ -42,6 +42,9 @@ HeroPlane::HeroPlane()
     m_burst_recorder = BURST_INTERVAL;
     m_sprint_recorder = SPRINT_INTERVAL;
 
+    m_sprint_timer = 0;
+    m_burst_timer = 0;
+
     for(int i = 0 ;i<BULLET_NUM;++i){
         m_bullets[i] = Bullet(i);
     }
@@ -149,6 +152,11 @@ void HeroPlane::burst(bool s)
     //累加时间间隔记录变量
     m_burst_recorder++;
     //判断如果记录数字 未达到发射间隔，直接return
+
+    if(m_burst_timer)   {
+        m_burst_timer--;
+    }
+
     if(m_burst_recorder < SKILL_INTERVAL||!s||m_charge!=CHARGE_MAX)
     {
         return;
@@ -159,7 +167,7 @@ void HeroPlane::burst(bool s)
     m_charge = 0;
 
     //大招效果
-
+    m_burst_timer = BURST_TIME;
 }
 
 

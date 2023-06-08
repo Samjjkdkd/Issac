@@ -17,14 +17,15 @@
 #define I_GOT_SPRINT 8.0f
 #define MAX_HEALTH 20.0
 #define SKILL_INTERVAL 200
-#define BURST_INTERVAL 2000
+#define BURST_INTERVAL 1000
 #define SPRINT_INTERVAL 50
 #define SKILL_BULLET_NUM 30
-#define CHARGE_MAX 90
+#define CHARGE_MAX 20
 #define MAX_STAMINA 1000
 #define SPRINT_COST 300
 #define SPRINT_TIME 30
 #define BOOST_TIME 8
+#define BURST_TIME 500
 /**********  子弹配置数据 **********/
 #define BULLET_PATH ":/res/bullet_11.png"   //子弹图片路径
 #define SKILL_BULLET_PATH  ":/res/bullet_12.png"
@@ -42,6 +43,14 @@
 #define RESIZE_HEIGHT_2 80 //敌方统一大小
 #define RESIZE_WIDTH_3 80 //敌方统一大小
 #define RESIZE_HEIGHT_3 80 //敌方统一大小
+
+//奖励相关
+#define ENEMY_ENERGY_1 10
+#define ENEMY_ENERGY_2 3
+#define ENEMY_ENERGY_3 5
+#define ENEMY_SCORE_1 3
+#define ENEMY_SCORE_2 1
+#define ENEMY_SCORE_3 1
 
 //动图播放
 #define ENEMY_3_INTERVAL 7

@@ -67,6 +67,9 @@ public:
     //冲刺持续计时器
     int m_sprint_timer;
 
+    //爆发持续计时器
+    int m_burst_timer;
+
     //e计时器
     int m_skill_recorder;
 

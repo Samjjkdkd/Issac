@@ -89,4 +89,12 @@
 
 - ### 修改按键逻辑
 
-    部分按键（如E/Q/Shift）均要求抬起后才能再次触发，故在*MoveVector*中新增按键抬起的相应检测
+    部分按键（如E/Q/Shift）均要求抬起后才能再次触发，故在*MoveVector*中新增按键抬起的相应
+    
+## **ISAAC v2.10.0**
+
+- ### 元素爆发功能实装
+
+    元素爆发(Q)现已具有实际功能，目前为时停敌方所有行为持续一段时间，这段时间*Hero*可以自由移动和发射子弹
+    时停期间场景以及敌机会变暗
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/6.png)
