@@ -12,12 +12,12 @@
 /**********  飞机配置数据 **********/
 #define HERO_PATH ":/res/Entity_887.0.0.1.png"
 #define RESIZE_RADIUS 128
-#define ROTATE_SENSITIVITY 5
+#define ROTATE_SENSITIVITY 2
 #define I_SHOW_SPEED 10.0
 #define MAX_HEALTH 20.0
 #define SKILL_INTERVAL 200
 #define BURST_INTERVAL 2000
-#define SKILL_BULLET_NUM 80
+#define SKILL_BULLET_NUM 30
 #define CHARGE_MAX 90
 /**********  子弹配置数据 **********/
 #define BULLET_PATH ":/res/bullet_11.png"   //子弹图片路径
@@ -47,7 +47,7 @@
 #define ENEMY_HP_1 3 //敌方血量
 #define ENEMY_HP_2 1
 #define ENEMY_HP_3 1
-#define ENEMY_NUM   200  //敌机总数量
+#define ENEMY_NUM   50  //敌机总数量
 #define ENEMY_INTERVAL  5  //敌机出场时间间隔
 
 #define BOMB_PATH  ":/res/blood-%1.png"   //爆炸资源图片
@@ -74,7 +74,7 @@
 #define ENERGY_LASTING 500
 #define ENERGY_BLING 50
 #define ENERGY_MAX 20
-#define ENERGY_POSSIBILITY 0.30
+#define ENERGY_POSSIBILITY 0.10
 /***********界面位置相关*************/
 #define SKILL_ICON_MARGIN_X 330
 #define SKILL_ICON_MARGIN_Y 200

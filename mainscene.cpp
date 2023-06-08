@@ -268,6 +268,7 @@ void MainScene::paintEvent(QPaintEvent *event)
         }
     }
     painter.setOpacity(1);
+    painter.setPen(QPen(Qt::white, 1));
     //绘制分数
     QString a = "Killed:" + QString::number(score);
     painter.setFont(QFont("黑体",20,QFont::Bold));
@@ -307,13 +308,13 @@ void MainScene::paintEvent(QPaintEvent *event)
                         m_hero.m_skill_recorder>SKILL_INTERVAL? 1.0f:((float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)));
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-SKILL_ICON_MARGIN_X,GAME_HEIGHT-SKILL_ICON_MARGIN_Y,SKILL_ICON_SIZE,SKILL_ICON_SIZE);
-    painter.setOpacity(m_hero.m_skill_recorder>SKILL_INTERVAL?0.6:0.5);
+    painter.setOpacity(m_hero.m_skill_recorder>SKILL_INTERVAL?0.6:0.3);
     painter.fillPath(path3, QColor(0xff,0xff,0xff));
     painter.setOpacity(1);
     painter.setFont(QFont("黑体",15,QFont::Bold));
     painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-10,e);
     painter.setFont(QFont("黑体",30,QFont::Bold));
-    painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-50,QString("E"));
+    painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-48,QString("E"));
 
     //绘制大招图标
     QString q = m_hero.m_burst_recorder>BURST_INTERVAL?"":(QString::number((float)((float)BURST_INTERVAL-(float)m_hero.m_burst_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
@@ -322,13 +323,13 @@ void MainScene::paintEvent(QPaintEvent *event)
     path4.addRect(GAME_WIDTH-BURST_ICON_MARGIN_X+1,GAME_HEIGHT-BURST_ICON_MARGIN_Y+1+(float)(BURST_ICON_SIZE-2)*((float)(m_hero.m_charge>=0?CHARGE_MAX-m_hero.m_charge:0)/CHARGE_MAX),SKILL_ICON_SIZE-2,(float)(SKILL_ICON_SIZE-2)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX));
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-BURST_ICON_MARGIN_X,GAME_HEIGHT-BURST_ICON_MARGIN_Y,BURST_ICON_SIZE,BURST_ICON_SIZE);
-    painter.setOpacity(m_hero.m_charge==CHARGE_MAX?0.6:0.5);
+    painter.setOpacity(m_hero.m_charge==CHARGE_MAX?0.6:0.4);
     painter.fillPath(path4, QColor(0x2e,0xdc,0xff));
     painter.setOpacity(1);
     painter.setFont(QFont("黑体",15,QFont::Bold));
     painter.drawText(GAME_WIDTH-BURST_ICON_MARGIN_X+10,GAME_HEIGHT-BURST_ICON_MARGIN_Y+BURST_ICON_SIZE-10,q);
     painter.setFont(QFont("黑体",30,QFont::Bold));
-    painter.drawText(GAME_WIDTH-BURST_ICON_MARGIN_X+10,GAME_HEIGHT-BURST_ICON_MARGIN_Y+BURST_ICON_SIZE-50,QString("Q"));
+    painter.drawText(GAME_WIDTH-BURST_ICON_MARGIN_X+10,GAME_HEIGHT-BURST_ICON_MARGIN_Y+BURST_ICON_SIZE-48,QString("Q"));
 
     //绘制debug信息
     painter.setFont(QFont("黑体",8,QFont::Bold));
@@ -569,7 +570,6 @@ void MainScene::collisionDetection()
                     }
 
                     //生产能量球
-                    srand((unsigned)time(0));
                     if(rand()%100<(int)((float)ENERGY_POSSIBILITY*100.0f))
                     {
                         for(int k = 0; k<ENERGY_MAX;k++){

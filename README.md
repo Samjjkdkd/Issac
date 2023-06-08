@@ -70,3 +70,7 @@
 
 ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/4.png)
 
+## **ISAACv2.8.3**
+
+### 修改技能图标透明度
+
