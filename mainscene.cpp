@@ -182,9 +182,10 @@ void MainScene::updatePosition()
     //爆发
     m_hero.burst(this->my_vector.burst);
 
-    int isShiftPressed=this->my_vector.StateofMoveKeys[4]==QString("pressed")?1:0;
-    int deltax=qFloor(this->my_vector.Vx*10000.0*I_SHOW_SPEED)/(10000+isShiftPressed*3*10000);
-    int deltay=qFloor(this->my_vector.Vy*10000.0*I_SHOW_SPEED)/(10000+isShiftPressed*3*10000);
+    //冲刺
+    m_hero.sprint(this->my_vector.sprint);
+    int deltax=qFloor(this->my_vector.Vx*this->m_hero.m_speed);
+    int deltay=qFloor(this->my_vector.Vy*this->m_hero.m_speed);
 
     this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
     this->m_hero.b_direction+=this->my_vector.theta;
@@ -206,7 +207,7 @@ void MainScene::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
 
-    painter.setRenderHint(QPainter::Antialiasing);
+    //painter.setRenderHint(QPainter::Antialiasing);
     //绘制地图
     painter.drawPixmap(0,0 , m_map.m_map_1);
 
@@ -267,8 +268,9 @@ void MainScene::paintEvent(QPaintEvent *event)
             painter.drawPixmap(m_bombs[i].m_X,m_bombs[i].m_Y,m_bombs[i].m_pixArr[m_bombs[i].m_index]);
         }
     }
-    painter.setOpacity(1);
+    painter.setOpacity(1.0);
     painter.setPen(QPen(Qt::white, 1));
+
     //绘制分数
     QString a = "Killed:" + QString::number(score);
     painter.setFont(QFont("黑体",20,QFont::Bold));
@@ -281,7 +283,7 @@ void MainScene::paintEvent(QPaintEvent *event)
 
     //画血条
     QPainterPath path1;
-    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_hp>=0?m_hero.m_hp:0)/MAX_HEALTH),18);
+    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_hp>=0?m_hero.m_hp:0)/(float)MAX_HEALTH),19);
     painter.setPen(QPen(Qt::red, 1));
     painter.fillPath(path1, Qt::red);
     painter.setPen(QPen(Qt::white, 1));
@@ -291,11 +293,11 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show1.length()/2)*12,m_hero.m_Rect.y()-17,h_show1);
 
 
-    //画蓝条
+    //画体力
     QPainterPath path2;
-    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+18)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX),6);
+    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_stamina)/(float)MAX_STAMINA),7);
     painter.setPen(QPen(Qt::red, 1));
-    painter.fillPath(path2, QColor(0x2e,0xdc,0xff));
+    painter.fillPath(path2, QColor(0xaaaaaa));
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-13,m_hero.m_Rect.width()+20,8);
 
@@ -304,8 +306,8 @@ void MainScene::paintEvent(QPaintEvent *event)
     QString e = m_hero.m_skill_recorder>SKILL_INTERVAL?"":(QString::number((float)((float)SKILL_INTERVAL-(float)m_hero.m_skill_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
     QPainterPath path3;
     path3.addRect(GAME_WIDTH-SKILL_ICON_MARGIN_X+1,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+1+(float)(SKILL_ICON_SIZE-2)*(
-                                                                                                    m_hero.m_skill_recorder>SKILL_INTERVAL? 0.0f:((float)(SKILL_INTERVAL)-(float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)),SKILL_ICON_SIZE-2,(float)(SKILL_ICON_SIZE-2)*(
-                        m_hero.m_skill_recorder>SKILL_INTERVAL? 1.0f:((float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)));
+                                                                                                    m_hero.m_skill_recorder>SKILL_INTERVAL? 0.0f:((float)(SKILL_INTERVAL)-(float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)),SKILL_ICON_SIZE-1,(float)(SKILL_ICON_SIZE-2)*(
+                        m_hero.m_skill_recorder>SKILL_INTERVAL? 1.0f:((float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL))+1);
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-SKILL_ICON_MARGIN_X,GAME_HEIGHT-SKILL_ICON_MARGIN_Y,SKILL_ICON_SIZE,SKILL_ICON_SIZE);
     painter.setOpacity(m_hero.m_skill_recorder>SKILL_INTERVAL?0.6:0.3);
@@ -320,7 +322,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     QString q = m_hero.m_burst_recorder>BURST_INTERVAL?"":(QString::number((float)((float)BURST_INTERVAL-(float)m_hero.m_burst_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
 
     QPainterPath path4;
-    path4.addRect(GAME_WIDTH-BURST_ICON_MARGIN_X+1,GAME_HEIGHT-BURST_ICON_MARGIN_Y+1+(float)(BURST_ICON_SIZE-2)*((float)(m_hero.m_charge>=0?CHARGE_MAX-m_hero.m_charge:0)/CHARGE_MAX),SKILL_ICON_SIZE-2,(float)(SKILL_ICON_SIZE-2)*((double)(m_hero.m_charge>=0?m_hero.m_charge:0)/CHARGE_MAX));
+    path4.addRect(GAME_WIDTH-BURST_ICON_MARGIN_X+1,GAME_HEIGHT-BURST_ICON_MARGIN_Y+1+(float)(BURST_ICON_SIZE-2)*((float)(CHARGE_MAX-m_hero.m_charge)/CHARGE_MAX),SKILL_ICON_SIZE-1,(float)(SKILL_ICON_SIZE-2)*((double)(m_hero.m_charge)/CHARGE_MAX)+1);
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-BURST_ICON_MARGIN_X,GAME_HEIGHT-BURST_ICON_MARGIN_Y,BURST_ICON_SIZE,BURST_ICON_SIZE);
     painter.setOpacity(m_hero.m_charge==CHARGE_MAX?0.6:0.4);

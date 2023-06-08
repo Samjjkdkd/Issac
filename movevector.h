@@ -21,6 +21,7 @@ public:
     qreal theta;
     bool skill;//技能是否释放
     bool burst;//爆发是否释放
+    bool sprint;//是否冲刺
 
 };
 

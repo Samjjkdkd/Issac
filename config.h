@@ -13,12 +13,18 @@
 #define HERO_PATH ":/res/Entity_887.0.0.1.png"
 #define RESIZE_RADIUS 128
 #define ROTATE_SENSITIVITY 2
-#define I_SHOW_SPEED 10.0
+#define I_SHOW_SPEED 4.0f
+#define I_GOT_SPRINT 8.0f
 #define MAX_HEALTH 20.0
 #define SKILL_INTERVAL 200
 #define BURST_INTERVAL 2000
+#define SPRINT_INTERVAL 50
 #define SKILL_BULLET_NUM 30
 #define CHARGE_MAX 90
+#define MAX_STAMINA 1000
+#define SPRINT_COST 300
+#define SPRINT_TIME 30
+#define BOOST_TIME 8
 /**********  子弹配置数据 **********/
 #define BULLET_PATH ":/res/bullet_11.png"   //子弹图片路径
 #define SKILL_BULLET_PATH  ":/res/bullet_12.png"

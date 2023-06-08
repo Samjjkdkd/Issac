@@ -31,11 +31,16 @@ HeroPlane::HeroPlane()
 
     m_hp = MAX_HEALTH;
     m_charge = 0;
+    m_speed = I_SHOW_SPEED;
+
+    m_stamina = MAX_STAMINA;
 
     //初始化发射间隔记录
     m_recorder = 0;
-    m_skill_recorder = 0;
-    m_burst_recorder = 0;
+
+    m_skill_recorder = SKILL_INTERVAL;
+    m_burst_recorder = BURST_INTERVAL;
+    m_sprint_recorder = SPRINT_INTERVAL;
 
     for(int i = 0 ;i<BULLET_NUM;++i){
         m_bullets[i] = Bullet(i);
@@ -154,6 +159,37 @@ void HeroPlane::burst(bool s)
     m_charge = 0;
 
     //大招效果
+
+}
+
+
+void HeroPlane::sprint(bool s)
+{
+
+    //累加时间间隔记录变量
+    m_sprint_recorder++;
+
+    m_stamina++;
+    m_stamina=m_stamina>=MAX_STAMINA?MAX_STAMINA:m_stamina;
+
+    if(m_sprint_timer){
+        m_sprint_timer--;
+        if(SPRINT_TIME+BOOST_TIME<m_sprint_timer){
+            m_speed = I_SHOW_SPEED + I_GOT_SPRINT*((float)(SPRINT_TIME+2*BOOST_TIME-m_sprint_timer)/(float)BOOST_TIME);
+        }else if(BOOST_TIME<m_sprint_timer){
+            m_speed = I_SHOW_SPEED + I_GOT_SPRINT;
+        }else{
+            m_speed = I_SHOW_SPEED + I_GOT_SPRINT*((float)(m_sprint_timer)/(float)BOOST_TIME);
+        }
+    }
+    //判断如果记录数字 未达到发射间隔，直接return
+    if(m_sprint_recorder < SPRINT_INTERVAL||!s||m_stamina<SPRINT_COST)
+    {
+        return;
+    }
+    m_sprint_timer = SPRINT_TIME+2*BOOST_TIME;
+    m_stamina-=SPRINT_COST;
+    m_sprint_recorder = 0;
 
 }
 

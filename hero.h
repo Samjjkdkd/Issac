@@ -15,6 +15,8 @@ public:
     void skill(bool s);
     //q技能
     void burst(bool s);
+    //冲刺
+    void sprint(bool s);
     //设置飞机位置
     void setPosition(int x, int y);
 
@@ -38,6 +40,12 @@ public:
     //飞机生命
     int m_hp;
 
+    //飞机速度
+    float m_speed;
+
+    //飞机体力
+    int m_stamina;
+
     //飞机充能
     int m_charge;
 
@@ -53,10 +61,16 @@ public:
     //发射间隔记录
     int m_recorder;
 
-    //e的cd
+    //冲刺冷却计时器
+    int m_sprint_recorder;
+
+    //冲刺持续计时器
+    int m_sprint_timer;
+
+    //e计时器
     int m_skill_recorder;
 
-    //q的cd
+    //q计时器
     int m_burst_recorder;
 
     int shiftx, shifty;

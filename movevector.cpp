@@ -16,6 +16,7 @@ void MoveVector::toZeroVector()//归零向量
     this->theta=0;
     this->skill = false;
     this->burst = false;
+    this->sprint = false;
 }
 
 
@@ -54,6 +55,10 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
     if(this->StateofMoveKeys[8]==QString("pressed"))//Q
     {
         this->burst = true;
+    }
+    if(this->StateofMoveKeys[4]==QString("pressed"))//Shift
+    {
+        this->sprint = true;
     }
     qreal length=qSqrt(this->Vx*this->Vx+this->Vy*this->Vy);
     if(length!=qreal(0.0))//向量归一化

@@ -74,3 +74,10 @@
 
 ### 修改技能图标透明度
 
+## **ISAACv2.9.0**
+
+### 新增冲刺机制
+
+原本血条下方的蓝条被改为体力条（灰条），shift键功能修改为冲刺，冲刺会消耗体力。（具体机制类似于Nesh'Naury）
+
+![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/5.png)
