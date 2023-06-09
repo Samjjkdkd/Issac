@@ -1,7 +1,7 @@
 /**********  游戏配置数据 **********/
 #define GAME_WIDTH  2048  //宽度
 #define GAME_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v2.10.1" //标题
+#define GAME_TITLE "以撒 v3.0.0" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -15,17 +15,20 @@
 #define ROTATE_SENSITIVITY 2
 #define I_SHOW_SPEED 4.0f
 #define I_GOT_SPRINT 8.0f
-#define MAX_HEALTH 20.0
+#define MAX_HEALTH 100.0
 #define SKILL_INTERVAL 200
-#define BURST_INTERVAL 1000
 #define SPRINT_INTERVAL 50
+#define BURST_INTERVAL 1000
+#define ASHWAB_INTERVAL 2000
 #define SKILL_BULLET_NUM 30
 #define CHARGE_MAX 20
+#define CHARGE2_MAX 20
 #define MAX_STAMINA 1000
 #define SPRINT_COST 300
 #define SPRINT_TIME 30
 #define BOOST_TIME 8
 #define BURST_TIME 500
+#define ASHWAB_TIME 500
 /**********  子弹配置数据 **********/
 #define BULLET_PATH ":/res/bullet_11.png"   //子弹图片路径
 #define SKILL_BULLET_PATH  ":/res/bullet_12.png"
@@ -79,24 +82,29 @@
 #define RESIZE_BLOOD_WIDTH 200
 #define RESIZE_BLOOD_HEIGHT 200
 
-#define SOUND_BGM_PATH ":/res/bg.wav"
+#define SOUND_BGM_PATH ":/res/WildFire.wav"
 #define SOUND_BOOM_PATH ":/res/bomb.wav"
 
-
+/***********终结技资源***************/
+#define Z_PATH_PREFFIX ":/res/z_effect/z-"
+#define Z_SOUND_PATH ":/res/z.wav"
 /***********能量相关****************/
 #define ENERGY_PATH ":/res/energy.png"
 #define ENERGY_PATH_1 ":/res/energy_1.png"
 #define ENERGY_LASTING 500
 #define ENERGY_BLING 50
-#define ENERGY_MAX 20
+#define ENERGY_MAX 50
 #define ENERGY_POSSIBILITY 0.10
 /***********界面位置相关*************/
-#define SKILL_ICON_MARGIN_X 330
+#define SKILL_ICON_MARGIN_X 450
 #define SKILL_ICON_MARGIN_Y 200
 #define SKILL_ICON_SIZE 100
-#define BURST_ICON_MARGIN_X 210
+#define BURST_ICON_MARGIN_X 330
 #define BURST_ICON_MARGIN_Y 200
 #define BURST_ICON_SIZE 100
+#define ASHWAB_ICON_MARGIN_X 210
+#define ASHWAB_ICON_MARGIN_Y 200
+#define ASHWAB_ICON_SIZE 100
 
 
 #define Pi 3.141592653589793238462643383279503884197169399375105820974944

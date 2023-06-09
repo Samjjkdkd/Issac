@@ -105,4 +105,12 @@
 
 - ### 元素爆发功能修改
 
-       Q技能会让子弹发射间隔减半，这个代码写的有点傻逼，好心人可以优化一下（我改在hero::shoot()了）
+    Q技能会让子弹发射间隔减半，这个代码写的有点傻逼，好心人可以优化一下（我改在hero::shoot()了）
+    
+## **ISAAC v3.0.0**
+
+- ### 新增终结技
+
+    按下Z释放终结技。释放元素爆发以给终结技充能。
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/7.png)

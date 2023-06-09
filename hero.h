@@ -15,6 +15,8 @@ public:
     void skill(bool s);
     //q技能
     void burst(bool s);
+    //z技能
+    void ashwab(bool s);
     //冲刺
     void sprint(bool s);
     //设置飞机位置
@@ -22,6 +24,7 @@ public:
 
     //充能
     void i_got_charge(int n);
+    void i_got_charge2(int n);
 
     QPixmap PixmapToRound(const QPixmap &src, int radius);
 
@@ -49,6 +52,8 @@ public:
     //飞机充能
     int m_charge;
 
+    int m_charge2;
+
     //飞机的矩形边框
     QRect m_Rect;
 
@@ -70,11 +75,17 @@ public:
     //爆发持续计时器
     int m_burst_timer;
 
+    //终结技持续计时器
+    int m_ashwab_timer;
+
     //e计时器
     int m_skill_recorder;
 
     //q计时器
     int m_burst_recorder;
+
+    //z计时器
+    int m_ashwab_recorder;
 
     int shiftx, shifty;
 };

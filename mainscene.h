@@ -13,6 +13,7 @@
 #include "energy.h"
 #include "movevector.h"
 #include "bloodtrail.h"
+#include "audiothread.h"
 #include <vector>
 
 class MainScene : public QWidget
@@ -24,6 +25,7 @@ public:
 
     QSoundEffect *bgsound;
     QSoundEffect *bombSound;
+    AudioThread *z_sound;
 
     //启动游戏  用于启动定时器对象
     void playGame();
@@ -67,6 +69,10 @@ public:
     //残留血液
     bloodtrail m_bloodtrail[BLOOD_NUM];
     QPixmap m_blood[2];
+
+    //终结技动画
+    QPixmap m_ashwab[76];
+
 
     // Bullet temp_bullet;
     ~MainScene();

@@ -11,14 +11,15 @@
 
 enum SOUND_TYPE{
     SOUND_BGM,
-    SOUND_BOOM
+    SOUND_BOOM,
+    SOUND_Z
 };
 
 class AudioThread : public QObject
 {
     Q_OBJECT
 public:
-    AudioThread(QObject *parent = nullptr);
+    AudioThread(QObject *parent = nullptr,int type= SOUND_Z);
     ~AudioThread();
 
 signals:

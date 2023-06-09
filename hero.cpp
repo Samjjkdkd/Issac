@@ -31,6 +31,7 @@ HeroPlane::HeroPlane()
 
     m_hp = MAX_HEALTH;
     m_charge = 0;
+    m_charge2 = 0;
     m_speed = I_SHOW_SPEED;
 
     m_stamina = MAX_STAMINA;
@@ -41,9 +42,11 @@ HeroPlane::HeroPlane()
     m_skill_recorder = SKILL_INTERVAL;
     m_burst_recorder = BURST_INTERVAL;
     m_sprint_recorder = SPRINT_INTERVAL;
+    m_ashwab_recorder = ASHWAB_INTERVAL;
 
     m_sprint_timer = 0;
     m_burst_timer = 0;
+    m_ashwab_timer = 0;
 
     for(int i = 0 ;i<BULLET_NUM;++i){
         m_bullets[i] = Bullet(i);
@@ -102,6 +105,11 @@ void HeroPlane::i_got_charge(int n){
     if(this->m_charge>CHARGE_MAX)   this->m_charge=CHARGE_MAX;
 }
 
+void HeroPlane::i_got_charge2(int n){
+    if(this->m_charge2<CHARGE2_MAX)   this->m_charge2+=n;
+    if(this->m_charge2>CHARGE2_MAX)   this->m_charge2=CHARGE2_MAX;
+}
+
 
 void HeroPlane::skill(bool s)
 {
@@ -158,7 +166,7 @@ void HeroPlane::burst(bool s)
         m_burst_timer--;
     }
 
-    if(m_burst_recorder < SKILL_INTERVAL||!s||m_charge!=CHARGE_MAX)
+    if(m_burst_recorder < BURST_INTERVAL||!s||m_charge!=CHARGE_MAX)
     {
         return;
     }
@@ -166,9 +174,33 @@ void HeroPlane::burst(bool s)
     //重置发射时间间隔记录
     m_burst_recorder = 0;
     m_charge = 0;
-
+    i_got_charge2(10);
     //大招效果
     m_burst_timer = BURST_TIME;
+}
+
+void HeroPlane::ashwab(bool s)
+{
+
+    //累加时间间隔记录变量
+    m_ashwab_recorder++;
+    //判断如果记录数字 未达到发射间隔，直接return
+
+    if(m_ashwab_timer)   {
+        m_ashwab_timer--;
+    }
+
+    if(m_ashwab_recorder < ASHWAB_INTERVAL||!s||m_charge2!=CHARGE2_MAX)
+    {
+        return;
+    }
+    //到达发射时间处理
+    //重置发射时间间隔记录
+    m_ashwab_recorder = 0;
+    m_charge2 = 0;
+
+    //大招效果
+    m_ashwab_timer = ASHWAB_TIME;
 }
 
 

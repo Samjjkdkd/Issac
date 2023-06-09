@@ -32,6 +32,7 @@ MainScene::~MainScene()
 void MainScene::initScene()
 {
     //加载资源。
+    z_sound = new AudioThread(this,SOUND_Z);
     bgsound = new QSoundEffect(this);
     bgsound->setSource(QUrl::fromLocalFile(SOUND_BGM_PATH));
     bgsound->setLoopCount(-1);
@@ -41,6 +42,10 @@ void MainScene::initScene()
     m_blood[0] = m_blood[0].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
     m_blood[1].load(BLOOD_PATH_2);
     m_blood[1] = m_blood[1].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+
+    for(int i = 0; i<76;i++){
+        m_ashwab[i].load(QString(Z_PATH_PREFFIX + QString("%1").arg(i, 2, 10, QLatin1Char('0'))+".png"));
+    }
 
     //初始化窗口大小
     setFixedSize(GAME_WIDTH,GAME_HEIGHT);
@@ -131,16 +136,18 @@ void MainScene::updatePosition()
     //发射子弹
     m_hero.shoot();
     //计算子弹坐标
-    for(int i = 0 ;i < BULLET_NUM;i++)
-    {
-        //如果子弹状态为非空闲，计算发射位置
-        if(!m_hero.m_bullets[i].m_Free)
+    if(!m_hero.m_ashwab_timer){
+        for(int i = 0 ;i < BULLET_NUM;i++)
         {
+            //如果子弹状态为非空闲，计算发射位置
+            if(!m_hero.m_bullets[i].m_Free)
+            {
             m_hero.m_bullets[i].updatePosition();
+            }
         }
     }
     //敌机坐标计算
-    if(!m_hero.m_burst_timer){
+    if(!(m_hero.m_burst_timer||m_hero.m_ashwab_timer)){
         for(int i = 0 ; i< ENEMY_NUM;i++)
         {
             //非空闲敌机 更新坐标
@@ -186,23 +193,38 @@ void MainScene::updatePosition()
 
     //冲刺
     m_hero.sprint(this->my_vector.sprint);
-    int deltax=qFloor(this->my_vector.Vx*this->m_hero.m_speed);
-    int deltay=qFloor(this->my_vector.Vy*this->m_hero.m_speed);
 
-    this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
-    this->m_hero.b_direction+=this->my_vector.theta;
-    this->m_hero.b_direction%=360;
-    transform.translate(RESIZE_RADIUS/2,RESIZE_RADIUS/2);
-    int alpha = -this->m_hero.b_direction+180;
-    transform.rotate(alpha);
-    transform.translate(-RESIZE_RADIUS/2,-RESIZE_RADIUS/2);
-    QPixmap ibashPlane = m_hero.m_Plane_original.transformed(transform, Qt::SmoothTransformation);
-    m_hero.m_Plane = ibashPlane;
+    //终结
+    m_hero.ashwab(this->my_vector.ashwab);
+    if(m_hero.m_ashwab_timer&&this->my_vector.ashwab){
+        bgsound->setVolume(0.05f);
+        z_sound->play();
+    }
 
-    alpha %= 90;
-    alpha = abs(alpha);
-    m_hero.shiftx = qCos((45-alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
-    m_hero.shifty = qSin((45+alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
+    if(m_hero.m_ashwab_timer == 20){
+        bgsound->setVolume(0.25f);
+    }
+
+    if(!m_hero.m_ashwab_timer){
+        int deltax=qFloor(this->my_vector.Vx*this->m_hero.m_speed);
+        int deltay=qFloor(this->my_vector.Vy*this->m_hero.m_speed);
+
+        this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
+        this->m_hero.b_direction+=this->my_vector.theta;
+        this->m_hero.b_direction%=360;
+        transform.translate(RESIZE_RADIUS/2,RESIZE_RADIUS/2);
+        int alpha = -this->m_hero.b_direction+180;
+        transform.rotate(alpha);
+        transform.translate(-RESIZE_RADIUS/2,-RESIZE_RADIUS/2);
+        QPixmap ibashPlane = m_hero.m_Plane_original.transformed(transform, Qt::SmoothTransformation);
+        m_hero.m_Plane = ibashPlane;
+
+        alpha %= 90;
+        alpha = abs(alpha);
+
+        m_hero.shiftx = qCos((45-alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
+        m_hero.shifty = qSin((45+alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
+    }
 }
 
 void MainScene::paintEvent(QPaintEvent *event)
@@ -249,7 +271,7 @@ void MainScene::paintEvent(QPaintEvent *event)
         }
     }
 
-    if(m_hero.m_burst_timer){
+    if(m_hero.m_burst_timer||m_hero.m_ashwab_timer){
         painter.setBrush(QBrush(QColor(0,0,0,80)));
         painter.drawRect(-1,-1,GAME_WIDTH+2,GAME_HEIGHT+2);
         painter.setBrush(QBrush(Qt::NoBrush));
@@ -257,9 +279,6 @@ void MainScene::paintEvent(QPaintEvent *event)
 
 
     painter.setOpacity(1);
-    //画Hero
-    painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
-    //painter.drawRect(m_hero.m_Rect);
 
 
     //painter.drawPixmap(temp_bullet.m_X,temp_bullet.m_Y,temp_bullet.m_Bullet);
@@ -273,6 +292,11 @@ void MainScene::paintEvent(QPaintEvent *event)
             //painter.drawRect(m_hero.m_bullets[i].m_Rect);
         }
     }
+
+    //画Hero
+    painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
+    //painter.drawRect(m_hero.m_Rect);
+
     //绘制能量球
     for(int i = 0 ;i < ENERGY_MAX;i++)
     {
@@ -287,7 +311,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.setPen(QPen(Qt::white, 1));
 
     //绘制分数
-    QString a = "Killed:" + QString::number(score);
+    QString a = "Score:" + QString::number(score);
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(750,100,a);
 
@@ -333,7 +357,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.setFont(QFont("黑体",30,QFont::Bold));
     painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-48,QString("E"));
 
-    //绘制大招图标
+    //绘制元素爆发图标
     QString q = m_hero.m_burst_recorder>BURST_INTERVAL?"":(QString::number((float)((float)BURST_INTERVAL-(float)m_hero.m_burst_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
 
     QPainterPath path4;
@@ -348,6 +372,33 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.setFont(QFont("黑体",30,QFont::Bold));
     painter.drawText(GAME_WIDTH-BURST_ICON_MARGIN_X+10,GAME_HEIGHT-BURST_ICON_MARGIN_Y+BURST_ICON_SIZE-48,QString("Q"));
 
+    //绘制终结图标
+    QString z = m_hero.m_ashwab_recorder>ASHWAB_INTERVAL?"":(QString::number((float)((float)ASHWAB_INTERVAL-(float)m_hero.m_ashwab_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
+
+    QPainterPath path5;
+    path5.addRect(GAME_WIDTH-ASHWAB_ICON_MARGIN_X+1,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y+1+(float)(ASHWAB_ICON_SIZE-2)*((float)(CHARGE2_MAX-m_hero.m_charge2)/CHARGE2_MAX),ASHWAB_ICON_SIZE-1,(float)(ASHWAB_ICON_SIZE-2)*((double)(m_hero.m_charge2)/CHARGE2_MAX)+1);
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(GAME_WIDTH-ASHWAB_ICON_MARGIN_X,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y,ASHWAB_ICON_SIZE,ASHWAB_ICON_SIZE);
+    painter.setOpacity(m_hero.m_charge2==CHARGE2_MAX?0.6:0.4);
+    painter.fillPath(path5, QColor(0xfff700));
+    painter.setOpacity(1);
+    painter.setFont(QFont("黑体",15,QFont::Bold));
+    painter.drawText(GAME_WIDTH-ASHWAB_ICON_MARGIN_X+10,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y+ASHWAB_ICON_SIZE-10,z);
+    painter.setFont(QFont("黑体",30,QFont::Bold));
+    painter.drawText(GAME_WIDTH-ASHWAB_ICON_MARGIN_X+10,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y+ASHWAB_ICON_SIZE-48,QString("Z"));
+
+
+    //绘制大招动画
+    if(m_hero.m_ashwab_timer){
+        float curr_time = (float)(ASHWAB_TIME-m_hero.m_ashwab_timer)*(float)GAME_RATE/1000.0f-0.20f;
+        if(curr_time>=1.60f&&curr_time<4.56f){
+            painter.drawPixmap(0,0,m_ashwab[(int)((curr_time-1.60f)*25.0f)]);
+        }
+
+
+    }
+
+
     //绘制debug信息
     painter.setFont(QFont("黑体",8,QFont::Bold));
 //    for(int i = BULLET_NUM-SKILL_BULLET_NUM;i<BULLET_NUM;++i)
@@ -358,6 +409,8 @@ void MainScene::paintEvent(QPaintEvent *event)
 //    {
 //        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_energies[i].m_Free?"true":"false")));
 //    }
+
+
 }
 
 void MainScene::playGame()
@@ -451,6 +504,10 @@ void MainScene::keyPressEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[8]=QString("pressed");
     }
+    if(event->key()==Qt::Key_Z)
+    {
+        this->my_vector.StateofMoveKeys[9]=QString("pressed");
+    }
 }
 
 //松键事件
@@ -492,6 +549,10 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[8]=QString("unpressed");
     }
+    if(event->key()==Qt::Key_Z)
+    {
+        this->my_vector.StateofMoveKeys[9]=QString("unpressed");
+    }
 }
 
 //古法碰撞检测
@@ -506,7 +567,47 @@ void MainScene::collisionDetection()
     //遍历所有非空闲的敌机
     for(int i = 0 ;i < ENEMY_NUM;i++)
     {
-
+        if(m_hero.m_ashwab_timer == 20&&!m_enemys[i]->m_Free){
+            m_enemys[i]->hp=0;
+            m_enemys[i]->m_Free = true;
+            //得分增加
+            switch(m_enemys[i]->type){
+            case 1:
+                score+=ENEMY_SCORE_1;
+                break;
+            case 2:
+                score+=ENEMY_SCORE_2;
+                break;
+            case 3:
+                score+=ENEMY_SCORE_3;
+                break;
+            }
+            for(int k = 0 ; k < BOMB_NUM;k++)
+            {
+                if(m_bombs[k].m_Free)
+                {
+                //爆炸状态设置为非空闲
+                m_bombs[k].m_Free = false;
+                //更新坐标
+                m_bombs[k].m_X = m_enemys[i]->m_X;
+                m_bombs[k].m_Y = m_enemys[i]->m_Y;
+                break;
+                }
+            }
+            for(int k = 0 ; k < BLOOD_NUM;k++)
+            {
+                if(m_bloodtrail[k].m_Free)
+                {
+                    //爆炸状态设置为非空闲
+                    m_bloodtrail[k].m_Free = false;
+                    //更新坐标
+                    m_bloodtrail[k].m_X = m_enemys[i]->m_X;
+                    m_bloodtrail[k].m_Y = m_enemys[i]->m_Y;
+                    break;
+                }
+            }
+            continue;
+        }
         if(m_enemys[i]->m_Rect.intersects(m_hero.m_Rect)&&!m_enemys[i]->m_Free){
             m_hero.m_hp-= m_enemys[i]->hp;
             m_enemys[i]->m_Free = true;
