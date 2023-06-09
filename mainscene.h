@@ -33,16 +33,24 @@
 #include <complex>
 #include <ctime>
 
+enum INPUT_TYPE{
+    WASD,
+    AD_DIR
+};
+
 class MainScene : public QWidget
 {
     Q_OBJECT
 
 public:
     MainScene(QWidget *parent = nullptr);
+    void set_input_type(int t);
 
     QSoundEffect *bgsound;
     QSoundEffect *bombSound;
     QSoundEffect *z_sound;
+
+    int input_type;
 
     //启动游戏  用于启动定时器对象
     void playGame();

@@ -9,6 +9,10 @@ MainScene::MainScene(QWidget *parent)
 
 }
 
+void MainScene::set_input_type(int t){
+    this->input_type = t;
+}
+
 MainScene::~MainScene()
 {
 }
@@ -191,19 +195,24 @@ void MainScene::updatePosition()
     if(m_hero.m_ashwab_timer == 20){
         bgsound->setVolume(0.25f);
     }
-    int deltax;
-    int deltay;
+    int deltax = 0;
+    int deltay = 0;
     if(!m_hero.m_ashwab_timer){
-//        deltax=qFloor((this->my_vector.Vx)*this->m_hero.m_speed);
-//        deltay=qFloor((this->my_vector.Vy)*this->m_hero.m_speed);
-        if(m_hero.m_sprint_timer&&!this->my_vector.Vf){
-            this->my_vector.Vf = 1.0;
+        if(input_type == WASD){
+            if(m_hero.m_sprint_timer&&!this->my_vector.Vf){
+                this->my_vector.Vf = 1.0;
+            }
+            deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
+            deltay += this->my_vector.Vf*qSin((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
+            if(this->my_vector.Vf<0.0f){
+                this->my_vector.theta*=-1;
+            }
+        }else if(input_type == AD_DIR)
+        {
+            deltax += qFloor((this->my_vector.Vx)*this->m_hero.m_speed);
+            deltay += qFloor((this->my_vector.Vy)*this->m_hero.m_speed);
         }
-        deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
-        deltay += this->my_vector.Vf*qSin((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
-        if(this->my_vector.Vf<0.0f){
-            this->my_vector.theta*=-1;
-        }
+
         this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
         this->m_hero.b_direction+=this->my_vector.theta;
         this->m_hero.b_direction%=360;

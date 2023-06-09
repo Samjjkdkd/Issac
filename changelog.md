@@ -133,4 +133,11 @@
 
 - ### 实验性功能：修改移动方式为WASD，具体操作方式同开车类游戏
 
+## **ISAAC v3.2.0**
+
+- ### 正式添加上版本的移动方式，可在开始界面选择
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/8.png)
+
+
 
