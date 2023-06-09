@@ -3,7 +3,7 @@
 #define GAME_HEIGHT 1200  //高度
 #define START_WIDTH  2048  //宽度
 #define START_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v3.1" //标题
+#define GAME_TITLE "以撒 v3.1.1" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -93,7 +93,7 @@
 /***********终结技资源***************/
 #define Z_PATH_PREFFIX ":/res/z_effect/z-"
 #define Z_SOUND_PATH ":/res/z.wav"
-#define ASHWAB_OFFSET 0.05f
+#define ASHWAB_OFFSET 0.15f
 /***********能量相关****************/
 #define ENERGY_PATH ":/res/energy.png"
 #define ENERGY_PATH_1 ":/res/energy_1.png"

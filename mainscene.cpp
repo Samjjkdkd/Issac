@@ -197,7 +197,7 @@ void MainScene::updatePosition()
     //终结
     m_hero.ashwab(this->my_vector.ashwab);
     if(m_hero.m_ashwab_timer&&this->my_vector.ashwab){
-        bgsound->setVolume(0.05f);
+        bgsound->setVolume(0.15f);
         z_sound->play();
     }
 
@@ -571,7 +571,7 @@ void MainScene::collisionDetection()
     //遍历所有非空闲的敌机
     for(int i = 0 ;i < ENEMY_NUM;i++)
     {
-        if(m_hero.m_ashwab_timer == (int)(ASHWAB_OFFSET*1000.0f/(float)GAME_RATE) &&!m_enemys[i]->m_Free){
+        if(m_hero.m_ashwab_timer == (int)((ASHWAB_OFFSET+0.13f)*1000.0f/(float)GAME_RATE) &&!m_enemys[i]->m_Free){
             m_enemys[i]->hp=0;
             m_enemys[i]->m_Free = true;
             //得分增加
