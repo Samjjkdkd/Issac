@@ -1,23 +1,25 @@
 #ifndef STARTSCENE_H
 #define STARTSCENE_H
 
+#include "startscene_ui.h"
+
 #include <QSoundEffect>
-#include "config.h"
+#include <QDialog>
 #include <QWidget>
 #include <QPushButton>
-class StartScene : public QWidget
+
+namespace Ui {
+    class StartScene;
+}
+
+class StartScene : public QDialog
 {
     Q_OBJECT
+
 public:
     explicit StartScene(QWidget *parent = nullptr);
-    QPixmap m_startscene;
-    QSoundEffect *startsound;
-
-    void  initScene();
-    QPushButton* play_game_button;
     ~StartScene();
-signals:
-
+    Ui::StartScene *ui;
 };
 
 #endif // STARTSCENE_H

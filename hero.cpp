@@ -31,7 +31,7 @@ HeroPlane::HeroPlane()
 
     m_hp = MAX_HEALTH;
     m_charge = 0;
-    m_charge2 = 20;
+    m_charge2 = 0;
     m_speed = I_SHOW_SPEED;
 
     m_stamina = MAX_STAMINA;

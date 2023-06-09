@@ -23,7 +23,6 @@ SOURCES += \
     mainscene.cpp \
     map.cpp \
     movevector.cpp \
-    startdlg.cpp \
     startscene.cpp
 
 HEADERS += \
@@ -41,8 +40,8 @@ HEADERS += \
     mainscene.h \
     map.h \
     movevector.h \
-    startdlg.h \
-    startscene.h
+    startscene.h \
+    startscene_ui.h
     QSoundEffect
 
 # Default rules for deployment.
@@ -56,5 +55,4 @@ RC_ICONS = res\app.ico
 
 QT  += core gui multimedia
 
-FORMS += \
-    startdlg.ui
+FORMS +=

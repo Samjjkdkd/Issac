@@ -22,6 +22,10 @@ void MoveVector::toZeroVector()//归零向量
     this->Vx=0;
     this->Vy=0;
     this->theta=0;
+    this->skill = false;
+    this->burst = false;
+    this->sprint = false;
+    this->ashwab = false;
 
 }
 

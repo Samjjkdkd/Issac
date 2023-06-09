@@ -14,6 +14,9 @@ bloodtrail::bloodtrail()
     //当前播放图片下标
     m_index = 0;
 
+    //方向
+    m_direction = 0;
+
     //爆炸间隔记录
     m_Recoder = BLOOD_INTERVAL;
 }

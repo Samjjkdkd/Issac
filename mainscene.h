@@ -15,6 +15,23 @@
 #include "bloodtrail.h"
 #include "audiothread.h"
 #include <vector>
+#include "config.h"
+#include "enemy_1.h"
+#include "enemy_2.h"
+#include "enemy_3.h"
+#include <QIcon>
+#include <QPainter>
+#include <QPainterPath>
+#include <QMouseEvent>
+#include <QPen>
+#include <ctime>
+#include <QSoundEffect>
+#include <QSound>
+#include <QLabel>
+#include <QColor>
+#include <math.h>
+#include <complex>
+#include <ctime>
 
 class MainScene : public QWidget
 {
@@ -25,7 +42,7 @@ public:
 
     QSoundEffect *bgsound;
     QSoundEffect *bombSound;
-    AudioThread *z_sound;
+    QSoundEffect *z_sound;
 
     //启动游戏  用于启动定时器对象
     void playGame();

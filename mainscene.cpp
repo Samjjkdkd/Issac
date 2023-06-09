@@ -1,21 +1,4 @@
 #include "mainscene.h"
-#include "config.h"
-#include "enemy_1.h"
-#include "enemy_2.h"
-#include "enemy_3.h"
-#include <QIcon>
-#include <QPainter>
-#include <QPainterPath>
-#include <QMouseEvent>
-#include <QPen>
-#include <ctime>
-#include <QSoundEffect>
-#include <QSound>
-#include <QLabel>
-#include <QColor>
-#include <math.h>
-#include <complex>
-#include <ctime>
 MainScene::MainScene(QWidget *parent)
     : QWidget(parent)
 {
@@ -32,11 +15,14 @@ MainScene::~MainScene()
 void MainScene::initScene()
 {
     //加载资源。
-    z_sound = new AudioThread(this,SOUND_Z);
+    z_sound = new QSoundEffect(this);
+    z_sound->setSource(QUrl::fromLocalFile(Z_SOUND_PATH));
+    z_sound->setLoopCount(1);
+    z_sound->setVolume(1.0f);
     bgsound = new QSoundEffect(this);
     bgsound->setSource(QUrl::fromLocalFile(SOUND_BGM_PATH));
     bgsound->setLoopCount(QSoundEffect::Infinite);
-    bgsound->setVolume(0.25f);
+    bgsound->setVolume(0.5f);
 
     m_blood[0].load(BLOOD_PATH_1);
     m_blood[0] = m_blood[0].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -44,7 +30,8 @@ void MainScene::initScene()
     m_blood[1] = m_blood[1].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
     for(int i = 0; i<76;i++){
-        m_ashwab[i].load(QString(Z_PATH_PREFFIX + QString("%1").arg(i, 2, 10, QLatin1Char('0'))+".png"));
+        m_ashwab[i].load(Z_PATH_PREFFIX + QString("%1").arg(i, 2, 10, QLatin1Char('0'))+".png");
+        //m_ashwab[i] = m_ashwab[i].scaled(GAME_WIDTH,GAME_HEIGHT,Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
     }
 
     //初始化窗口大小
@@ -237,16 +224,22 @@ void MainScene::paintEvent(QPaintEvent *event)
 
 
     //绘制血迹
+    QTransform blood_trans;
+    QPixmap blood_tmp;
     for(int i = 0 ; i < BLOOD_NUM;i++)
     {
         if(m_bloodtrail[i].m_Free == false)
         {
+            blood_trans.reset();
+            blood_trans.rotate(m_bloodtrail[i].m_direction);
             painter.setOpacity(m_bloodtrail[i].m_transparentrate/1.5);
             if(m_bloodtrail[i].type == 0){
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[0]);
+                blood_tmp = m_blood[0].transformed(blood_trans,Qt::SmoothTransformation);
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,blood_tmp);
             }
             if(m_bloodtrail[i].type == 1){
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_blood[1]);
+                blood_tmp = m_blood[1].transformed(blood_trans,Qt::SmoothTransformation);
+                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,blood_tmp);
             }
         }
     }
@@ -409,10 +402,10 @@ void MainScene::paintEvent(QPaintEvent *event)
     //    {
     //        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_energies[i].m_Free?"true":"false")));
     //    }
-    for(int i = 0;i<ENEMY_NUM;++i)
-    {
-        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_enemys[i]->m_Free?"true":"false")));
-    }
+//    for(int i = 0;i<ENEMY_NUM;++i)
+//    {
+//        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_enemys[i]->m_Free?"true":"false")));
+//    }
 
 
 }
@@ -604,6 +597,10 @@ void MainScene::collisionDetection()
                 {
                     //爆炸状态设置为非空闲
                     m_bloodtrail[k].m_Free = false;
+
+                    //给予方向
+                    m_bloodtrail[k].m_direction = rand()%360;
+
                     //更新坐标
                     m_bloodtrail[k].m_X = m_enemys[i]->m_X;
                     m_bloodtrail[k].m_Y = m_enemys[i]->m_Y;
@@ -633,6 +630,9 @@ void MainScene::collisionDetection()
 
                     m_bloodtrail[k].m_Free = false;
                     //更新坐标
+
+                    m_bloodtrail[k].m_direction = rand()%360;
+
 
                     m_bloodtrail[k].m_X = m_enemys[i]->m_X;
                     m_bloodtrail[k].m_Y = m_enemys[i]->m_Y;
@@ -697,7 +697,12 @@ void MainScene::collisionDetection()
                         {
                             //爆炸状态设置为非空闲
                             m_bloodtrail[k].m_Free = false;
+
+
+                            m_bloodtrail[k].m_direction = rand()%360;
+
                             //更新坐标
+
                             m_bloodtrail[k].m_X = m_enemys[i]->m_X;
                             m_bloodtrail[k].m_Y = m_enemys[i]->m_Y;
                             break;

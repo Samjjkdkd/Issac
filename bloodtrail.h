@@ -28,6 +28,9 @@ public:
     //爆炸时加载的图片下标
     int m_index;
 
+    //方向
+    int m_direction;
+
     //画笔透明度
     float m_transparentrate=1;
 
