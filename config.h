@@ -3,7 +3,7 @@
 #define GAME_HEIGHT 1200  //高度
 #define START_WIDTH  2048  //宽度
 #define START_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v3.1.2" //标题
+#define GAME_TITLE "以撒 v3.1.3" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -114,5 +114,5 @@
 #define ASHWAB_ICON_SIZE 100
 
 
-#define Pi 3.141592653589793238462643383279503884197169399375105820974944
+#define Pi 3.1415926
 

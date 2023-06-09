@@ -14,10 +14,12 @@ public:
     void GenerateVector();
     void AddVx(qreal deltax);
     void AddVy(qreal deltay);
+    void AddVf(qreal deltay);//前进
     void changeTheta(qreal dtheta);
     QString StateofMoveKeys[20];//记录键盘相关键的状态
     qreal Vx;
     qreal Vy;
+    qreal Vf;
     qreal theta;
     bool skill;//技能是否释放
     bool burst;//爆发是否释放

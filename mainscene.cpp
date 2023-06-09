@@ -191,11 +191,19 @@ void MainScene::updatePosition()
     if(m_hero.m_ashwab_timer == 20){
         bgsound->setVolume(0.25f);
     }
-
+    int deltax;
+    int deltay;
     if(!m_hero.m_ashwab_timer){
-        int deltax=qFloor(this->my_vector.Vx*this->m_hero.m_speed);
-        int deltay=qFloor(this->my_vector.Vy*this->m_hero.m_speed);
-
+//        deltax=qFloor((this->my_vector.Vx)*this->m_hero.m_speed);
+//        deltay=qFloor((this->my_vector.Vy)*this->m_hero.m_speed);
+        if(m_hero.m_sprint_timer&&!this->my_vector.Vf){
+            this->my_vector.Vf = 1.0;
+        }
+        deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
+        deltay += this->my_vector.Vf*qSin((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
+        if(this->my_vector.Vf<0.0f){
+            this->my_vector.theta*=-1;
+        }
         this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
         this->m_hero.b_direction+=this->my_vector.theta;
         this->m_hero.b_direction%=360;
@@ -489,7 +497,7 @@ void MainScene::keyPressEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[6]=QString("pressed");
     }
-    if(event->key()==Qt::Key_Shift)//低速移动键，参照東方project机制
+    if(event->key()==Qt::Key_Shift)
     {
         this->my_vector.StateofMoveKeys[4]=QString("pressed");
     }
@@ -504,6 +512,14 @@ void MainScene::keyPressEvent(QKeyEvent *event)
     if(event->key()==Qt::Key_Z)
     {
         this->my_vector.StateofMoveKeys[9]=QString("pressed");
+    }
+    if(event->key()==Qt::Key_W)
+    {
+        this->my_vector.StateofMoveKeys[10]=QString("pressed");
+    }
+    if(event->key()==Qt::Key_S)
+    {
+        this->my_vector.StateofMoveKeys[11]=QString("pressed");
     }
 }
 
@@ -534,7 +550,7 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[6]=QString("unpressed");
     }
-    if(event->key()==Qt::Key_Shift)//低速移动键，参照東方project机制
+    if(event->key()==Qt::Key_Shift)
     {
         this->my_vector.StateofMoveKeys[4]=QString("unpressed");
     }
@@ -549,6 +565,14 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
     if(event->key()==Qt::Key_Z)
     {
         this->my_vector.StateofMoveKeys[9]=QString("unpressed");
+    }
+    if(event->key()==Qt::Key_W)
+    {
+        this->my_vector.StateofMoveKeys[10]=QString("unpressed");
+    }
+    if(event->key()==Qt::Key_S)
+    {
+        this->my_vector.StateofMoveKeys[11]=QString("unpressed");
     }
 }
 

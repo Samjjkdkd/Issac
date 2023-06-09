@@ -21,6 +21,7 @@ void MoveVector::toZeroVector()//归零向量
 {
     this->Vx=0;
     this->Vy=0;
+    this->Vf=0;
     this->theta=0;
     this->skill = false;
     this->burst = false;
@@ -111,6 +112,14 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
     {
         this->ashwab_up=true;
     }
+    if(this->StateofMoveKeys[10]==QString("pressed"))//S
+    {
+        this->AddVf(1.0);
+    }
+    if(this->StateofMoveKeys[11]==QString("pressed"))//W
+    {
+        this->AddVf(-1.0);
+    }
     qreal length=qSqrt(this->Vx*this->Vx+this->Vy*this->Vy);
     if(length!=qreal(0.0))//向量归一化
     {
@@ -128,6 +137,12 @@ void MoveVector::AddVy(qreal deltay)
 {
     this->Vy+=deltay;
 }
+
+void MoveVector::AddVf(qreal deltaf)
+{
+    this->Vf+=deltaf;
+}
+
 
 void MoveVector::changeTheta(qreal dtheta){
     this->theta+=dtheta;
