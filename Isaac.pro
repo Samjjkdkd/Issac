@@ -23,7 +23,8 @@ SOURCES += \
     mainscene.cpp \
     map.cpp \
     movevector.cpp \
-    startdlg.cpp
+    startdlg.cpp \
+    startscene.cpp
 
 HEADERS += \
     audiothread.h \
@@ -40,7 +41,8 @@ HEADERS += \
     mainscene.h \
     map.h \
     movevector.h \
-    startdlg.h
+    startdlg.h \
+    startscene.h
     QSoundEffect
 
 # Default rules for deployment.

@@ -35,7 +35,7 @@ void MainScene::initScene()
     z_sound = new AudioThread(this,SOUND_Z);
     bgsound = new QSoundEffect(this);
     bgsound->setSource(QUrl::fromLocalFile(SOUND_BGM_PATH));
-    bgsound->setLoopCount(-1);
+    bgsound->setLoopCount(QSoundEffect::Infinite);
     bgsound->setVolume(0.25f);
 
     m_blood[0].load(BLOOD_PATH_1);
@@ -390,7 +390,7 @@ void MainScene::paintEvent(QPaintEvent *event)
 
     //绘制大招动画
     if(m_hero.m_ashwab_timer){
-        float curr_time = (float)(ASHWAB_TIME-m_hero.m_ashwab_timer)*(float)GAME_RATE/1000.0f-0.20f;
+        float curr_time = (float)(ASHWAB_TIME-m_hero.m_ashwab_timer)*(float)GAME_RATE/1000.0f-ASHWAB_OFFSET;
         if(curr_time>=1.60f&&curr_time<4.56f){
             painter.drawPixmap(0,0,m_ashwab[(int)((curr_time-1.60f)*25.0f)]);
         }
@@ -405,10 +405,14 @@ void MainScene::paintEvent(QPaintEvent *event)
 //    {
 //        painter.drawText(0,12*(SKILL_BULLET_NUM+i-BULLET_NUM),QString(QString::number(i)+":"+(m_hero.m_bullets[i].m_Free?"true":"false")));
 //    }
-//    for(int i = 0;i<ENERGY_MAX;++i)
-//    {
-//        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_energies[i].m_Free?"true":"false")));
-//    }
+    //    for(int i = 0;i<ENERGY_MAX;++i)
+    //    {
+    //        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_energies[i].m_Free?"true":"false")));
+    //    }
+    for(int i = 0;i<ENEMY_NUM;++i)
+    {
+        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_enemys[i]->m_Free?"true":"false")));
+    }
 
 
 }
@@ -567,7 +571,7 @@ void MainScene::collisionDetection()
     //遍历所有非空闲的敌机
     for(int i = 0 ;i < ENEMY_NUM;i++)
     {
-        if(m_hero.m_ashwab_timer == 20&&!m_enemys[i]->m_Free){
+        if(m_hero.m_ashwab_timer == (int)(ASHWAB_OFFSET*1000.0f/(float)GAME_RATE) &&!m_enemys[i]->m_Free){
             m_enemys[i]->hp=0;
             m_enemys[i]->m_Free = true;
             //得分增加

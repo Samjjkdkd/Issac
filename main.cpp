@@ -1,5 +1,6 @@
 #include "mainscene.h"
 #include "startdlg.h"
+//#include "startscene.h"
 
 #include <QApplication>
 
@@ -7,6 +8,8 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     StartDlg s;
+//    StartScene b;
+//    b.show();
     if(s.exec() == QDialog::Accepted) // 利用Accepted返回值判断按钮是否被按下
     {
         MainScene w;

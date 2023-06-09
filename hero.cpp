@@ -48,9 +48,15 @@ HeroPlane::HeroPlane()
     m_burst_timer = 0;
     m_ashwab_timer = 0;
 
+    b_direction = 180;
+
     for(int i = 0 ;i<BULLET_NUM;++i){
         m_bullets[i] = Bullet(i);
     }
+
+    m_skill_degree = SKILL_DEGREE;
+
+    m_bullet_interval= BULLET_INTERVAL;
 }
 
 void HeroPlane::setPosition(int x, int y)
@@ -67,8 +73,8 @@ void HeroPlane::shoot()
     //累加时间间隔记录变量
     m_recorder++;
     //判断如果记录数字 未达到发射间隔，直接return
-    int bullet_interval_ = m_burst_timer==0? BULLET_INTERVAL:BULLET_INTERVAL/2;
-    if(m_recorder < bullet_interval_)
+
+    if(m_recorder < m_bullet_interval)
     {
         return;
     }
@@ -126,11 +132,11 @@ void HeroPlane::skill(bool s)
     m_skill_recorder = 0;
 
     //发射子弹
-    float d_degree = (float)(360.0/(float)SKILL_BULLET_NUM);
+    m_skill_degree = SKILL_DEGREE;
+    float d_degree = (float)(m_skill_degree/(float)SKILL_BULLET_NUM);
     QTransform transform;
     transform.rotate(180.0);
-    for(float j = 0; j <= 360.0;j+=d_degree){
-
+    for(float j = b_direction - m_skill_degree/2; j <= b_direction + m_skill_degree/2;j+=d_degree){
         for(int i = BULLET_NUM-SKILL_BULLET_NUM ; i < BULLET_NUM;i++)
         {
             //如果是空闲的子弹进行发射
@@ -162,8 +168,14 @@ void HeroPlane::burst(bool s)
     m_burst_recorder++;
     //判断如果记录数字 未达到发射间隔，直接return
 
-    if(m_burst_timer)   {
+    if(m_burst_timer)   {//大招 速度 射速 提升
+        m_speed = I_SHOW_SPEED * I_SPEED_BURST;
+        m_bullet_interval = BULLET_INTERVAL/2;
         m_burst_timer--;
+        if(!m_burst_timer){
+            m_speed = I_SHOW_SPEED;
+            m_bullet_interval = BULLET_INTERVAL;
+        }
     }
 
     if(m_burst_recorder < BURST_INTERVAL||!s||m_charge!=CHARGE_MAX)
@@ -223,6 +235,7 @@ void HeroPlane::sprint(bool s)
             m_speed = I_SHOW_SPEED + I_GOT_SPRINT*((float)(m_sprint_timer)/(float)BOOST_TIME);
         }
     }
+
     //判断如果记录数字 未达到发射间隔，直接return
     if(m_sprint_recorder < SPRINT_INTERVAL||!s||m_stamina<SPRINT_COST)
     {

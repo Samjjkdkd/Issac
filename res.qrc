@@ -1,7 +1,6 @@
 <RCC>
     <qresource prefix="/">
         <file>res/app.ico</file>
-        <file>res/bg.wav</file>
         <file>res/Blue_Womb.png</file>
         <file>res/bomb.wav</file>
         <file>res/bomb-1.png</file>
@@ -153,5 +152,6 @@
         <file>res/z_effect/z-74.png</file>
         <file>res/z_effect/z-75.png</file>
         <file>res/WildFire.wav</file>
+        <file>res/StarRail.wav</file>
     </qresource>
 </RCC>

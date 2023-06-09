@@ -1,5 +1,7 @@
 #include "startdlg.h"
 #include "ui_startdlg.h"
+#include <QMediaPlayer>
+
 
 StartDlg::StartDlg(QWidget *parent) :
     QDialog(parent),

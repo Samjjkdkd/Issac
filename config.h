@@ -1,11 +1,14 @@
 /**********  游戏配置数据 **********/
 #define GAME_WIDTH  2048  //宽度
 #define GAME_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v3.0.0" //标题
+#define START_WIDTH  2048  //宽度
+#define START_HEIGHT 1200  //高度
+#define GAME_TITLE "以撒 v3.1" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
 #define MAP_PATH  ":/res/Blue_Womb.png" //地图图片路径
+#define START_MAP_PATH ":/res/startbg.jpg"
 #define MAP_SCROLL_SPEED 2  //地图滚动速度
 #define MAP_RESIZE_WIDTH 2048
 #define MAP_RESIZE_HEIGHT 1200
@@ -15,11 +18,13 @@
 #define ROTATE_SENSITIVITY 2
 #define I_SHOW_SPEED 4.0f
 #define I_GOT_SPRINT 8.0f
+#define I_SPEED_BURST 1.5
 #define MAX_HEALTH 100.0
 #define SKILL_INTERVAL 200
 #define SPRINT_INTERVAL 50
 #define BURST_INTERVAL 1000
 #define ASHWAB_INTERVAL 2000
+#define SKILL_DEGREE 70
 #define SKILL_BULLET_NUM 30
 #define CHARGE_MAX 20
 #define CHARGE2_MAX 20
@@ -88,6 +93,7 @@
 /***********终结技资源***************/
 #define Z_PATH_PREFFIX ":/res/z_effect/z-"
 #define Z_SOUND_PATH ":/res/z.wav"
+#define ASHWAB_OFFSET 0.05f
 /***********能量相关****************/
 #define ENERGY_PATH ":/res/energy.png"
 #define ENERGY_PATH_1 ":/res/energy_1.png"

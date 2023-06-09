@@ -60,8 +60,8 @@ public:
     //弹匣
     Bullet m_bullets[BULLET_NUM];
 
-    //子弹方向
-    int b_direction = 180;
+    //英雄朝向
+    int b_direction;
 
     //发射间隔记录
     int m_recorder;
@@ -88,6 +88,10 @@ public:
     int m_ashwab_recorder;
 
     int shiftx, shifty;
+
+    float m_skill_degree;
+
+    int m_bullet_interval;
 };
 
 #endif // HERO_H

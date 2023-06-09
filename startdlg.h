@@ -1,6 +1,5 @@
 #ifndef STARTDLG_H
 #define STARTDLG_H
-
 #include <QDialog>
 
 namespace Ui {

@@ -114,3 +114,11 @@
     按下Z释放终结技。释放元素爆发以给终结技充能。
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/7.png)
+
+## **ISAAC v3.1**
+
+- ### e修改为扇形。开q时候速度和射速增加
+
+   好心人可以把开始界面写成纯代码形式这样就可以加音乐了。
+
+
