@@ -79,6 +79,8 @@ void MainScene::initScene()
             m_bloodtrail[i].type = 1;
         }
     }
+    ftime(&cTime);
+    lastTime = cTime.time*1000+cTime.millitm;
 }
 
 void MainScene::enemyToScene()
@@ -202,15 +204,15 @@ void MainScene::updatePosition()
             if(m_hero.m_sprint_timer&&!this->my_vector.Vf){
                 this->my_vector.Vf = 1.0;
             }
-            deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
-            deltay += this->my_vector.Vf*qSin((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed;
+            deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed();
+            deltay += this->my_vector.Vf*qSin((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed();
             if(this->my_vector.Vf<0.0f){
                 this->my_vector.theta*=-1;
             }
         }else if(input_type == AD_DIR)
         {
-            deltax += qFloor((this->my_vector.Vx)*this->m_hero.m_speed);
-            deltay += qFloor((this->my_vector.Vy)*this->m_hero.m_speed);
+            deltax += (this->my_vector.Vx)*this->m_hero.m_speed();
+            deltay += (this->my_vector.Vy)*this->m_hero.m_speed();
         }
 
         this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
@@ -326,25 +328,25 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.drawText(750,100,a);
 
     //绘制生命
-    QString b = "HP:" + QString::number(m_hero.m_hp);
+    QString b = "HP:" + QString::number(m_hero.m_hp());
     painter.setFont(QFont("黑体",20,QFont::Bold));
     painter.drawText(1050,100,b);
 
     //画血条
     QPainterPath path1;
-    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_hp>=0?m_hero.m_hp:0)/(float)MAX_HEALTH),19);
+    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_hp()>=0?m_hero.m_hp():0)/(float)m_hero.m_hp.max()),19);
     painter.setPen(QPen(Qt::red, 1));
     painter.fillPath(path1, Qt::red);
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-33,m_hero.m_Rect.width()+20,20);
-    QString h_show1 = QString::number(m_hero.m_hp) + "/"+ QString::number(MAX_HEALTH);
+    QString h_show1 = QString::number(m_hero.m_hp()) + "/"+ QString::number(m_hero.m_hp.max());
     painter.setFont(QFont("Consolas",10,QFont::Normal));
     painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show1.length()/2)*12,m_hero.m_Rect.y()-17,h_show1);
 
 
     //画体力
     QPainterPath path2;
-    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_stamina)/(float)MAX_STAMINA),7);
+    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_stamina())/(float)m_hero.m_stamina.max()),7);
     painter.setPen(QPen(Qt::red, 1));
     painter.fillPath(path2, QColor(0xaaaaaa));
     painter.setPen(QPen(Qt::white, 1));
@@ -371,10 +373,10 @@ void MainScene::paintEvent(QPaintEvent *event)
     QString q = m_hero.m_burst_recorder>BURST_INTERVAL?"":(QString::number((float)((float)BURST_INTERVAL-(float)m_hero.m_burst_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
 
     QPainterPath path4;
-    path4.addRect(GAME_WIDTH-BURST_ICON_MARGIN_X+1,GAME_HEIGHT-BURST_ICON_MARGIN_Y+1+(float)(BURST_ICON_SIZE-2)*((float)(CHARGE_MAX-m_hero.m_charge)/CHARGE_MAX),SKILL_ICON_SIZE-1,(float)(SKILL_ICON_SIZE-2)*((double)(m_hero.m_charge)/CHARGE_MAX)+1);
+    path4.addRect(GAME_WIDTH-BURST_ICON_MARGIN_X+1,GAME_HEIGHT-BURST_ICON_MARGIN_Y+1+(float)(BURST_ICON_SIZE-2)*(1.0f-m_hero.m_charge.progress()),SKILL_ICON_SIZE-1,(float)(SKILL_ICON_SIZE-2)*(m_hero.m_charge.progress())+1);
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-BURST_ICON_MARGIN_X,GAME_HEIGHT-BURST_ICON_MARGIN_Y,BURST_ICON_SIZE,BURST_ICON_SIZE);
-    painter.setOpacity(m_hero.m_charge==CHARGE_MAX?0.6:0.4);
+    painter.setOpacity(m_hero.m_charge.full()?0.6:0.4);
     painter.fillPath(path4, QColor(0x2e,0xdc,0xff));
     painter.setOpacity(1);
     painter.setFont(QFont("黑体",15,QFont::Bold));
@@ -386,10 +388,10 @@ void MainScene::paintEvent(QPaintEvent *event)
     QString z = m_hero.m_ashwab_recorder>ASHWAB_INTERVAL?"":(QString::number((float)((float)ASHWAB_INTERVAL-(float)m_hero.m_ashwab_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
 
     QPainterPath path5;
-    path5.addRect(GAME_WIDTH-ASHWAB_ICON_MARGIN_X+1,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y+1+(float)(ASHWAB_ICON_SIZE-2)*((float)(CHARGE2_MAX-m_hero.m_charge2)/CHARGE2_MAX),ASHWAB_ICON_SIZE-1,(float)(ASHWAB_ICON_SIZE-2)*((double)(m_hero.m_charge2)/CHARGE2_MAX)+1);
+    path5.addRect(GAME_WIDTH-ASHWAB_ICON_MARGIN_X+1,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y+1+(float)(ASHWAB_ICON_SIZE-2)*(1.0f- m_hero.m_charge2.progress()),ASHWAB_ICON_SIZE-1,(float)(ASHWAB_ICON_SIZE-2)*m_hero.m_charge2.progress()+1);
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-ASHWAB_ICON_MARGIN_X,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y,ASHWAB_ICON_SIZE,ASHWAB_ICON_SIZE);
-    painter.setOpacity(m_hero.m_charge2==CHARGE2_MAX?0.6:0.4);
+    painter.setOpacity(m_hero.m_charge2.full()?0.6:0.4);
     painter.fillPath(path5, QColor(0xfff700));
     painter.setOpacity(1);
     painter.setFont(QFont("黑体",15,QFont::Bold));
@@ -424,6 +426,13 @@ void MainScene::paintEvent(QPaintEvent *event)
 //        painter.drawText(0,12*(i),QString(QString::number(i)+":"+(m_enemys[i]->m_Free?"true":"false")));
 //    }
 
+
+    //绘制FPS
+    painter.setFont(QFont("黑体",18,QFont::Bold));
+    ftime(&cTime);
+    currTime = cTime.time*1000+cTime.millitm;
+    painter.drawText(GAME_WIDTH-180,50,"FPS " + QString("%1").arg((int)(1000.0f/(float)(currTime-lastTime)), 3, 10, QLatin1Char(' ')));
+    lastTime = currTime;
 
 }
 
@@ -782,7 +791,7 @@ void MainScene::collisionDetection()
     for(int i = 0; i< ENERGY_MAX;++i)
     {
         if((!m_energies[i].m_Free)&&m_energies[i].m_Rect.intersects(m_hero.m_Rect)){
-            m_hero.i_got_charge(m_energies[i].m_energy_amount);
+            m_hero.m_charge+=m_energies[i].m_energy_amount;
             m_energies[i].m_Free = true;
         }
     }

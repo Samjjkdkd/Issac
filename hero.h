@@ -3,6 +3,25 @@
 #include<QRect>
 #include<QPixmap>
 #include "bullet.h"
+#include "config.h"
+#include "auxstructure.h"
+
+enum HeroInfo{
+    Speed,
+    Skill_Interval,
+    Sprint_Interval,
+    Ashwab_Interval,
+    Burst_Interval,
+    Health,
+    Stamina
+};
+
+enum SpeedBonusIndex{
+    s_Keep,
+    s_Sprint,
+    s_Burst
+};
+
 
 class HeroPlane
 {
@@ -26,6 +45,9 @@ public:
     void i_got_charge(int n);
     void i_got_charge2(int n);
 
+    //获取速度
+    qreal getInfo(int type);
+
     QPixmap PixmapToRound(const QPixmap &src, int radius);
 
     //飞机资源 对象
@@ -41,57 +63,65 @@ public:
     int m_Y;
 
     //飞机生命
-    int m_hp;
+    TubeLikeData m_hp;
 
     //飞机速度
-    float m_speed;
+    VariableData m_speed;
 
     //飞机体力
-    int m_stamina;
+    TubeLikeData m_stamina;
 
     //飞机充能
-    int m_charge;
+    TubeLikeData m_charge;
 
-    int m_charge2;
+    TubeLikeData m_charge2;
 
     //飞机的矩形边框
     QRect m_Rect;
 
     //弹匣
-    Bullet m_bullets[BULLET_NUM];
+    Bullet m_bullets[BULLET_MAX];
 
     //英雄朝向
     int b_direction;
 
+    //行为相关
+    //recorder为正计时，与间隔相关
+    //timer为倒计时，与持续时间相关
+    //interval为间隔
+
     //发射间隔记录
-    int m_recorder;
+    int m_bullet_recorder;
+    int m_bullet_interval;
 
-    //冲刺冷却计时器
-    int m_sprint_recorder;
-
-    //冲刺持续计时器
-    int m_sprint_timer;
-
-    //爆发持续计时器
-    int m_burst_timer;
-
-    //终结技持续计时器
-    int m_ashwab_timer;
-
-    //e计时器
+    //元素战技
     int m_skill_recorder;
+    int m_skill_interval;
 
-    //q计时器
+    //冲刺
+    int m_sprint_recorder;
+    int m_sprint_timer;
+    int m_sprint_interval;
+
+    //元素爆发
+    int m_burst_timer;
     int m_burst_recorder;
+    int m_burst_interval;
 
-    //z计时器
+    //终结技
+    int m_ashwab_timer;
     int m_ashwab_recorder;
-
-    int shiftx, shifty;
+    int m_ashwab_interval;
 
     float m_skill_degree;
 
-    int m_bullet_interval;
+    //q计时器
+
+    //z计时器
+
+    int shiftx, shifty;
+
+
 };
 
 #endif // HERO_H

@@ -139,5 +139,15 @@
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/8.png)
 
+## **ISAAC v3.3.-1**
+
+- ### 代码大重构（Work in progress）
+
+    趁现在还没出bug赶紧push一下
+
+- ### 加入FPS显示（这样才能知道优化做的有多烂）
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/9.png)
+
 
 

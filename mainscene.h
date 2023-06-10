@@ -1,6 +1,6 @@
 #ifndef MAINSCENE_H
 #define MAINSCENE_H
-#include<QTimer>
+#include <QTimer>
 #include <QWidget>
 #include <QSound>
 #include <QSoundEffect>
@@ -31,7 +31,7 @@
 #include <QColor>
 #include <math.h>
 #include <complex>
-#include <ctime>
+#include <sys/timeb.h>
 
 enum INPUT_TYPE{
     WASD,
@@ -61,6 +61,11 @@ public:
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);//按键事件
     void keyReleaseEvent(QKeyEvent *event);//松键事件
+
+    //用于寄算fps
+    int lastTime;
+    int currTime;
+    timeb cTime;
 
     //地图对象
     Map m_map;

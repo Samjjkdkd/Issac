@@ -1,6 +1,5 @@
 #ifndef BULLET_H
 #define BULLET_H
-#include "config.h"
 #include <QPixmap>
 
 class Bullet

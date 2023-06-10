@@ -2,6 +2,8 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QRect>
+
+
 HeroPlane::HeroPlane()
 {
 
@@ -29,15 +31,19 @@ HeroPlane::HeroPlane()
     m_Rect.setHeight(m_Plane.height());
     m_Rect.moveTo(m_X,m_Y);
 
-    m_hp = MAX_HEALTH;
-    m_charge = 0;
-    m_charge2 = 0;
+
+    m_hp = TubeLikeData(MAX_HEALTH);
+
+    m_charge = TubeLikeData(0.0f,CHARGE_MAX);
+    m_charge2 = TubeLikeData(0.0f,CHARGE2_MAX);
+
     m_speed = I_SHOW_SPEED;
 
-    m_stamina = MAX_STAMINA;
+
+    m_stamina = TubeLikeData(MAX_STAMINA);
 
     //初始化发射间隔记录
-    m_recorder = 0;
+    m_bullet_recorder = 0;
 
     m_skill_recorder = SKILL_INTERVAL;
     m_burst_recorder = BURST_INTERVAL;
@@ -50,6 +56,7 @@ HeroPlane::HeroPlane()
 
     b_direction = 180;
 
+
     for(int i = 0 ;i<BULLET_NUM;++i){
         m_bullets[i] = Bullet(i);
     }
@@ -57,6 +64,18 @@ HeroPlane::HeroPlane()
     m_skill_degree = SKILL_DEGREE;
 
     m_bullet_interval= BULLET_INTERVAL;
+}
+
+qreal HeroPlane::getInfo(int type){
+    qreal return_val;
+    switch(type){
+    case Speed:
+        return_val = this->m_speed();
+        break;
+    default:
+        return_val = 0;
+    }
+    return return_val;
 }
 
 void HeroPlane::setPosition(int x, int y)
@@ -71,16 +90,16 @@ void HeroPlane::shoot()
 {
     QTransform transform;
     //累加时间间隔记录变量
-    m_recorder++;
+    m_bullet_recorder++;
     //判断如果记录数字 未达到发射间隔，直接return
 
-    if(m_recorder < m_bullet_interval)
+    if(m_bullet_recorder < m_bullet_interval)
     {
         return;
     }
     //到达发射时间处理
     //重置发射时间间隔记录
-    m_recorder = 0;
+    m_bullet_recorder = 0;
 
     //发射子弹
     for(int i = 0 ; i < BULLET_NUM-SKILL_BULLET_NUM;i++)
@@ -104,16 +123,6 @@ void HeroPlane::shoot()
             break;
         }
     }
-}
-
-void HeroPlane::i_got_charge(int n){
-    if(this->m_charge<CHARGE_MAX)   this->m_charge+=n;
-    if(this->m_charge>CHARGE_MAX)   this->m_charge=CHARGE_MAX;
-}
-
-void HeroPlane::i_got_charge2(int n){
-    if(this->m_charge2<CHARGE2_MAX)   this->m_charge2+=n;
-    if(this->m_charge2>CHARGE2_MAX)   this->m_charge2=CHARGE2_MAX;
 }
 
 
@@ -169,16 +178,17 @@ void HeroPlane::burst(bool s)
     //判断如果记录数字 未达到发射间隔，直接return
 
     if(m_burst_timer)   {//大招 速度 射速 提升
-        m_speed = I_SHOW_SPEED * I_SPEED_BURST;
+        if(m_burst_timer)
+            m_speed.setRatio(I_SPEED_BURST,s_Burst);
         m_bullet_interval = BULLET_INTERVAL/2;
         m_burst_timer--;
         if(!m_burst_timer){
-            m_speed = I_SHOW_SPEED;
+            m_speed.setRatio(0.0f,s_Burst);
             m_bullet_interval = BULLET_INTERVAL;
         }
     }
 
-    if(m_burst_recorder < BURST_INTERVAL||!s||m_charge!=CHARGE_MAX)
+    if(m_burst_recorder < BURST_INTERVAL||!s||!m_charge.full())
     {
         return;
     }
@@ -186,7 +196,7 @@ void HeroPlane::burst(bool s)
     //重置发射时间间隔记录
     m_burst_recorder = 0;
     m_charge = 0;
-    i_got_charge2(10);
+    m_charge2+=10;
     //大招效果
     m_burst_timer = BURST_TIME;
 }
@@ -202,7 +212,7 @@ void HeroPlane::ashwab(bool s)
         m_ashwab_timer--;
     }
 
-    if(m_ashwab_recorder < ASHWAB_INTERVAL||!s||m_charge2!=CHARGE2_MAX)
+    if(m_ashwab_recorder < ASHWAB_INTERVAL||!s||!m_charge2.full())
     {
         return;
     }
@@ -223,21 +233,20 @@ void HeroPlane::sprint(bool s)
     m_sprint_recorder++;
 
     m_stamina++;
-    m_stamina=m_stamina>=MAX_STAMINA?MAX_STAMINA:m_stamina;
 
     if(m_sprint_timer){
         m_sprint_timer--;
         if(SPRINT_TIME+BOOST_TIME<m_sprint_timer){
-            m_speed = I_SHOW_SPEED + I_GOT_SPRINT*((float)(SPRINT_TIME+2*BOOST_TIME-m_sprint_timer)/(float)BOOST_TIME);
+            m_speed.setFlat(I_GOT_SPRINT*((float)(SPRINT_TIME+2*BOOST_TIME-m_sprint_timer)/(float)BOOST_TIME),s_Sprint);
         }else if(BOOST_TIME<m_sprint_timer){
-            m_speed = I_SHOW_SPEED + I_GOT_SPRINT;
+            m_speed.setFlat(I_GOT_SPRINT,s_Sprint);
         }else{
-            m_speed = I_SHOW_SPEED + I_GOT_SPRINT*((float)(m_sprint_timer)/(float)BOOST_TIME);
+            m_speed.setFlat(I_GOT_SPRINT*((float)(m_sprint_timer)/(float)BOOST_TIME),s_Sprint);
         }
     }
 
     //判断如果记录数字 未达到发射间隔，直接return
-    if(m_sprint_recorder < SPRINT_INTERVAL||!s||m_stamina<SPRINT_COST)
+    if(m_sprint_recorder < SPRINT_INTERVAL||!s||m_stamina()<SPRINT_COST)
     {
         return;
     }

@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     audiothread.cpp \
+    auxstructure.cpp \
     bloodtrail.cpp \
     bomb.cpp \
     bullet.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
 
 HEADERS += \
     audiothread.h \
+    auxstructure.h \
     bloodtrail.h \
     bomb.h \
     bullet.h \

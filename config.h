@@ -3,7 +3,7 @@
 #define GAME_HEIGHT 1200  //高度
 #define START_WIDTH  2048  //宽度
 #define START_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v3.2.0" //标题
+#define GAME_TITLE "以撒 v3.3.0" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -17,8 +17,8 @@
 #define RESIZE_RADIUS 128
 #define ROTATE_SENSITIVITY 2
 #define I_SHOW_SPEED 4.0f
-#define I_GOT_SPRINT 8.0f
-#define I_SPEED_BURST 1.5
+#define I_GOT_SPRINT 8.0f //这个值为绝对值（小速度）
+#define I_SPEED_BURST 0.5 //提升比例（大速度）
 #define MAX_HEALTH 100.0
 #define SKILL_INTERVAL 200
 #define SPRINT_INTERVAL 50
@@ -39,6 +39,7 @@
 #define SKILL_BULLET_PATH  ":/res/bullet_12.png"
 #define BULLET_SPEED 7  //子弹移动速度
 #define BULLET_NUM 120   //弹匣中子弹总数
+#define BULLET_MAX 1000   //子弹上限
 #define BULLET_INTERVAL 8 //发射子弹时间间隔
 /**********  敌机配置数据 **********/
 #define ENEMY_PATH_1  ":/res/Entity_10.0.0.png"  //敌机资源图片
@@ -53,9 +54,9 @@
 #define RESIZE_HEIGHT_3 80 //敌方统一大小
 
 //奖励相关
-#define ENEMY_ENERGY_1 10
-#define ENEMY_ENERGY_2 3
-#define ENEMY_ENERGY_3 5
+#define ENEMY_ENERGY_1 10.0f
+#define ENEMY_ENERGY_2 3.0f
+#define ENEMY_ENERGY_3 5.0f
 #define ENEMY_SCORE_1 3
 #define ENEMY_SCORE_2 1
 #define ENEMY_SCORE_3 1

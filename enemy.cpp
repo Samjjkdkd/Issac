@@ -1,6 +1,6 @@
 #include "enemy.h"
 #include "config.h"
-#include<math.h>
+#include <math.h>
 EnemyPlane::EnemyPlane()
 {
 

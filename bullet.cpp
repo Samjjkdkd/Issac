@@ -1,5 +1,6 @@
 #include "bullet.h"
 #include <math.h>
+#include "config.h"
 Bullet::Bullet(){
 
 }

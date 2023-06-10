@@ -28,7 +28,7 @@ public:
     int m_recorder;
 
     //能量值
-    int m_energy_amount = 3;
+    float m_energy_amount = 3;
 
     //记录状态时间
     int m_recorder_1;
