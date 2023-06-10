@@ -22,6 +22,10 @@ enum SpeedBonusIndex{
     s_Burst
 };
 
+enum BulletBonusIndex{
+    b_Keep,
+    b_Burst
+};
 
 class HeroPlane
 {
@@ -38,12 +42,12 @@ public:
     void ashwab(bool s);
     //冲刺
     void sprint(bool s);
+
+    //开了
+    void cheat();
+
     //设置飞机位置
     void setPosition(int x, int y);
-
-    //充能
-    void i_got_charge(int n);
-    void i_got_charge2(int n);
 
     //获取速度
     qreal getInfo(int type);
@@ -70,6 +74,7 @@ public:
 
     //飞机体力
     TubeLikeData m_stamina;
+    VariableData sprint_cost;
 
     //飞机充能
     TubeLikeData m_charge;
@@ -90,30 +95,24 @@ public:
     //timer为倒计时，与持续时间相关
     //interval为间隔
 
-    //发射间隔记录
-    int m_bullet_recorder;
-    int m_bullet_interval;
+    //发射事件
+    EventManager m_shoot;
 
-    //元素战技
-    int m_skill_recorder;
-    int m_skill_interval;
+    //冲刺事件
+    EventManager m_sprint;
 
-    //冲刺
-    int m_sprint_recorder;
-    int m_sprint_timer;
-    int m_sprint_interval;
+    //战技事件
+    EventManager m_skill;
 
-    //元素爆发
-    int m_burst_timer;
-    int m_burst_recorder;
-    int m_burst_interval;
+    //爆发事件
+    EventManager m_burst;
 
-    //终结技
-    int m_ashwab_timer;
-    int m_ashwab_recorder;
-    int m_ashwab_interval;
+    //终结事件
+    EventManager m_ashwab;
 
-    float m_skill_degree;
+    VariableData m_skill_degree;
+
+    VariableData m_skill_bullet_num;
 
     //q计时器
 

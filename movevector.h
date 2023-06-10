@@ -32,6 +32,9 @@ public:
     bool sprint_up;
     bool ashwab_up;
 
+
+    bool cheat;
+
 };
 
 #endif // MOVEVECTOR_H

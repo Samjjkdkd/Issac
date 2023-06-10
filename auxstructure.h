@@ -9,13 +9,19 @@
 class VariableData{
 public:
     float base;
+
+    //不同加成来源的加成分开存储
+    //最大索引先给了20 感觉没必要放进config里
     float bonus_flat[BONUS_INDEX_MAX];
     float bonus_ratio[BONUS_INDEX_MAX];
     float bonus_flat_sum;
     float bonus_ratio_sum;
     VariableData(float a);
     VariableData();
+
     float operator()();
+
+    //设置第i个加成
     void setFlat(float a, int i);
     void setRatio(float a, int i);
 
@@ -31,13 +37,16 @@ public:
     TubeLikeData(float _v, float _m);
     TubeLikeData(float _v);
     TubeLikeData();
-    float max();
-    bool full();
-    float progress();
+    float max();//获得当前上限
+    bool full();//是否为满
+    void fill();//填满
+    float progress();//获得当前进度
 
     void addMax(float a);
     void addVal(float a);
 
+
+    //支持正常赋值运算符
     void operator+=(float a);
     void operator-=(float a);
     void operator=(float a);
@@ -47,7 +56,8 @@ public:
     float operator++(int);
 
     float operator()();
-    void valCheck();
+
+    void valCheck();//数值合法性校验
 
 };
 
@@ -57,8 +67,21 @@ class EventManager
 {
 public:
     int recorder;
-    int interval;
-    int time;
+    VariableData interval;
+    VariableData time;
+    int timer;
+    bool without_timer = false;
+
+    bool tick();//计时一次
+    bool avail();//是否可用
+    void release();//释放
+    bool holding();//是否进行中
+    float getCD();//获得冷却
+    void ready();//使可用化
+    float progress();//获得进度
+
+    EventManager(int,int,bool init_avail = true);
+    EventManager(int);
     EventManager();
 };
 

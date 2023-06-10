@@ -95,7 +95,7 @@
 /***********终结技资源***************/
 #define Z_PATH_PREFFIX ":/res/z_effect/z-"
 #define Z_SOUND_PATH ":/res/z.wav"
-#define ASHWAB_OFFSET 0.15f
+#define ASHWAB_OFFSET 0.00f
 /***********能量相关****************/
 #define ENERGY_PATH ":/res/energy.png"
 #define ENERGY_PATH_1 ":/res/energy_1.png"

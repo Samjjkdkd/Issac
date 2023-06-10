@@ -12,8 +12,8 @@ public:
     //更新信息（播放图片下标、播放间隔）
     void updateInfo();
 
-    //放爆炸资源数组
-
+    //放资源数组
+    QPixmap m_bloodtrail;
 
     //爆炸位置
     int m_X;

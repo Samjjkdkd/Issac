@@ -70,15 +70,7 @@ void MainScene::initScene()
             m_enemys.push_back(pointer);
         }
     }
-    for(int i=0;i<BLOOD_NUM;i++){
-        int type_ = rand()%2;
-        if(type_ == 0){
-            m_bloodtrail[i].type = 0;
-        }
-        else if(type_ == 1){
-            m_bloodtrail[i].type = 1;
-        }
-    }
+
     ftime(&cTime);
     lastTime = cTime.time*1000+cTime.millitm;
 }
@@ -129,7 +121,7 @@ void MainScene::updatePosition()
     //发射子弹
     m_hero.shoot();
     //计算子弹坐标
-    if(!m_hero.m_ashwab_timer){
+    if(!m_hero.m_ashwab.holding()){
         for(int i = 0 ;i < BULLET_NUM;i++)
         {
             //如果子弹状态为非空闲，计算发射位置
@@ -140,7 +132,7 @@ void MainScene::updatePosition()
         }
     }
     //敌机坐标计算
-    if(!(m_hero.m_burst_timer||m_hero.m_ashwab_timer)){
+    if(!(m_hero.m_burst.holding()||m_hero.m_ashwab.holding())){
         for(int i = 0 ; i< ENEMY_NUM;i++)
         {
             //非空闲敌机 更新坐标
@@ -189,19 +181,23 @@ void MainScene::updatePosition()
 
     //终结
     m_hero.ashwab(this->my_vector.ashwab);
-    if(m_hero.m_ashwab_timer&&this->my_vector.ashwab){
+
+    //作弊
+    if(this->my_vector.cheat)   m_hero.cheat();
+
+    if(m_hero.m_ashwab.timer&&this->my_vector.ashwab){
         bgsound->setVolume(0.15f);
         z_sound->play();
     }
 
-    if(m_hero.m_ashwab_timer == 20){
+    if(m_hero.m_ashwab.timer == 20){
         bgsound->setVolume(0.25f);
     }
     int deltax = 0;
     int deltay = 0;
-    if(!m_hero.m_ashwab_timer){
+    if(!m_hero.m_ashwab.holding()){
         if(input_type == WASD){
-            if(m_hero.m_sprint_timer&&!this->my_vector.Vf){
+            if(m_hero.m_sprint.holding()&&!this->my_vector.Vf){
                 this->my_vector.Vf = 1.0;
             }
             deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed();
@@ -243,23 +239,15 @@ void MainScene::paintEvent(QPaintEvent *event)
 
 
     //绘制血迹
-    QTransform blood_trans;
-    QPixmap blood_tmp;
+
     for(int i = 0 ; i < BLOOD_NUM;i++)
     {
         if(m_bloodtrail[i].m_Free == false)
         {
-            blood_trans.reset();
-            blood_trans.rotate(m_bloodtrail[i].m_direction);
             painter.setOpacity(m_bloodtrail[i].m_transparentrate/1.5);
-            if(m_bloodtrail[i].type == 0){
-                blood_tmp = m_blood[0].transformed(blood_trans,Qt::SmoothTransformation);
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,blood_tmp);
-            }
-            if(m_bloodtrail[i].type == 1){
-                blood_tmp = m_blood[1].transformed(blood_trans,Qt::SmoothTransformation);
-                painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,blood_tmp);
-            }
+
+            painter.drawPixmap(m_bloodtrail[i].m_X,m_bloodtrail[i].m_Y,m_bloodtrail[i].m_bloodtrail);
+
         }
     }
     painter.setOpacity(1);
@@ -283,7 +271,7 @@ void MainScene::paintEvent(QPaintEvent *event)
         }
     }
 
-    if(m_hero.m_burst_timer||m_hero.m_ashwab_timer){
+    if(m_hero.m_burst.holding()||m_hero.m_ashwab.holding()){
         painter.setBrush(QBrush(QColor(0,0,0,80)));
         painter.drawRect(-1,-1,GAME_WIDTH+2,GAME_HEIGHT+2);
         painter.setBrush(QBrush(Qt::NoBrush));
@@ -354,14 +342,13 @@ void MainScene::paintEvent(QPaintEvent *event)
 
 
     //绘制技能图标
-    QString e = m_hero.m_skill_recorder>SKILL_INTERVAL?"":(QString::number((float)((float)SKILL_INTERVAL-(float)m_hero.m_skill_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
+    QString e = m_hero.m_skill.avail()?"":(QString::number(m_hero.m_skill.getCD()*(float)GAME_RATE/1000.0f,'f',1)+"s");
     QPainterPath path3;
     path3.addRect(GAME_WIDTH-SKILL_ICON_MARGIN_X+1,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+1+(float)(SKILL_ICON_SIZE-2)*(
-                                                                                                    m_hero.m_skill_recorder>SKILL_INTERVAL? 0.0f:((float)(SKILL_INTERVAL)-(float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL)),SKILL_ICON_SIZE-1,(float)(SKILL_ICON_SIZE-2)*(
-                        m_hero.m_skill_recorder>SKILL_INTERVAL? 1.0f:((float)(m_hero.m_skill_recorder))/(float)(SKILL_INTERVAL))+1);
+                                                                                                    1.0f-m_hero.m_skill.progress()),SKILL_ICON_SIZE-1,(float)(SKILL_ICON_SIZE-2)*m_hero.m_skill.progress()+1);
     painter.setPen(QPen(Qt::white, 1));
     painter.drawRect(GAME_WIDTH-SKILL_ICON_MARGIN_X,GAME_HEIGHT-SKILL_ICON_MARGIN_Y,SKILL_ICON_SIZE,SKILL_ICON_SIZE);
-    painter.setOpacity(m_hero.m_skill_recorder>SKILL_INTERVAL?0.6:0.3);
+    painter.setOpacity(m_hero.m_skill.avail()?0.6:0.3);
     painter.fillPath(path3, QColor(0xff,0xff,0xff));
     painter.setOpacity(1);
     painter.setFont(QFont("黑体",15,QFont::Bold));
@@ -370,7 +357,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.drawText(GAME_WIDTH-SKILL_ICON_MARGIN_X+10,GAME_HEIGHT-SKILL_ICON_MARGIN_Y+SKILL_ICON_SIZE-48,QString("E"));
 
     //绘制元素爆发图标
-    QString q = m_hero.m_burst_recorder>BURST_INTERVAL?"":(QString::number((float)((float)BURST_INTERVAL-(float)m_hero.m_burst_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
+    QString q = m_hero.m_burst.avail()?"":(QString::number(m_hero.m_burst.getCD()*(float)GAME_RATE/1000.0f,'f',1)+"s");
 
     QPainterPath path4;
     path4.addRect(GAME_WIDTH-BURST_ICON_MARGIN_X+1,GAME_HEIGHT-BURST_ICON_MARGIN_Y+1+(float)(BURST_ICON_SIZE-2)*(1.0f-m_hero.m_charge.progress()),SKILL_ICON_SIZE-1,(float)(SKILL_ICON_SIZE-2)*(m_hero.m_charge.progress())+1);
@@ -385,7 +372,7 @@ void MainScene::paintEvent(QPaintEvent *event)
     painter.drawText(GAME_WIDTH-BURST_ICON_MARGIN_X+10,GAME_HEIGHT-BURST_ICON_MARGIN_Y+BURST_ICON_SIZE-48,QString("Q"));
 
     //绘制终结图标
-    QString z = m_hero.m_ashwab_recorder>ASHWAB_INTERVAL?"":(QString::number((float)((float)ASHWAB_INTERVAL-(float)m_hero.m_ashwab_recorder)*(float)GAME_RATE/1000.0f,'f',1)+"s");
+    QString z = m_hero.m_ashwab.avail()?"":(QString::number(m_hero.m_ashwab.getCD()*(float)GAME_RATE/1000.0f,'f',1)+"s");
 
     QPainterPath path5;
     path5.addRect(GAME_WIDTH-ASHWAB_ICON_MARGIN_X+1,GAME_HEIGHT-ASHWAB_ICON_MARGIN_Y+1+(float)(ASHWAB_ICON_SIZE-2)*(1.0f- m_hero.m_charge2.progress()),ASHWAB_ICON_SIZE-1,(float)(ASHWAB_ICON_SIZE-2)*m_hero.m_charge2.progress()+1);
@@ -401,8 +388,8 @@ void MainScene::paintEvent(QPaintEvent *event)
 
 
     //绘制大招动画
-    if(m_hero.m_ashwab_timer){
-        float curr_time = (float)(ASHWAB_TIME-m_hero.m_ashwab_timer)*(float)GAME_RATE/1000.0f-ASHWAB_OFFSET;
+    if(m_hero.m_ashwab.timer){
+        float curr_time = (float)(ASHWAB_TIME-m_hero.m_ashwab.timer)*(float)GAME_RATE/1000.0f-ASHWAB_OFFSET;
         if(curr_time>=1.60f&&curr_time<4.56f){
             painter.drawPixmap(0,0,m_ashwab[(int)((curr_time-1.60f)*25.0f)]);
         }
@@ -539,6 +526,10 @@ void MainScene::keyPressEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[11]=QString("pressed");
     }
+    if(event->key()==Qt::Key_G)
+    {
+        this->my_vector.StateofMoveKeys[12]=QString("pressed");
+    }
 }
 
 //松键事件
@@ -592,6 +583,10 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[11]=QString("unpressed");
     }
+    if(event->key()==Qt::Key_G)
+    {
+        this->my_vector.StateofMoveKeys[12]=QString("unpressed");
+    }
 }
 
 //古法碰撞检测
@@ -603,10 +598,11 @@ bool isIntersect(const QRect& a, const QRect& b){
 void MainScene::collisionDetection()
 {
 
+    QTransform blood_trans;
     //遍历所有非空闲的敌机
     for(int i = 0 ;i < ENEMY_NUM;i++)
     {
-        if(m_hero.m_ashwab_timer == (int)((ASHWAB_OFFSET+0.13f)*1000.0f/(float)GAME_RATE) &&!m_enemys[i]->m_Free){
+        if(m_hero.m_ashwab.timer == (int)((ASHWAB_OFFSET+0.20f)*1000.0f/(float)GAME_RATE) &&!m_enemys[i]->m_Free){
             m_enemys[i]->hp=0;
             m_enemys[i]->m_Free = true;
             //得分增加
@@ -671,10 +667,14 @@ void MainScene::collisionDetection()
                 {
 
                     m_bloodtrail[k].m_Free = false;
-                    //更新坐标
+
+                    int tmp_type = rand()%2;
 
                     m_bloodtrail[k].m_direction = rand()%360;
-
+                    m_bloodtrail[k].type = tmp_type;
+                    blood_trans.reset();
+                    blood_trans.rotate(m_bloodtrail[k].m_direction);
+                    m_bloodtrail[k].m_bloodtrail = m_blood[m_bloodtrail[k].type].transformed(blood_trans,Qt::SmoothTransformation);
 
                     m_bloodtrail[k].m_X = m_enemys[i]->m_X;
                     m_bloodtrail[k].m_Y = m_enemys[i]->m_Y;
@@ -740,9 +740,13 @@ void MainScene::collisionDetection()
                             //爆炸状态设置为非空闲
                             m_bloodtrail[k].m_Free = false;
 
+                            int tmp_type = rand()%2;
 
                             m_bloodtrail[k].m_direction = rand()%360;
-
+                            m_bloodtrail[k].type = tmp_type;
+                            blood_trans.reset();
+                            blood_trans.rotate(m_bloodtrail[k].m_direction);
+                            m_bloodtrail[k].m_bloodtrail = m_blood[m_bloodtrail[k].type].transformed(blood_trans,Qt::SmoothTransformation);
                             //更新坐标
 
                             m_bloodtrail[k].m_X = m_enemys[i]->m_X;

@@ -149,5 +149,15 @@
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/9.png)
 
+## **ISAAC v3.3.0**
+
+- ### 代码大重构（Stage I clear）
+
+    Hero模块已基本完成全部重构
+
+- ### 优化了上个版本的掉帧问题
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/10.png)
+
 
 

@@ -88,6 +88,10 @@ bool TubeLikeData::full(){
     return val == val_max();
 }
 
+void TubeLikeData::fill(){
+    val = val_max();
+}
+
 void TubeLikeData::valCheck(){
     val = val>val_max()?val_max():val;
 }
@@ -102,7 +106,64 @@ float TubeLikeData::operator++(int){
     return tmp;
 }
 
-EventManager::EventManager()
+EventManager::EventManager(int i,int t, bool init_avail)
 {
+    interval = (float)i;
+    time = t;
+    if(init_avail)  recorder = interval();
+    timer = 0;
 
 }
+
+EventManager::EventManager(int i):EventManager::EventManager(i,0)
+{
+    without_timer = true;
+}
+
+EventManager::EventManager():EventManager::EventManager(0,0)
+{
+}
+
+bool EventManager::tick()
+{
+    recorder++;
+    recorder = recorder>interval()?interval():recorder;
+    if(timer)  {
+        timer--;
+        return true;
+    }
+    return false;
+
+}
+
+bool EventManager::avail()
+{
+    return (float)recorder >= interval();
+}
+
+bool EventManager::holding()
+{
+    return timer?true:false;
+}
+
+void EventManager::release()
+{
+    timer = (int)time();
+    recorder = 0;
+}
+
+float EventManager::getCD()
+{
+    return interval() - (float)recorder;
+}
+
+void EventManager::ready()
+{
+    recorder = interval();
+}
+
+float EventManager::progress()
+{
+    return (float)recorder/interval();
+}
+

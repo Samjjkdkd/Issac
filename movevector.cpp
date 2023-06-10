@@ -7,10 +7,6 @@ MoveVector::MoveVector()
         this->StateofMoveKeys[i]=QString("unpressed");
     }
     this->toZeroVector();
-    this->skill = false;
-    this->burst = false;
-    this->sprint = false;
-    this->ashwab = false;
     this->skill_up = true;
     this->burst_up = true;
     this->sprint_up = true;
@@ -27,7 +23,7 @@ void MoveVector::toZeroVector()//归零向量
     this->burst = false;
     this->sprint = false;
     this->ashwab = false;
-
+    this->cheat = false;
 }
 
 
@@ -119,6 +115,10 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
     if(this->StateofMoveKeys[11]==QString("pressed"))//W
     {
         this->AddVf(-1.0);
+    }
+    if(this->StateofMoveKeys[12]==QString("pressed"))//W
+    {
+        this->cheat = true;
     }
     qreal length=qSqrt(this->Vx*this->Vx+this->Vy*this->Vy);
     if(length!=qreal(0.0))//向量归一化
