@@ -155,6 +155,10 @@
 
     Hero模块已基本完成全部重构
 
+- ### 加入作弊按键
+
+    暂无更多说明
+
 - ### 优化了上个版本的掉帧问题
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/10.png)
