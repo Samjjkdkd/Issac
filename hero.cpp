@@ -23,9 +23,7 @@ HeroPlane::HeroPlane()
     m_Plane = m_Plane_original;
 
     //初始化坐标
-    m_X = GAME_WIDTH * 0.5 - m_Plane.width()*0.5;
-    m_Y = GAME_HEIGHT*0.5 - m_Plane.height()*0.5;
-
+    toInitPosotion();
     //初始化矩形框
     m_Rect.setWidth(m_Plane.width());
     m_Rect.setHeight(m_Plane.height());
@@ -50,7 +48,6 @@ HeroPlane::HeroPlane()
     m_ashwab = EventManager(ASHWAB_INTERVAL,ASHWAB_TIME);
     sprint_cost = SPRINT_COST;
 
-    b_direction = 180;
 
     m_bullet_num = BULLET_NUM;
     m_bullet_num.setMax(BULLET_MAX);
@@ -63,6 +60,13 @@ HeroPlane::HeroPlane()
 
     m_skill_degree = SKILL_DEGREE;
     m_skill_bullet_num = SKILL_BULLET_NUM;
+
+}
+\
+void HeroPlane::toInitPosotion(){
+    b_direction = 180;
+    m_X = GAME_WIDTH * 0.5 - m_Plane.width()*0.5;
+    m_Y = GAME_HEIGHT*0.5 - m_Plane.height()*0.5;
 
 }
 

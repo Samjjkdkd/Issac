@@ -163,7 +163,6 @@
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/10.png)
 
-
 ## **ISAAC v3.4.0**
 
 - ### 代码大重构
@@ -181,5 +180,21 @@
     播放该动画时不会显示游戏界面的各类提示信息
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/11.png)
+
+## **ISAAC v3.5.0**
+
+- ### 调整启动对话框选项文字
+
+    其实只是排了下版
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/12.png)
+
+- ### 新增场景切换功能
+
+    *MainScene*可管理多个场景，并运用*connect*使不同之间进行切换
+    
+    目前只实装了一个欢迎界面
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/13.png)
 
 

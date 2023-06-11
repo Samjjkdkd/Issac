@@ -24,7 +24,8 @@ SOURCES += \
     mainscene.cpp \
     map.cpp \
     movevector.cpp \
-    startscene.cpp
+    startscene.cpp \
+    virtualbutton.cpp
 
 HEADERS += \
     audiothread.h \
@@ -43,7 +44,8 @@ HEADERS += \
     map.h \
     movevector.h \
     startscene.h \
-    startscene_ui.h
+    startscene_ui.h \
+    virtualbutton.h
     QSoundEffect
 
 # Default rules for deployment.

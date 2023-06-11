@@ -25,28 +25,44 @@ public:
     QPushButton *pushButton1;
     QPushButton *pushButton2;
     QLabel *label;
+    QLabel *text;
     QSoundEffect* start_music;
     void setupUi(QDialog *StartScene)
     {
+        StartScene->setWindowTitle("Start Issac");
         if (StartScene->objectName().isEmpty())
             StartScene->setObjectName(QString::fromUtf8("StartScene"));
         StartScene->resize(1024, 479);
         pushButton1 = new QPushButton(StartScene);
         pushButton1->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton1->setGeometry(QRect(330, 180, 170, 140));
+        pushButton1->setGeometry(QRect((1024-500)/2, 230, 500, 70));
         pushButton2 = new QPushButton(StartScene);
         pushButton2->setObjectName(QString::fromUtf8("pushButton"));
-        pushButton2->setGeometry(QRect(510, 180, 170, 140));
+        pushButton2->setGeometry(QRect((1024-500)/2, 310, 500, 70));
         QFont font;
         font.setFamily(QString::fromUtf8("Microsoft YaHei"));
-        font.setPointSize(20);
+        font.setPointSize(12);
         pushButton1->setFont(font);
+        pushButton1->setText("AD(direction) + WS(forward/backward)");
         pushButton2->setFont(font);
+        pushButton2->setText("AD(direction) + direction keys(absolute)");
         label = new QLabel(StartScene);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(0, 0, 1024, 479));
         label->setPixmap(QPixmap(QString::fromUtf8(":/res/startbg.jpg")));
         label->raise();
+
+        text = new QLabel(StartScene);
+        QPalette pe;
+        pe.setColor(QPalette::WindowText, Qt::white);
+        text->setObjectName(QString::fromUtf8("label"));
+        text->setGeometry(QRect((1024-500)/2, 150, 500, 100));
+        text->setFont(font);
+        text->setPalette(pe);
+        text->setText("Select method of moving");
+        text->setAlignment(Qt::AlignCenter);
+        text->raise();
+
         pushButton1->setFont(font);
         pushButton1->raise();
         pushButton2->setFont(font);
@@ -59,20 +75,12 @@ public:
         start_music->play();
 
 
-        retranslateUi(StartScene);
         QObject::connect(pushButton1, SIGNAL(clicked()), StartScene, SLOT(reject()));
         QObject::connect(pushButton2, SIGNAL(clicked()), StartScene, SLOT(accept()));
 
         QMetaObject::connectSlotsByName(StartScene);
     } // setupUi
 
-    void retranslateUi(QDialog *StartScene)
-    {
-        StartScene->setWindowTitle(QCoreApplication::translate("StartScene", "Start Issac", nullptr));
-        pushButton1->setText(QCoreApplication::translate("StartScene", "WASD", nullptr));
-        pushButton2->setText(QCoreApplication::translate("StartScene", "AD+Dir", nullptr));
-        label->setText(QString());
-    } // retranslateUi
 
 };
 

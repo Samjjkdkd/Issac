@@ -46,6 +46,9 @@ public:
     //开了
     void cheat();
 
+    //飞机位置初始化
+    void toInitPosotion();
+
     //设置飞机位置
     void setPosition(int x, int y);
 

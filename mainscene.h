@@ -13,7 +13,7 @@
 #include "energy.h"
 #include "movevector.h"
 #include "bloodtrail.h"
-#include "audiothread.h"
+#include "virtualbutton.h"
 #include <vector>
 #include "config.h"
 #include "enemy_1.h"
@@ -32,10 +32,22 @@
 #include <math.h>
 #include <complex>
 #include <sys/timeb.h>
+#include <QApplication>
+
 
 enum INPUT_TYPE{
     WASD,
     AD_DIR
+};
+
+enum SceneStage{
+    Welcome,
+    InGame
+};
+
+enum WelcomeButtons{
+    Enter_Game,
+    Quit_Game
 };
 
 class MainScene : public QWidget
@@ -46,12 +58,19 @@ public:
     MainScene(QWidget *parent = nullptr);
     void set_input_type(int t);
 
+    VirtualButton welcome_buttons[10];
+
+    int welcome_selected = -1;
+
+
+    //右下角显示技能的图标类
     class InfoIcon;
 
     InfoIcon *icon_skill;
     InfoIcon *icon_burst;
     InfoIcon *icon_ashwab;
 
+    //用于播放动画的类，目前就一个ashwab
     class AnimatePlayer;
 
     AnimatePlayer *ashwab_player;
@@ -60,17 +79,24 @@ public:
     QSoundEffect *bombSound;
     QSoundEffect *z_sound;
 
+    //输入方式
     int input_type;
 
-    //启动游戏  用于启动定时器对象
-    void playGame();
-    //更新坐标
+    //场景阶段
+    int scene_stage;
+
+    void mainLogic();
+
+     //更新坐标
     void updatePosition();
+    void updatePosition4welcome();
 
     void killAll();
 
     //绘图事件
     void paintEvent(QPaintEvent *event);
+    void paintInGameScene(QPainter &painter);
+    void paintWelcomeScene(QPainter &painter);
     void paintHostileObject(QPainter &painter);
     void paintFriendlyObject(QPainter &painter);
     void paintInfoComponent(QPainter &painter);
@@ -112,6 +138,7 @@ public:
     int score = 0;
 
     void collisionDetection();
+    void collisionDetection4welcome();
 
     //爆炸数组
     Bomb m_bombs[BOMB_NUM];
@@ -123,9 +150,23 @@ public:
     bloodtrail m_bloodtrail[BLOOD_NUM];
     QPixmap m_blood[2];
 
+
+    void initScene();
+
     // Bullet temp_bullet;
     ~MainScene();
-    void  initScene();
+
+public slots:
+    //初始界面
+    void welCome();
+
+    //启动游戏
+    void playGame();
+
+signals:
+    void toWelcome();
+    void toInGame();
+
 
 };
 

@@ -35,6 +35,8 @@ public:
 
     bool cheat;
 
+    bool confirm;
+
 };
 
 #endif // MOVEVECTOR_H
