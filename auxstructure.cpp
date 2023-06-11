@@ -21,6 +21,9 @@ void VariableData::setFlat(float a, int i){
 void VariableData::setRatio(float a, int i){
     bonus_ratio[i]=a;
 }
+void VariableData::setMax(float a){
+    max=a;
+}
 
 float VariableData::operator()(){
     bonus_ratio_sum = 0.0f;
@@ -29,8 +32,8 @@ float VariableData::operator()(){
         bonus_flat_sum+=bonus_flat[i];
         bonus_ratio_sum+=bonus_ratio[i];
     }
-
-    return base*(1.0f+bonus_ratio_sum)+bonus_flat_sum;
+    return_val = base*(1.0f+bonus_ratio_sum)+bonus_flat_sum;
+    return return_val > max? max:return_val;
 }
 
 TubeLikeData::TubeLikeData(float _v, float _m):val(_v),val_max(_m){}
@@ -124,10 +127,12 @@ EventManager::EventManager():EventManager::EventManager(0,0)
 {
 }
 
-bool EventManager::tick()
+bool EventManager::tick(bool timerOnly)
 {
-    recorder++;
-    recorder = recorder>interval()?interval():recorder;
+    if(!timerOnly){
+        recorder++;
+        recorder = recorder>interval()?interval():recorder;
+    }
     if(timer)  {
         timer--;
         return true;

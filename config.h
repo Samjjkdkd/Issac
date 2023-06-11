@@ -3,7 +3,7 @@
 #define GAME_HEIGHT 1200  //高度
 #define START_WIDTH  2048  //宽度
 #define START_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v3.3.0" //标题
+#define GAME_TITLE "以撒 v3.4.0" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -33,7 +33,7 @@
 #define SPRINT_TIME 30
 #define BOOST_TIME 8
 #define BURST_TIME 500
-#define ASHWAB_TIME 500
+#define ASHWAB_TIME 446
 /**********  子弹配置数据 **********/
 #define BULLET_PATH ":/res/bullet_11.png"   //子弹图片路径
 #define SKILL_BULLET_PATH  ":/res/bullet_12.png"
@@ -72,6 +72,7 @@
 #define ENEMY_HP_2 1
 #define ENEMY_HP_3 1
 #define ENEMY_NUM   50  //敌机总数量
+#define ENEMY_MAX   500  //敌机最大数量
 #define ENEMY_INTERVAL  5  //敌机出场时间间隔
 
 #define BOMB_PATH  ":/res/blood-%1.png"   //爆炸资源图片
@@ -95,7 +96,6 @@
 /***********终结技资源***************/
 #define Z_PATH_PREFFIX ":/res/z_effect/z-"
 #define Z_SOUND_PATH ":/res/z.wav"
-#define ASHWAB_OFFSET 0.00f
 /***********能量相关****************/
 #define ENERGY_PATH ":/res/energy.png"
 #define ENERGY_PATH_1 ":/res/energy_1.png"

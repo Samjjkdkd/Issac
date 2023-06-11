@@ -77,15 +77,18 @@ public:
     VariableData sprint_cost;
 
     //飞机充能
-    TubeLikeData m_charge;
+    TubeLikeData m_charge3;//战技充能
 
-    TubeLikeData m_charge2;
+    TubeLikeData m_charge;//爆发充能
+
+    TubeLikeData m_charge2;//终结充能
 
     //飞机的矩形边框
     QRect m_Rect;
 
     //弹匣
     Bullet m_bullets[BULLET_MAX];
+    Bullet m_bullets2[BULLET_MAX];
 
     //英雄朝向
     int b_direction;
@@ -110,8 +113,13 @@ public:
     //终结事件
     EventManager m_ashwab;
 
-    VariableData m_skill_degree;
 
+    //弹匣数量
+    VariableData m_bullet_num;
+
+    //战技子弹扇形角度
+    VariableData m_skill_degree;
+    //战技子弹数量
     VariableData m_skill_bullet_num;
 
     //q计时器

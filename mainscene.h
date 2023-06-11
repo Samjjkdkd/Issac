@@ -46,6 +46,16 @@ public:
     MainScene(QWidget *parent = nullptr);
     void set_input_type(int t);
 
+    class InfoIcon;
+
+    InfoIcon *icon_skill;
+    InfoIcon *icon_burst;
+    InfoIcon *icon_ashwab;
+
+    class AnimatePlayer;
+
+    AnimatePlayer *ashwab_player;
+
     QSoundEffect *bgsound;
     QSoundEffect *bombSound;
     QSoundEffect *z_sound;
@@ -56,8 +66,18 @@ public:
     void playGame();
     //更新坐标
     void updatePosition();
+
+    void killAll();
+
     //绘图事件
     void paintEvent(QPaintEvent *event);
+    void paintHostileObject(QPainter &painter);
+    void paintFriendlyObject(QPainter &painter);
+    void paintInfoComponent(QPainter &painter);
+    void paintDebug(QPainter &painter);
+    void paintMask(QPainter &painter, float trans);
+
+
     void mouseMoveEvent(QMouseEvent *event);
     void keyPressEvent(QKeyEvent *event);//按键事件
     void keyReleaseEvent(QKeyEvent *event);//松键事件
@@ -82,8 +102,11 @@ public:
     //敌机数组
     std::vector <EnemyPlane*> m_enemys;
 
-    //敌机出场间隔记录
-    int m_recorder;
+    //敌机生成事件
+    EventManager m_enemySpawn;
+
+    //敌机数量
+    VariableData m_enemy_num;
 
     //得分
     int score = 0;
@@ -100,13 +123,51 @@ public:
     bloodtrail m_bloodtrail[BLOOD_NUM];
     QPixmap m_blood[2];
 
-    //终结技动画
-    QPixmap m_ashwab[76];
-
-
     // Bullet temp_bullet;
     ~MainScene();
     void  initScene();
+
+};
+
+class MainScene::InfoIcon{
+public:
+    EventManager &e;
+    TubeLikeData &d;
+    InfoIcon(EventManager &_e,TubeLikeData &_charge,int _x, int _y, int _size, unsigned _c,QString k);
+    int margin_x, margin_y;
+    int size;
+    QFont font1;
+    QFont font2;
+    float opacity1 = 0.6f;
+    float opacity2 = 0.4f;
+    QColor c;
+    QPainterPath path;
+    QString str_;
+    QString key_;
+
+    void paint(QPainter &p);
+};
+
+class MainScene::AnimatePlayer{
+public:
+    timeb timeObject;
+    QPixmap frames[100];
+    int frame_num;
+    int frame_rate;
+    float frame_time;
+    QString path_preffix;
+    bool playing = false;
+    bool ended = false;
+    float start_time;
+    float end_time;
+    float playing_time;
+    float animate_time;
+    long long play_time;
+    long long curr_time;
+    bool isPlaying();
+    AnimatePlayer(int _num, int _rate, QString pre, float _start, float _end = 100.0f);
+    void start();
+    void play(QPainter &painter);
 
 };
 

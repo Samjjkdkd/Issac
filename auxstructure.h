@@ -16,6 +16,8 @@ public:
     float bonus_ratio[BONUS_INDEX_MAX];
     float bonus_flat_sum;
     float bonus_ratio_sum;
+    float max = 16777216.0f;
+    float return_val;
     VariableData(float a);
     VariableData();
 
@@ -24,6 +26,9 @@ public:
     //设置第i个加成
     void setFlat(float a, int i);
     void setRatio(float a, int i);
+
+    //设置最大值
+    void setMax(float a);
 
     void operator=(float _base);
 };
@@ -72,7 +77,7 @@ public:
     int timer;
     bool without_timer = false;
 
-    bool tick();//计时一次
+    bool tick(bool timerOnly = false);//计时一次
     bool avail();//是否可用
     void release();//释放
     bool holding();//是否进行中

@@ -2,14 +2,16 @@
 #include <math.h>
 #include "config.h"
 Bullet::Bullet(){
+    //子弹状态
+    m_Free = true;
 
 }
-Bullet::Bullet(int i)
+Bullet::Bullet(int type)
 {
     //加载子弹资源
-    if(i>=0&&i<BULLET_NUM-SKILL_BULLET_NUM){
+    if(type == 0){
         m_Bullet_original.load(BULLET_PATH);
-    }else{
+    }else if(type == 1){
         m_Bullet_original.load(SKILL_BULLET_PATH);
     }
     m_Bullet = m_Bullet_original;

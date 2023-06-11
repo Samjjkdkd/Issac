@@ -153,7 +153,7 @@
 
 - ### 代码大重构（Stage I clear）
 
-    Hero模块已基本完成全部重构
+    *Hero*模块已基本完成全部重构
 
 - ### 加入作弊按键
 
@@ -163,5 +163,23 @@
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/10.png)
 
+
+## **ISAAC v3.4.0**
+
+- ### 代码大重构
+
+    全部代码已基本完成重构，已做好对接Roguelike准备工作
+
+    修改部分逻辑，性能优化
+
+- ### 终结技动画优化
+
+    终结技动画不再依赖*timer*计时，而是采用真实事件计时，使音画不同步问题彻底解决
+
+    增加、完善动画细节，时间对齐
+
+    播放该动画时不会显示游戏界面的各类提示信息
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/11.png)
 
 
