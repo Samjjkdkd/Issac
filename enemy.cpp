@@ -38,20 +38,17 @@ void EnemyPlane::updatePosition(int hero_X,int hero_Y)
 //    m_Y += m_Speed * vector_Y/100;
     float length = sqrt(vector_X*vector_X+vector_Y*vector_Y);
 
-    int dX = (int) (((float)vector_X/length)*m_Speed*10000.0)/10000;
-    int dY = (int) (((float)vector_Y/length)*m_Speed*10000.0)/10000;
 
-    if(length){
+    if(length>0.0f){
+        int dX = (int) (((float)vector_X/length)*m_Speed*10000.0)/10000;
+        int dY = (int) (((float)vector_Y/length)*m_Speed*10000.0)/10000;
         m_X +=dX;
         m_Y +=dY;
         m_Rect.moveTo(m_X,m_Y);
     }
 
-    if(startplace==0&&m_Y >= GAME_HEIGHT + m_Rect.height())
-    {
-        m_Free = true;
-    }
-    if(startplace==1&&m_Y <= - m_Rect.height())
+    if(m_Y >= GAME_HEIGHT + m_Rect.height()||m_Y <= - m_Rect.height()
+        ||m_X >= GAME_WIDTH + m_Rect.width()||m_X <= - m_Rect.width())
     {
         m_Free = true;
     }

@@ -3,7 +3,7 @@
 #define GAME_HEIGHT 1200  //高度
 #define START_WIDTH  2048  //宽度
 #define START_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v3.5.0" //标题
+#define GAME_TITLE "以撒 v4.0.0" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -18,6 +18,7 @@
 #define ROTATE_SENSITIVITY 2
 #define I_SHOW_SPEED 4.0f
 #define I_GOT_SPRINT 8.0f //这个值为绝对值（小速度）
+#define I_SHOOT_SPEED 10.0f//子弹射速(个/100帧)
 #define I_SPEED_BURST 0.5 //提升比例（大速度）
 #define MAX_HEALTH 100.0
 #define SKILL_INTERVAL 200
@@ -29,8 +30,8 @@
 #define CHARGE_MAX 20
 #define CHARGE2_MAX 20
 #define MAX_STAMINA 1000
-#define SPRINT_COST 300
-#define SPRINT_TIME 30
+#define SPRINT_COST 200
+#define SPRINT_TIME 5
 #define BOOST_TIME 8
 #define BURST_TIME 500
 #define ASHWAB_TIME 446
@@ -89,13 +90,15 @@
 #define RESIZE_BLOOD_WIDTH 200
 #define RESIZE_BLOOD_HEIGHT 200
 
-#define SOUND_BGM_PATH ":/res/WildFire.wav"
-#define START_BGM_PATH ":/res/StarRail.wav"
-#define SOUND_BOOM_PATH ":/res/bomb.wav"
+#define SOUND_BGM_PATH ":/res/sound_fx/WildFire.wav"
+#define START_BGM_PATH ":/res/sound_fx/StarRail.wav"
+#define SOUND_BOOM_PATH ":/res/sound_fx/bomb.wav"
+#define RESULT_BGM_PATH ":/res/sound_fx/PANIC!.wav"
+#define WELCOME_BGM_PATH ":/res/sound_fx/Shooting_Stars.wav"
 
 /***********终结技资源***************/
 #define Z_PATH_PREFFIX ":/res/z_effect/z-"
-#define Z_SOUND_PATH ":/res/z.wav"
+#define Z_SOUND_PATH ":/res/sound_fx/z.wav"
 /***********能量相关****************/
 #define ENERGY_PATH ":/res/energy.png"
 #define ENERGY_PATH_1 ":/res/energy_1.png"

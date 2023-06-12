@@ -111,7 +111,7 @@ float TubeLikeData::operator++(int){
 
 EventManager::EventManager(int i,int t, bool init_avail)
 {
-    interval = (float)i;
+    freq = 100.0f / (float)i;
     time = t;
     if(init_avail)  recorder = interval();
     timer = 0;
@@ -143,7 +143,12 @@ bool EventManager::tick(bool timerOnly)
 
 bool EventManager::avail()
 {
-    return (float)recorder >= interval();
+    return recorder >= interval();
+}
+
+int EventManager::interval()
+{
+    return (int)(100.0f/freq());
 }
 
 bool EventManager::holding()

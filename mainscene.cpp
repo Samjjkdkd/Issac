@@ -12,6 +12,8 @@ MainScene::MainScene(QWidget *parent)
 void MainScene::mainLogic(){
     connect(this,SIGNAL(toWelcome()),this,SLOT(welCome()));
     connect(this,SIGNAL(toInGame()),this,SLOT(playGame()));
+    connect(this,SIGNAL(toResult()),this,SLOT(gameOver()));
+    cut_scene->start(this,true);
     emit toWelcome();
 
 }
@@ -28,6 +30,12 @@ void MainScene::initScene()
     welcome_buttons[0] = VirtualButton(1024-520,460,300,200,"Start");
     welcome_buttons[1] = VirtualButton(1024+220,460,300,200,"Quit");
 
+    result_buttons[0] = VirtualButton(1024-520,460,300,200,"Menu");
+    result_buttons[1] = VirtualButton(1024+220,460,300,200,"Quit");
+
+    cut_scene = new CutScene();
+
+
     //加载资源。
     z_sound = new QSoundEffect(this);
     z_sound->setSource(QUrl::fromLocalFile(Z_SOUND_PATH));
@@ -37,6 +45,14 @@ void MainScene::initScene()
     bgsound->setSource(QUrl::fromLocalFile(SOUND_BGM_PATH));
     bgsound->setLoopCount(QSoundEffect::Infinite);
     bgsound->setVolume(0.5f);
+    result_bgm = new QSoundEffect(this);
+    result_bgm->setSource(QUrl::fromLocalFile(RESULT_BGM_PATH));
+    result_bgm->setLoopCount(QSoundEffect::Infinite);
+    result_bgm->setVolume(0.5f);
+    welcome_bgm = new QSoundEffect(this);
+    welcome_bgm->setSource(QUrl::fromLocalFile(WELCOME_BGM_PATH));
+    welcome_bgm->setLoopCount(QSoundEffect::Infinite);
+    welcome_bgm->setVolume(0.5f);
 
     m_blood[0].load(BLOOD_PATH_1);
     m_blood[0] = m_blood[0].scaled(RESIZE_BLOOD_WIDTH,RESIZE_BLOOD_HEIGHT, Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -66,7 +82,7 @@ void MainScene::initScene()
     //初始化按钮事件
     icon_skill = new InfoIcon(m_hero.m_skill,m_hero.m_charge3,SKILL_ICON_MARGIN_X,SKILL_ICON_MARGIN_Y,SKILL_ICON_SIZE,0xffffff,"E");
     icon_burst = new InfoIcon(m_hero.m_burst,m_hero.m_charge,BURST_ICON_MARGIN_X,BURST_ICON_MARGIN_Y,BURST_ICON_SIZE,0x2edcff,"Q");
-    icon_ashwab = new InfoIcon(m_hero.m_ashwab,m_hero.m_charge2,ASHWAB_ICON_MARGIN_X,ASHWAB_ICON_MARGIN_Y,ASHWAB_ICON_SIZE,0xfff700,"Z");
+    icon_ashwab = new InfoIcon(m_hero.m_ashwab,m_hero.m_charge2,ASHWAB_ICON_MARGIN_X,ASHWAB_ICON_MARGIN_Y,ASHWAB_ICON_SIZE,0xfff700,"R");
 
     //初始化终结播放器
     ashwab_player = new AnimatePlayer(74,25,Z_PATH_PREFFIX,1.500f);
@@ -135,6 +151,14 @@ void MainScene::enemyToScene()
 
 void MainScene::updatePosition()
 {
+
+    if(m_hero.m_hp()<=0.0f){
+        m_Timer.stop();
+        m_Timer.disconnect();
+        cut_scene->start(this);
+        bgsound->stop();
+        emit toResult();
+    }
     //大前提：没开终结寄
     if(!m_hero.m_ashwab.holding()){
         //发射子弹
@@ -202,7 +226,7 @@ void MainScene::updatePosition()
 
     //以下内容与玩家输入动作有关
     QTransform transform;
-    this->my_vector.GenerateVector();
+    this->my_vector.GenerateVector(input_type);
 
     //战技
     m_hero.skill(this->my_vector.skill);
@@ -236,7 +260,7 @@ void MainScene::updatePosition()
     int deltax = 0;
     int deltay = 0;
     if(!m_hero.m_ashwab.holding()){
-        if(input_type == WASD){
+        if(input_type == DIR_only){
             if(m_hero.m_sprint.holding()&&!this->my_vector.Vf){
             this->my_vector.Vf = 1.0;
             }
@@ -274,7 +298,7 @@ void MainScene::updatePosition4welcome()
 
     //以下内容与玩家输入动作有关
     QTransform transform;
-    this->my_vector.GenerateVector();
+    this->my_vector.GenerateVector(input_type);
 
     m_hero.sprint(my_vector.sprint);
 
@@ -283,7 +307,8 @@ void MainScene::updatePosition4welcome()
         case Enter_Game:
             m_Timer.stop();
             m_Timer.disconnect();
-            m_hero.toInitPosotion();
+            cut_scene->start(this);
+            welcome_bgm->stop();
             emit toInGame();
             break;
         case Quit_Game:
@@ -298,14 +323,76 @@ void MainScene::updatePosition4welcome()
     int deltax = 0;
     int deltay = 0;
 
-    if(input_type == WASD){
+    if(input_type == DIR_only){
         if(m_hero.m_sprint.holding()&&!this->my_vector.Vf){
-        this->my_vector.Vf = 1.0;
+            this->my_vector.Vf = 1.0;
         }
         deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed();
         deltay += this->my_vector.Vf*qSin((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed();
         if(this->my_vector.Vf<0.0f){
-        this->my_vector.theta*=-1;
+            this->my_vector.theta*=-1;
+        }
+    }else if(input_type == AD_DIR)
+    {
+        deltax += (this->my_vector.Vx)*this->m_hero.m_speed();
+        deltay += (this->my_vector.Vy)*this->m_hero.m_speed();
+    }
+
+    this->m_hero.setPosition(this->m_hero.m_X+deltax,this->m_hero.m_Y+deltay);
+    this->m_hero.b_direction+=this->my_vector.theta;
+    this->m_hero.b_direction%=360;
+    transform.translate(RESIZE_RADIUS/2,RESIZE_RADIUS/2);
+    int alpha = -this->m_hero.b_direction+180;
+    transform.rotate(alpha);
+    transform.translate(-RESIZE_RADIUS/2,-RESIZE_RADIUS/2);
+    QPixmap ibashPlane = m_hero.m_Plane_original.transformed(transform, Qt::SmoothTransformation);
+    m_hero.m_Plane = ibashPlane;
+
+    alpha %= 90;
+    alpha = abs(alpha);
+
+    m_hero.shiftx = qCos((45-alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
+    m_hero.shifty = qSin((45+alpha)*Pi/180) * sqrt(2) / 2 * RESIZE_RADIUS - RESIZE_RADIUS/2;
+}
+
+void MainScene::updatePosition4result()
+{
+
+    //以下内容与玩家输入动作有关
+    QTransform transform;
+    this->my_vector.GenerateVector(input_type);
+
+    m_hero.sprint(my_vector.sprint);
+
+    if(my_vector.confirm){
+        switch(result_selected){
+        case Back2Menu:
+            m_Timer.stop();
+            m_Timer.disconnect();
+            cut_scene->start(this);
+            result_bgm->stop();
+            emit toWelcome();
+            break;
+        case Quit_Game_:
+            m_Timer.stop();
+            m_Timer.disconnect();
+            qApp->quit();
+            break;
+        }
+    }
+
+    //应用坐标、角度变化
+    int deltax = 0;
+    int deltay = 0;
+
+    if(input_type == DIR_only){
+        if(m_hero.m_sprint.holding()&&!this->my_vector.Vf){
+            this->my_vector.Vf = 1.0;
+        }
+        deltax += this->my_vector.Vf*qCos((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed();
+        deltay += this->my_vector.Vf*qSin((float)(90-m_hero.b_direction)*Pi/180.0)*this->m_hero.m_speed();
+        if(this->my_vector.Vf<0.0f){
+            this->my_vector.theta*=-1;
         }
     }else if(input_type == AD_DIR)
     {
@@ -340,7 +427,27 @@ void MainScene::paintEvent(QPaintEvent *event)
     case InGame:
         paintInGameScene(painter);
         break;
+    case Game_over:
+        paintResultScene(painter);
+        break;
     }
+    if(cut_scene->active)
+        paintCutScene(painter);
+
+    //painter.setRenderHint(QPainter::Antialiasing);
+
+}
+
+void MainScene::paintCutScene(QPainter &painter)
+{
+    float cspgs = cut_scene->getProgress();
+    if(cspgs < 0.5f){
+        painter.drawPixmap(0,0,cut_scene->last_scene);
+        paintMask(painter,cspgs/0.5f);
+    }else{
+        paintMask(painter,(1.0f-cspgs)/0.5f);
+    }
+
 
     //painter.setRenderHint(QPainter::Antialiasing);
 
@@ -360,16 +467,18 @@ void MainScene::paintWelcomeScene(QPainter &painter){
 
     QString spaceHint("Press [SPACE] to confirm your choice");
     QString adHint("Press A/D to adjust your facing direction");
+    QString lrHint("Press ←/→ to adjust your facing direction");
     QString dirHint("Press ←→/↑↓ to move horizontally/vertically");
-    QString wsHint("Press W/S to move forward/backward");
+    QString udHint("Press ↑/↓ to move forward/backward");
     QString sprintHint("Press [Shift] to speed up for a while");
     painter.drawText(1024-sprintHint.length()*31/2,860,sprintHint);
-    painter.drawText(1024-adHint.length()*31/2,930,adHint);
     switch(input_type){
-        case WASD:
-            painter.drawText(1024-wsHint.length()*31/2,1000,wsHint);
+        case DIR_only:
+            painter.drawText(1024-lrHint.length()*31/2,930,lrHint);
+            painter.drawText(1024-udHint.length()*31/2,1000,udHint);
             break;
         case AD_DIR:
+            painter.drawText(1024-adHint.length()*31/2,930,adHint);
             painter.drawText(1024-dirHint.length()*31/2,1000,dirHint);
             break;
     }
@@ -382,6 +491,61 @@ void MainScene::paintWelcomeScene(QPainter &painter){
 
     welcome_buttons[0].drawButton(painter);
     welcome_buttons[1].drawButton(painter);
+
+    painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
+
+    //画血条
+    QPainterPath path1;
+    path1.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-32,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_hp()>=0?m_hero.m_hp():0)/(float)m_hero.m_hp.max()),19);
+    painter.setPen(QPen(Qt::red, 1));
+    painter.fillPath(path1, Qt::red);
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-33,m_hero.m_Rect.width()+20,20);
+    QString h_show1 = QString::number(m_hero.m_hp()) + "/"+ QString::number(m_hero.m_hp.max());
+    painter.setFont(QFont("Consolas",10,QFont::Normal));
+    painter.drawText(m_hero.m_Rect.x()+m_hero.m_Rect.width()/2-(h_show1.length()/2)*12,m_hero.m_Rect.y()-17,h_show1);
+
+
+    //画体力
+    QPainterPath path2;
+    path2.addRect(m_hero.m_Rect.x()-9,m_hero.m_Rect.y()-12,(m_hero.m_Rect.width()+19)*((float)(m_hero.m_stamina())/(float)m_hero.m_stamina.max()),7);
+    painter.setPen(QPen(Qt::red, 1));
+    painter.fillPath(path2, QColor(0xaaaaaa));
+    painter.setPen(QPen(Qt::white, 1));
+    painter.drawRect(m_hero.m_Rect.x()-10,m_hero.m_Rect.y()-13,m_hero.m_Rect.width()+20,8);
+
+
+
+    painter.setOpacity(1.0);
+    painter.setPen(QPen(Qt::white, 1));
+}
+
+void MainScene::paintResultScene(QPainter &painter){
+    //绘制地图
+    painter.drawPixmap(0,0 , m_map.m_map_1);
+    painter.setFont(QFont("黑体",40,QFont::Bold));
+    painter.setPen(QPen(Qt::red, 1));
+    //绘制标题
+    QString a = QString("Game Over!");
+    painter.drawText(1024-a.length()*41/2,200,a);
+    painter.setPen(QPen(Qt::white, 1));
+
+    painter.setFont(QFont("黑体",30,QFont::Bold));
+    //绘制分数
+    QString b = "Score:" + QString::number(score);
+    painter.drawText(1024-b.length()*31/2,300,b);
+
+
+    QString spaceHint("Press [SPACE] to confirm your choice");
+    if(result_selected!=-1)
+        painter.drawText(1024-spaceHint.length()*31/2,1070,spaceHint);
+
+    painter.setPen(QPen(Qt::white, 1));
+
+
+
+    result_buttons[0].drawButton(painter);
+    result_buttons[1].drawButton(painter);
 
     painter.drawPixmap(m_hero.m_X - m_hero.shiftx,m_hero.m_Y - m_hero.shifty,m_hero.m_Plane);
 
@@ -449,11 +613,33 @@ void MainScene::paintInGameScene(QPainter &painter){
 }
 
 
+void MainScene::resetScene(){
+    m_hero.reset();
+    for(int i = 0; i<m_enemy_num.max;++i){
+        m_enemys[i]->m_Free = true;
+    }
+    for(int i = 0; i<BLOOD_NUM; ++i)
+    {
+        m_bloodtrail[i].m_Free = true;
+    }
+    for(int i = 0 ; i < BOMB_NUM;i++)
+    {
+        m_bombs[i].m_Free = true;
+    }
+    for(int i = 0 ; i < ENERGY_MAX;i++)
+    {
+        m_energies[i].m_Free = true;
+    }
+    m_enemySpawn = EventManager(ENEMY_INTERVAL);
+    m_enemy_num = ENEMY_NUM;
+    m_enemy_num.setMax(ENEMY_MAX);
+}
+
 
 void MainScene::playGame()
 {
     scene_stage = InGame;
-
+    resetScene();
     //启动定时器
     m_Timer.start();
     bgsound->play();//
@@ -463,10 +649,12 @@ void MainScene::playGame()
     connect(&m_Timer,&QTimer::timeout,[=](){
         //更新游戏中元素的坐标
 
-        //敌机出场
-        enemyToScene();
-        updatePosition();
-        collisionDetection();
+        if(!cut_scene->active){
+            //敌机出场
+            enemyToScene();
+            updatePosition();
+            collisionDetection();
+        }
 
         //temp_bullet.m_Free = false;
         //temp_bullet.updatePosition();
@@ -481,7 +669,33 @@ void MainScene::welCome()
     scene_stage = Welcome;
     //启动定时器
     m_Timer.start();
+    welcome_bgm->play();
 
+
+    //监听定时器
+    connect(&m_Timer,&QTimer::timeout,[=](){
+
+
+        if(!cut_scene->active){
+            updatePosition4welcome();
+            collisionDetection4welcome();
+
+        }
+
+        //temp_bullet.m_Free = false;
+        //temp_bullet.updatePosition();
+        //重新绘制图片
+        update();
+
+    });
+}
+
+void MainScene::gameOver()
+{
+    scene_stage = Game_over;
+    //启动定时器
+    m_Timer.start();
+    result_bgm->play();
 
 
     //监听定时器
@@ -489,8 +703,8 @@ void MainScene::welCome()
         //更新游戏中元素的坐标
 
         //敌机出场
-        updatePosition4welcome();
-        collisionDetection4welcome();
+        updatePosition4result();
+        collisionDetection4result();
 
         //temp_bullet.m_Free = false;
         //temp_bullet.updatePosition();
@@ -575,7 +789,7 @@ void MainScene::keyPressEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[10]=QString("pressed");
     }
-    if(event->key()==Qt::Key_S)
+    if(event->key()==Qt::Key_R)
     {
         this->my_vector.StateofMoveKeys[11]=QString("pressed");
     }
@@ -636,7 +850,7 @@ void MainScene::keyReleaseEvent(QKeyEvent *event)
     {
         this->my_vector.StateofMoveKeys[10]=QString("unpressed");
     }
-    if(event->key()==Qt::Key_S)
+    if(event->key()==Qt::Key_R)
     {
         this->my_vector.StateofMoveKeys[11]=QString("unpressed");
     }
@@ -980,6 +1194,20 @@ void MainScene::collisionDetection4welcome()
         }else{
             welcome_buttons[i].isHanged = false;
             welcome_selected = welcome_selected == i?-1:welcome_selected;
+        }
+    }
+}
+
+void MainScene::collisionDetection4result()
+{
+
+    for(int i = 0; i<2;++i){
+        if(result_buttons[i].rect.intersects(m_hero.m_Rect)){
+            result_buttons[i].isHanged = true;
+            result_selected = i;
+        }else{
+            result_buttons[i].isHanged = false;
+            result_selected = result_selected == i?-1:result_selected;
         }
     }
 }

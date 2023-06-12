@@ -43,9 +43,9 @@ public:
         font.setFamily(QString::fromUtf8("Microsoft YaHei"));
         font.setPointSize(12);
         pushButton1->setFont(font);
-        pushButton1->setText("AD(direction) + WS(forward/backward)");
+        pushButton1->setText("←→↑↓ only");
         pushButton2->setFont(font);
-        pushButton2->setText("AD(direction) + direction keys(absolute)");
+        pushButton2->setText("AD + ←→↑↓");
         label = new QLabel(StartScene);
         label->setObjectName(QString::fromUtf8("label"));
         label->setGeometry(QRect(0, 0, 1024, 479));

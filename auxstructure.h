@@ -72,7 +72,8 @@ class EventManager
 {
 public:
     int recorder;
-    VariableData interval;
+    int interval();
+    VariableData freq;
     VariableData time;
     int timer;
     bool without_timer = false;

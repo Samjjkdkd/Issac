@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>res/app.ico</file>
         <file>res/Blue_Womb.png</file>
-        <file>res/bomb.wav</file>
         <file>res/bomb-1.png</file>
         <file>res/bomb-2.png</file>
         <file>res/bomb-3.png</file>
@@ -74,7 +73,6 @@
         <file>res/bloodtrail-4.png</file>
         <file>res/energy.png</file>
         <file>res/energy_1.png</file>
-        <file>res/z.wav</file>
         <file>res/z_effect/z-00.png</file>
         <file>res/z_effect/z-01.png</file>
         <file>res/z_effect/z-02.png</file>
@@ -151,7 +149,11 @@
         <file>res/z_effect/z-73.png</file>
         <file>res/z_effect/z-74.png</file>
         <file>res/z_effect/z-75.png</file>
-        <file>res/WildFire.wav</file>
-        <file>res/StarRail.wav</file>
+        <file>res/sound_fx/bomb.wav</file>
+        <file>res/sound_fx/StarRail.wav</file>
+        <file>res/sound_fx/WildFire.wav</file>
+        <file>res/sound_fx/z.wav</file>
+        <file>res/sound_fx/PANIC!.wav</file>
+        <file>res/sound_fx/Shooting_Stars.wav</file>
     </qresource>
 </RCC>

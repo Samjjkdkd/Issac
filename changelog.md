@@ -197,4 +197,28 @@
 
     ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/13.png)
 
+## **ISAAC v4.0.0**
+
+- ### 调整输入方式
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/14.png)
+    
+- ### 调整游戏相关配置
+
+    修正冲刺时间
+
+    修正敌机越来越少的问题
+
+- ### 场景间的切换添加转场动画
+
+    黑色淡出淡入遮罩
+
+- ### 增加结算界面
+
+    ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/15.png)
+
+- ### 更换相应场景背景音乐
+
+    选用了两首CXXX自主创作的音乐：PANIC! 与 Shooting Stars
+
 

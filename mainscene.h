@@ -36,18 +36,24 @@
 
 
 enum INPUT_TYPE{
-    WASD,
+    DIR_only,
     AD_DIR
 };
 
 enum SceneStage{
     Welcome,
-    InGame
+    InGame,
+    Game_over
 };
 
 enum WelcomeButtons{
     Enter_Game,
     Quit_Game
+};
+
+enum ResultButtons{
+    Back2Menu,
+    Quit_Game_
 };
 
 class MainScene : public QWidget
@@ -61,6 +67,15 @@ public:
     VirtualButton welcome_buttons[10];
 
     int welcome_selected = -1;
+
+    VirtualButton result_buttons[10];
+
+    int result_selected = -1;
+
+    //过场动画
+    class CutScene;
+
+    CutScene *cut_scene;
 
 
     //右下角显示技能的图标类
@@ -78,6 +93,8 @@ public:
     QSoundEffect *bgsound;
     QSoundEffect *bombSound;
     QSoundEffect *z_sound;
+    QSoundEffect *result_bgm;
+    QSoundEffect *welcome_bgm;
 
     //输入方式
     int input_type;
@@ -90,6 +107,7 @@ public:
      //更新坐标
     void updatePosition();
     void updatePosition4welcome();
+    void updatePosition4result();
 
     void killAll();
 
@@ -97,11 +115,13 @@ public:
     void paintEvent(QPaintEvent *event);
     void paintInGameScene(QPainter &painter);
     void paintWelcomeScene(QPainter &painter);
+    void paintResultScene(QPainter &painter);
     void paintHostileObject(QPainter &painter);
     void paintFriendlyObject(QPainter &painter);
     void paintInfoComponent(QPainter &painter);
     void paintDebug(QPainter &painter);
     void paintMask(QPainter &painter, float trans);
+    void paintCutScene(QPainter &painter);
 
 
     void mouseMoveEvent(QMouseEvent *event);
@@ -139,6 +159,7 @@ public:
 
     void collisionDetection();
     void collisionDetection4welcome();
+    void collisionDetection4result();
 
     //爆炸数组
     Bomb m_bombs[BOMB_NUM];
@@ -150,8 +171,11 @@ public:
     bloodtrail m_bloodtrail[BLOOD_NUM];
     QPixmap m_blood[2];
 
-
+    //初始化场景
     void initScene();
+
+    //重置场景
+    void resetScene();
 
     // Bullet temp_bullet;
     ~MainScene();
@@ -163,9 +187,13 @@ public slots:
     //启动游戏
     void playGame();
 
+    //死了啦
+    void gameOver();
+
 signals:
     void toWelcome();
     void toInGame();
+    void toResult();
 
 
 };
@@ -209,6 +237,48 @@ public:
     AnimatePlayer(int _num, int _rate, QString pre, float _start, float _end = 100.0f);
     void start();
     void play(QPainter &painter);
+
+};
+
+class MainScene::CutScene{
+public:
+    bool active;
+    QPixmap last_scene;
+    timeb timeObject;
+    long long play_time;
+    long long curr_time;
+    float playing_time;
+    float progress;
+    bool halfed = false;
+    float time = 2.0f;
+    float getProgress(){
+        ftime(&timeObject);
+        curr_time = timeObject.time*1000 + timeObject.millitm;
+        playing_time = (float)(curr_time - play_time)/1000.0f;
+        playing_time+=halfed?time/2.0f:0.0f;
+        if(playing_time>time){
+            active = false;
+            return 1.0f;
+
+        }else{
+            return playing_time/time;
+        }
+
+    }
+
+    void start(QWidget *ptr, bool isHalf = false){
+        if(isHalf) { halfed = true;}
+        else{
+            halfed = false;
+            last_scene = ptr->grab();
+        }
+        ftime(&timeObject);
+        play_time = timeObject.time*1000 + timeObject.millitm;
+        active = true;
+
+    }
+
+
 
 };
 

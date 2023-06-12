@@ -29,32 +29,42 @@ void MoveVector::toZeroVector()//归零向量
 
 
 
-void MoveVector::GenerateVector()//根据按键状态生成单位向量
+void MoveVector::GenerateVector(int input_type)//根据按键状态生成单位向量
 {
     this->toZeroVector();
     if(this->StateofMoveKeys[0]==QString("pressed"))//左
     {
-        this->AddVx(-1.0);
+        if(input_type)
+            this->AddVx(-1.0);
+        else
+            this->changeTheta(ROTATE_SENSITIVITY);
     }
     if(this->StateofMoveKeys[1]==QString("pressed"))//上
     {
+        this->AddVf(1.0);
         this->AddVy(-1.0);
     }
     if(this->StateofMoveKeys[2]==QString("pressed"))//下
     {
+        this->AddVf(-1.0);
         this->AddVy(1.0);
     }
     if(this->StateofMoveKeys[3]==QString("pressed"))//右
     {
-        this->AddVx(1.0);
+        if(input_type)
+            this->AddVx(1.0);
+        else
+            this->changeTheta(-ROTATE_SENSITIVITY);
     }
     if(this->StateofMoveKeys[5]==QString("pressed"))//A
     {
-        this->changeTheta(ROTATE_SENSITIVITY);
+        if(input_type)
+            this->changeTheta(ROTATE_SENSITIVITY);
     }
     if(this->StateofMoveKeys[6]==QString("pressed"))//D
     {
-        this->changeTheta(-ROTATE_SENSITIVITY);
+        if(input_type)
+            this->changeTheta(-ROTATE_SENSITIVITY);
     }
     if(this->StateofMoveKeys[7]==QString("pressed"))//E
     {
@@ -83,7 +93,7 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
             this->sprint = false;
         }
     }
-    if(this->StateofMoveKeys[9]==QString("pressed"))//Z
+    if(this->StateofMoveKeys[11]==QString("pressed"))//R
     {
         if(this->ashwab_up){
             this->ashwab = true;
@@ -105,23 +115,21 @@ void MoveVector::GenerateVector()//根据按键状态生成单位向量
     {
         this->sprint_up=true;
     }
-    if(this->StateofMoveKeys[9]==QString("unpressed"))//Shift
+    if(this->StateofMoveKeys[11]==QString("unpressed"))//R
     {
         this->ashwab_up=true;
     }
     if(this->StateofMoveKeys[10]==QString("pressed"))//S
     {
-        this->AddVf(1.0);
     }
-    if(this->StateofMoveKeys[11]==QString("pressed"))//W
+    if(this->StateofMoveKeys[8]==QString("pressed"))//Z
     {
-        this->AddVf(-1.0);
     }
-    if(this->StateofMoveKeys[12]==QString("pressed"))//W
+    if(this->StateofMoveKeys[12]==QString("pressed"))//G
     {
         this->cheat = true;
     }
-    if(this->StateofMoveKeys[13]==QString("pressed"))//W
+    if(this->StateofMoveKeys[13]==QString("pressed"))//Space
     {
         this->confirm = true;
     }

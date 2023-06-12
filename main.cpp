@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
 
     }
     else if(_input_type == StartScene::Rejected) {
-        w.set_input_type(WASD);
+        w.set_input_type(DIR_only);
         w.show();                      // 如果被按下，显示主窗口
 
     }

@@ -70,6 +70,48 @@ void HeroPlane::toInitPosotion(){
 
 }
 
+void HeroPlane::reset(){
+    m_Plane = m_Plane_original;
+
+    //初始化坐标
+    toInitPosotion();
+    //初始化矩形框
+    m_Rect.moveTo(m_X,m_Y);
+
+
+    m_hp = TubeLikeData(MAX_HEALTH);
+
+    m_charge = TubeLikeData(0.0f,CHARGE_MAX);
+    m_charge2 = TubeLikeData(0.0f,CHARGE2_MAX);
+    m_charge3 = TubeLikeData(SKILL_INTERVAL);
+
+    m_speed = I_SHOW_SPEED;
+
+    m_stamina = TubeLikeData(MAX_STAMINA);
+
+    //事件初始化
+    m_shoot = EventManager(BULLET_INTERVAL);
+    m_sprint = EventManager(SPRINT_INTERVAL, SPRINT_TIME);
+    m_skill = EventManager(SKILL_INTERVAL);
+    m_burst = EventManager(BURST_INTERVAL, BURST_TIME);
+    m_ashwab = EventManager(ASHWAB_INTERVAL,ASHWAB_TIME);
+    sprint_cost = SPRINT_COST;
+
+
+    m_bullet_num = BULLET_NUM;
+    m_bullet_num.setMax(BULLET_MAX);
+
+
+    for(int i = 0 ;i<m_bullet_num.max;++i){
+        m_bullets[i].m_Free = true;
+        m_bullets2[i].m_Free = true;
+    }
+
+    m_skill_degree = SKILL_DEGREE;
+    m_skill_bullet_num = SKILL_BULLET_NUM;
+
+}
+
 void HeroPlane::cheat(){
     m_charge.fill();
     m_charge2.fill();
@@ -192,10 +234,10 @@ void HeroPlane::burst(bool s)
 
     if(m_burst.holding())   {//大招 速度 射速 提升
         m_speed.setRatio(I_SPEED_BURST,s_Burst);
-        m_shoot.interval.setRatio(0.5f,b_Burst);
+        m_shoot.freq.setRatio(0.5f,b_Burst);
     }else{
         m_speed.setRatio(0.0f,s_Burst);
-        m_shoot.interval.setRatio(0.0f,b_Burst);
+        m_shoot.freq.setRatio(0.0f,b_Burst);
     }
 
     if(!(m_burst.avail()&&s&&m_charge.full()&&!m_ashwab.holding()))

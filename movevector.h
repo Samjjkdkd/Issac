@@ -11,7 +11,7 @@ class MoveVector
 public:
     MoveVector();
     void toZeroVector();
-    void GenerateVector();
+    void GenerateVector(int input_type);
     void AddVx(qreal deltax);
     void AddVy(qreal deltay);
     void AddVf(qreal deltay);//前进

@@ -49,6 +49,9 @@ public:
     //飞机位置初始化
     void toInitPosotion();
 
+    //重置
+    void reset();
+
     //设置飞机位置
     void setPosition(int x, int y);
 
@@ -74,6 +77,8 @@ public:
 
     //飞机速度
     VariableData m_speed;
+
+    VariableData m_shoot_speed;
 
     //飞机体力
     TubeLikeData m_stamina;
