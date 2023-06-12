@@ -170,6 +170,7 @@ float EventManager::getCD()
 void EventManager::ready()
 {
     recorder = interval();
+    //timer = 0;
 }
 
 float EventManager::progress()

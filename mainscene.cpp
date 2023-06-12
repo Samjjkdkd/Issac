@@ -71,6 +71,8 @@ void MainScene::initScene()
 
     m_enemySpawn = EventManager(ENEMY_INTERVAL);
 
+    score = 0;
+
     scene_stage = Welcome;
 
     m_enemy_num = ENEMY_NUM;
@@ -160,7 +162,7 @@ void MainScene::updatePosition()
         emit toResult();
     }
     //大前提：没开终结寄
-    if(!m_hero.m_ashwab.holding()){
+    if(!ashwab_player->isPlaying()){
         //发射子弹
         m_hero.shoot();
 
@@ -237,14 +239,11 @@ void MainScene::updatePosition()
     //冲刺
     m_hero.sprint(this->my_vector.sprint);
 
-    //终结
-    m_hero.ashwab(this->my_vector.ashwab);
-
     //作弊
     if(this->my_vector.cheat)   m_hero.cheat();
 
     //与终结技释放有关
-    if(m_hero.m_ashwab.timer&&this->my_vector.ashwab){
+    if(m_hero.ashwab(this->my_vector.ashwab)){
         bgsound->setVolume(0.15f);
         z_sound->play();
         ashwab_player->start();
@@ -259,7 +258,7 @@ void MainScene::updatePosition()
     //应用坐标、角度变化
     int deltax = 0;
     int deltay = 0;
-    if(!m_hero.m_ashwab.holding()){
+    if(!ashwab_player->isPlaying()){
         if(input_type == DIR_only){
             if(m_hero.m_sprint.holding()&&!this->my_vector.Vf){
             this->my_vector.Vf = 1.0;
@@ -633,6 +632,8 @@ void MainScene::resetScene(){
     m_enemySpawn = EventManager(ENEMY_INTERVAL);
     m_enemy_num = ENEMY_NUM;
     m_enemy_num.setMax(ENEMY_MAX);
+    score = 0;
+
 }
 
 

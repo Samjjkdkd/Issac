@@ -251,7 +251,7 @@ void HeroPlane::burst(bool s)
     m_charge2+=10;
 }
 
-void HeroPlane::ashwab(bool s)
+bool HeroPlane::ashwab(bool s)
 {
 
     //累加时间间隔记录变量
@@ -259,13 +259,13 @@ void HeroPlane::ashwab(bool s)
 
     if(!(m_ashwab.avail()&&s&&m_charge2.full()&&!m_ashwab.holding()))
     {
-        return;
+        return false;
     }
     //到达发射时间处理
     //重置发射时间间隔记录
     m_ashwab.release();
     m_charge2 = 0;
-
+    return true;
 
 }
 

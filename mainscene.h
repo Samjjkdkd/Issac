@@ -155,7 +155,7 @@ public:
     VariableData m_enemy_num;
 
     //得分
-    int score = 0;
+    int score;
 
     void collisionDetection();
     void collisionDetection4welcome();

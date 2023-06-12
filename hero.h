@@ -39,7 +39,7 @@ public:
     //q技能
     void burst(bool s);
     //z技能
-    void ashwab(bool s);
+    bool ashwab(bool s);
     //冲刺
     void sprint(bool s);
 
