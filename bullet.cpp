@@ -10,8 +10,11 @@ Bullet::Bullet(int type)
 {
     //加载子弹资源
     if(type == 0){
+        m_Speed = BULLET_SPEED;
         m_Bullet_original.load(BULLET_PATH);
     }else if(type == 1){
+        //子弹速度
+        m_Speed = BULLET_SPEED*2.0f;
         m_Bullet_original.load(SKILL_BULLET_PATH);
     }
     m_Bullet = m_Bullet_original;
@@ -22,8 +25,6 @@ Bullet::Bullet(int type)
     //子弹状态
     m_Free = true;
 
-    //子弹速度
-    m_Speed = BULLET_SPEED;
 
     //子弹矩形框
     m_Rect.setWidth(m_Bullet.width());

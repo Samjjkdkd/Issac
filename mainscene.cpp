@@ -48,7 +48,7 @@ void MainScene::initScene()
     result_bgm = new QSoundEffect(this);
     result_bgm->setSource(QUrl::fromLocalFile(RESULT_BGM_PATH));
     result_bgm->setLoopCount(QSoundEffect::Infinite);
-    result_bgm->setVolume(0.5f);
+    result_bgm->setVolume(0.6f);
     welcome_bgm = new QSoundEffect(this);
     welcome_bgm->setSource(QUrl::fromLocalFile(WELCOME_BGM_PATH));
     welcome_bgm->setLoopCount(QSoundEffect::Infinite);
