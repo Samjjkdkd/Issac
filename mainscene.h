@@ -19,6 +19,7 @@
 #include "enemy_1.h"
 #include "enemy_2.h"
 #include "enemy_3.h"
+#include "enemy_4.h"
 #include <QIcon>
 #include <QPainter>
 #include <QPainterPath>
@@ -147,6 +148,11 @@ public:
 
     //敌机数组
     std::vector <EnemyPlane*> m_enemys;
+
+    //4号敌人
+    enemy_4 m_enemy_4;
+
+
 
     //敌机生成事件
     EventManager m_enemySpawn;

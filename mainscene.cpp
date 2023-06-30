@@ -1,4 +1,5 @@
 #include "mainscene.h"
+
 MainScene::MainScene(QWidget *parent)
     : QWidget(parent)
 {
@@ -114,6 +115,9 @@ void MainScene::initScene()
 void MainScene::enemyToScene()
 {
     m_enemySpawn.tick(m_hero.m_ashwab.holding());
+    //生成4号
+    m_enemy_4.avail_enemy_4(m_hero.m_X,m_hero.m_Y);
+
     if(!m_enemySpawn.avail())
     {
         return;
@@ -149,6 +153,7 @@ void MainScene::enemyToScene()
             break;
         }
     }
+
 }
 
 void MainScene::updatePosition()
@@ -198,6 +203,9 @@ void MainScene::updatePosition()
                 m_enemys[i]->updatePosition(m_hero.m_X,m_hero.m_Y);
             }
 
+            }
+            if(m_enemy_4.state=="dash"){
+            m_enemy_4.updatePosition();
             }
         }
 
@@ -419,6 +427,8 @@ void MainScene::updatePosition4result()
 void MainScene::paintEvent(QPaintEvent *event)
 {
     QPainter painter(this);
+
+
     switch(scene_stage){
     case Welcome:
         paintWelcomeScene(painter);
@@ -929,6 +939,9 @@ void MainScene::collisionDetection()
 
 
     //遍历所有非空闲的敌机
+    if(m_enemy_4.m_Rect.intersects(m_hero.m_Rect)&&m_enemy_4.state=="dash"){
+        m_hero.m_hp-= 1;
+    }
     for(int i = 0 ;i < m_enemy_num.max;i++)
     {
         if(m_enemys[i]->m_Rect.intersects(m_hero.m_Rect)&&!m_enemys[i]->m_Free){
@@ -1298,6 +1311,33 @@ void MainScene::paintHostileObject(QPainter &painter){
             //painter.drawRect(m_enemys[i]->m_Rect);
         }
     }
+    if(m_enemy_4.state=="dash"){
+        m_enemy_4.drawEnemy(painter);
+    }
+    else if(m_enemy_4.state=="show"){
+        QPainterPath path1;
+        if(m_enemy_4.direction==0){
+        path1.addRect(m_enemy_4.m_X,0,RESIZE_WIDTH_4,GAME_HEIGHT+2*RESIZE_HEIGHT_4);
+        }
+        else if(m_enemy_4.direction==1){
+        path1.addRect(m_enemy_4.m_X,0,RESIZE_WIDTH_4,GAME_HEIGHT+2*RESIZE_HEIGHT_4);
+        }
+        else if(m_enemy_4.direction==2){
+         path1.addRect(0,m_enemy_4.m_Y,GAME_WIDTH+2*RESIZE_WIDTH_4,RESIZE_HEIGHT_4);
+        }
+        else{
+         path1.addRect(0,m_enemy_4.m_Y,GAME_WIDTH+2*RESIZE_WIDTH_4,RESIZE_HEIGHT_4);
+        }
+        painter.setPen(QPen(Qt::red, 0.7));
+        painter.setOpacity(ENEMY4_TRACK_TRANSPARANT);
+        painter.fillPath(path1, Qt::red);
+        painter.setOpacity(1);
+
+
+        painter.setPen(QPen(Qt::white, 1));
+
+    }
+
 
 
 }
@@ -1408,6 +1448,20 @@ void MainScene::AnimatePlayer::play(QPainter &painter){
 void MainScene::paintDebug(QPainter &painter){
     //绘制debug信息
     painter.setFont(QFont("黑体",8,QFont::Bold));
+painter.drawText(0,12,QString::number(m_enemy_4.m_X)+" "+QString::number(m_enemy_4.m_Y));
+    painter.drawText(0,24,QString::number(m_enemy_4.m_Free));
+QString s;
+    if(m_enemy_4.state=="wait"){
+        s = "wait";
+}
+    if(m_enemy_4.state=="show"){
+        s = "show";
+    }
+    if(m_enemy_4.state=="dash"){
+        s = "dash";
+    }
+painter.drawText(0,36,s);
+    painter.drawText(0,48,QString::number(m_enemy_4.square_X_1)+" "+QString::number(m_enemy_4.square_X_2));
 //    for(int i = BULLET_NUM-SKILL_BULLET_NUM;i<BULLET_NUM;++i)
 //    {
 //        painter.drawText(0,12*(SKILL_BULLET_NUM+i-BULLET_NUM),QString(QString::number(i)+":"+(m_hero.m_bullets[i].m_Free?"true":"false")));

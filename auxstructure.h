@@ -1,7 +1,8 @@
 #ifndef AUXSTRUCTURE_H
 #define AUXSTRUCTURE_H
-
+#include<string>
 #define BONUS_INDEX_MAX 20
+
 
 //一种很新的，可以变的量
 //如nesh的攻击力，由基础攻击力(base)，攻击力加成百分比(bonus_ratio)，和小攻击(bonus_flat)构成
@@ -72,7 +73,9 @@ class EventManager
 {
 public:
     int recorder;
+    int recorder_4=0;
     int interval();
+    int interval_4();
     VariableData freq;
     VariableData time;
     int timer;
@@ -80,6 +83,7 @@ public:
 
     bool tick(bool timerOnly = false);//计时一次
     bool avail();//是否可用
+    std::string avail_enemy_4(std::string); //专门用于检测是否生成4号的检测器
     void release();//释放
     bool holding();//是否进行中
     float getCD();//获得冷却

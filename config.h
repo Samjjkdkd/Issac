@@ -3,7 +3,7 @@
 #define GAME_HEIGHT 1200  //高度
 #define START_WIDTH  2048  //宽度
 #define START_HEIGHT 1200  //高度
-#define GAME_TITLE "以撒 v4.0.2" //标题
+#define GAME_TITLE "以撒 v4.1.2" //标题
 #define GAME_ICON  ":/res/app.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
@@ -20,7 +20,7 @@
 #define I_GOT_SPRINT 8.0f //这个值为绝对值（小速度）
 #define I_SHOOT_SPEED 10.0f//子弹射速(个/100帧)
 #define I_SPEED_BURST 0.5 //提升比例（大速度）
-#define MAX_HEALTH 20.0f
+#define MAX_HEALTH 1000.0f
 #define SKILL_INTERVAL 200
 #define SPRINT_INTERVAL 50
 #define BURST_INTERVAL 1000
@@ -47,12 +47,17 @@
 #define ENEMY_PATH_2  ":/res/Entity_11.0.0.png"  //敌机资源图片
 #define ENEMY_PATH_3_1  ":/res/Entity_14.0.1.png"  //敌机资源图片
 #define ENEMY_PATH_3_2  ":/res/Entity_14.0.2.png"  //敌机资源图片
+#define ENEMY_PATH_4  ":/res/Entity_867.0.0.png"  //敌机资源图片
 #define RESIZE_WIDTH_1 128 //敌方统一大小
 #define RESIZE_HEIGHT_1 128 //敌方统一大小
 #define RESIZE_WIDTH_2 80 //敌方统一大小
 #define RESIZE_HEIGHT_2 80 //敌方统一大小
 #define RESIZE_WIDTH_3 80 //敌方统一大小
 #define RESIZE_HEIGHT_3 80 //敌方统一大小
+#define RESIZE_WIDTH_4 300
+#define RESIZE_HEIGHT_4 300
+
+#define ENEMY4_TRACK_TRANSPARANT 0.3
 
 //奖励相关
 #define ENEMY_ENERGY_1 10.0f
@@ -69,9 +74,11 @@
 #define ENEMY_SPEED_1 1.5  //敌机移动速度
 #define ENEMY_SPEED_2 2  //敌机移动速度
 #define ENEMY_SPEED_3 2.0  //敌机移动速度
+#define ENEMY_SPEED_4 16.0
 #define ENEMY_HP_1 3 //敌方血量
 #define ENEMY_HP_2 1
 #define ENEMY_HP_3 1
+#define ENEMY_HP_4 999
 #define ENEMY_NUM   50  //敌机总数量
 #define ENEMY_MAX   500  //敌机最大数量
 #define ENEMY_INTERVAL  5  //敌机出场时间间隔

@@ -131,7 +131,9 @@ bool EventManager::tick(bool timerOnly)
 {
     if(!timerOnly){
         recorder++;
+
         recorder = recorder>interval()?interval():recorder;
+
     }
     if(timer)  {
         timer--;
@@ -145,6 +147,7 @@ bool EventManager::avail()
 {
     return recorder >= interval();
 }
+
 
 int EventManager::interval()
 {

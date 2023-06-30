@@ -155,5 +155,6 @@
         <file>res/sound_fx/z.wav</file>
         <file>res/sound_fx/PANIC!.wav</file>
         <file>res/sound_fx/Shooting_Stars.wav</file>
+        <file>res/Entity_867.0.0.png</file>
     </qresource>
 </RCC>

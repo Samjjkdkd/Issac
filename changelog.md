@@ -231,3 +231,16 @@
 
 - ### Bug fix
 
+## **ISAAC v4.1.2**
+
+- ### 加入了一个会冲刺的无敌敌怪
+       
+       ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/16.png)
+
+- ### 会在冲刺前显示轨迹
+       
+       ![image](https://raw.githubusercontent.com/Samjjkdkd/Issac/main/img/17.png)
+
+
+
+
