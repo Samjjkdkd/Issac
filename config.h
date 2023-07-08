@@ -20,7 +20,7 @@
 #define I_GOT_SPRINT 8.0f //这个值为绝对值（小速度）
 #define I_SHOOT_SPEED 10.0f//子弹射速(个/100帧)
 #define I_SPEED_BURST 0.5 //提升比例（大速度）
-#define MAX_HEALTH 1000.0f
+#define MAX_HEALTH 200.0f
 #define SKILL_INTERVAL 200
 #define SPRINT_INTERVAL 50
 #define BURST_INTERVAL 1000
