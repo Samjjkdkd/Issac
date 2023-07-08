@@ -7,6 +7,7 @@ StartScene::StartScene(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::StartScene)
 {
+    setWindowIcon(QIcon( GAME_ICON));
     ui->setupUi(this);
 }
 

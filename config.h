@@ -4,7 +4,7 @@
 #define START_WIDTH  2048  //宽度
 #define START_HEIGHT 1200  //高度
 #define GAME_TITLE "以撒 v4.1.2" //标题
-#define GAME_ICON  ":/res/app.ico"
+#define GAME_ICON  ":/res/issac.ico"
 #define GAME_RATE  10
 /**********  地图配置数据 **********/
 #define MAP_PATH  ":/res/Blue_Womb.png" //地图图片路径

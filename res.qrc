@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>res/app.ico</file>
         <file>res/Blue_Womb.png</file>
         <file>res/bomb-1.png</file>
         <file>res/bomb-2.png</file>
@@ -156,5 +155,6 @@
         <file>res/sound_fx/PANIC!.wav</file>
         <file>res/sound_fx/Shooting_Stars.wav</file>
         <file>res/Entity_867.0.0.png</file>
+        <file>res/issac.ico</file>
     </qresource>
 </RCC>
